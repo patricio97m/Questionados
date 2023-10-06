@@ -1,0 +1,8 @@
+[2023-10-06][INFO]Ejecutando Query SELECT * FROM `pokemones` WHERE nombre LIKE '%%' 
+[2023-10-06][INFO]Ejecutando Query SELECT * FROM `pokemones` WHERE nombre LIKE '%%' 
+[2023-10-06][INFO]Ejecutando Query SELECT * FROM `pokemones` WHERE nombre LIKE '%%' 
+[2023-10-06][INFO]Ejecutando Query SELECT * FROM `pokemones` WHERE nombre LIKE '%%' 
+[2023-10-06][INFO]Ejecutando Query SELECT * FROM `pokemones` WHERE nombre LIKE '%%' 
+[2023-10-06][INFO]Ejecutando Query SELECT * FROM `pokemones` WHERE nombre LIKE '%%' 
+[2023-10-06][INFO]Ejecutando Query SELECT * FROM `pokemones` WHERE nombre LIKE '%%' 
+[2023-10-06][INFO]Ejecutando Query SELECT * FROM `pokemones` WHERE nombre LIKE '%%' 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registrarse</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2>Registrarse</h2>
+
+    {{#error}}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+    {{/error}}
+
+    <form method="post" action="procesarUsuario">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" required>
+        </div>
+        <div class="form-group">
+            <label for="sexo">Sexo:</label>
+            <select class="form-control" id="sexo" name="sexo">
+                <option>Masculino</option>
+                <option>Femenino</option>
+                <option>Prefiero no cargarlo</option>
+            </select>
+        </div>
+        <!-- más adelante acá iria el google maps para elegir el país y ciudad -->
+        <div class="form-group">
+            <label for="pais">País:</label>
+            <input type="text" class="form-control" id="pais" name="pais" required>
+        </div>
+        <div class="form-group">
+            <label for="pais">Ciudad:</label>
+            <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+        </div>
+        <div class="form-group">
+            <label for="nacimiento">Año de Nacimiento:</label>
+            <input type="number" class="form-control" id="fecha_nac" name="fecha_nac" required>
+        </div>
+        <div class="form-group">
+            <label for="mail">Email:</label>
+            <input type="email" class="form-control" id="mail" name="mail" required>
+        </div>
+        <div class="form-group">
+            <label for="usuario">Nombre de Usuario:</label>
+            <input type="text" class="form-control" id="usuario" name="usuario" required>
+        </div>
+        <div class="form-group">
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" class="form-control" id="contrasena"  name="contrasena" required>
+        </div>
+        <div class="form-group">
+            <label for="repetirContrasena">Repetir Contraseña:</label>
+            <input type="password" class="form-control" id="repetirContrasena"  name="repetirContrasena"required>
+        </div>
+
+        <div class="form-group">
+            <label for="imagen">Imagen de perfil:</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="foto_perfil" name="foto_perfil" accept="image/*">
+                <label class="custom-file-label" for="foto_perfil">Seleccionar archivo</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrarse</button>
+    </form>
+
+    <a href="/usuario/ingresar">¿Ya tenés cuenta? Ingresar</a>
+</div>
+
+</body>
+</html>
+
