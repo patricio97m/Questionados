@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container">
+<div class="container mt-5 p-4 border rounded col-md-6">
     <h2>Registrarse</h2>
 
     {{#error}}
@@ -15,52 +17,56 @@
     {{/error}}
 
     <form method="post" action="/usuario/procesarUsuario">
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" required>
-        </div>
-        <div class="form-group">
-            <label for="apellido">Apellido:</label>
-            <input type="text" class="form-control" id="apellido" name="apellido" required>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" class="form-control" id="apellido" name="apellido" required>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="sexo">Sexo:</label>
-            <select class="form-control" id="sexo" name="sexo">
+            <select class="form-control form-control-sm" id="sexo" name="sexo">
                 <option>Masculino</option>
                 <option>Femenino</option>
                 <option>Prefiero no cargarlo</option>
             </select>
         </div>
-        <!-- más adelante acá iria el google maps para elegir el país y ciudad -->
         <div class="form-group">
             <label for="pais">País:</label>
-            <input type="text" class="form-control" id="pais" name="pais" required>
+            <input type="text" class="form-control form-control-sm" id="pais" name="pais" required>
         </div>
         <div class="form-group">
-            <label for="pais">Ciudad:</label>
-            <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" class="form-control form-control-sm" id="ciudad" name="ciudad" required>
         </div>
         <div class="form-group">
-            <label for="nacimiento">Año de Nacimiento:</label>
-            <input type="number" class="form-control" id="fecha_nac" name="fecha_nac" required>
+            <label for="fecha_nac">Año de Nacimiento:</label>
+            <input type="number" class="form-control form-control-sm" id="fecha_nac" name="fecha_nac" required>
         </div>
         <div class="form-group">
             <label for="mail">Email:</label>
-            <input type="email" class="form-control" id="mail" name="mail" required>
+            <input type="email" class="form-control form-control-sm" id="mail" name="mail" required>
         </div>
         <div class="form-group">
             <label for="usuario">Nombre de Usuario:</label>
-            <input type="text" class="form-control" id="usuario" name="usuario" required>
+            <input type="text" class="form-control form-control-sm" id="usuario" name="usuario" required>
         </div>
         <div class="form-group">
             <label for="contrasena">Contraseña:</label>
-            <input type="password" class="form-control" id="contrasena"  name="contrasena" required>
+            <input type="password" class="form-control form-control-sm" id="contrasena"  name="contrasena" required>
         </div>
         <div class="form-group">
             <label for="repetirContrasena">Repetir Contraseña:</label>
-            <input type="password" class="form-control" id="repetirContrasena"  name="repetirContrasena"required>
+            <input type="password" class="form-control form-control-sm" id="repetirContrasena"  name="repetirContrasena" required>
         </div>
-
         <div class="form-group">
             <label for="imagen">Imagen de perfil:</label>
             <div class="custom-file">
@@ -68,13 +74,15 @@
                 <label class="custom-file-label" for="foto_perfil">Seleccionar archivo</label>
             </div>
         </div>
-
-        <button type="submit" class="btn btn-primary">Registrarse</button>
+        <div class="d-flex justify-content-between align-items-center">
+            <p class="mt-3"><a href="/usuario/ingresar">¿Ya tenés cuenta? Ingresar</a></p>
+            <button type="submit" class="btn btn-primary">Registrarse</button>
+        </div>
     </form>
 
-    <a href="/usuario/ingresar">¿Ya tenés cuenta? Ingresar</a>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
-

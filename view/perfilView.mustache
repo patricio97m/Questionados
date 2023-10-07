@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi perfil</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<main class="pt-3 container mt-5 p-4 border rounded col-md-6">
+    <div class="text-center">
+        <h1 class="bg-dark text-uppercase d-inline px-3 text-light">Mi perfil</h1>
+    </div>
+    <div class="container mt-4 rounded p-4">
+        {{#usuario}}
+        <div class="d-flex align-items-center justify-content-center mb-4">
+            <img
+                    src={{fotousuario}}
+                    alt="Imagen de usuario"
+                    class="rounded-circle me-3"
+            />
+            <h2>
+                {{nombre}} {{apellido}}
+            </h2>
+        </div>
+
+        <form method="post" action="/usuario/actualizarUsuario">
+            <div class="input-group mb-3">
+                <span class="input-group-text custom-span" id="nombre">Nombre</span>
+                <input type="text" class="form-control" placeholder="Ingrese un nombre" aria-label="nombre" aria-describedby="nombre" name="nombre" value="{{nombre}}">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text custom-span" id="apellido">Apellido</span>
+                <input type="text" class="form-control" placeholder="Ingrese un apellido" aria-label="apellido" aria-describedby="apellido" name="apellido" value="{{apellido}}">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text custom-span" id="fecha_nac">Año de nacimiento</span>
+                <input type="text" class="form-control" placeholder="Ingrese un nombre" aria-label="fecha_nac" aria-describedby="fecha_nac" name="fecha_nac" value="{{fecha_nac}}">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text custom-span" id="sexo">Sexo</span>
+                <select class="form-control" id="sexo" name="sexo" value="{{sexo}}">
+                    <option>Masculino</option>
+                    <option>Femenino</option>
+                    <option>Prefiero no cargarlo</option>
+                </select>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text custom-span" id="pais">País</span>
+                <input type="text" class="form-control" placeholder="pais" aria-label="pais" aria-describedby="pais" name="pais" value="{{pais}}">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="ciudad">Ciudad</span>
+                <input type="text" class="form-control" placeholder="ciudad" aria-label="ciudad" aria-describedby="ciudad" name="ciudad" value="{{ciudad}}">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="ciudad">Email</span>
+                <input type="text" class="form-control" placeholder="mail" aria-label="mail" aria-describedby="mail" name="mail" value="{{mail}}">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="usuario">Usuario</span>
+                <input type="text" class="form-control" placeholder="usuario" aria-label="usuario" aria-describedby="usuario" name="usuario" value="{{usuario}}">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="contrasena">Contraseña</span>
+                <input type="password" class="form-control" placeholder="contrasena" aria-label="contrasena" aria-describedby="contrasena" name="contrasena" value="{{contrasena}}">
+            </div>
+
+            <div class="form-group">
+                <label for="imagen">Actualizar imagen de perfil:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="foto_perfil" name="foto_perfil" accept="image/*">
+                    <label class="custom-file-label" for="foto_perfil">Seleccionar archivo</label>
+                </div>
+            </div>
+
+        {{/usuario}}
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/usuario/cerrarSesion" class="btn btn-secondary">Cerrar sesión</a>
+                <button type="submit" class="btn btn-primary" >
+                    Actualizar datos
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

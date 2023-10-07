@@ -74,7 +74,8 @@ class UsuarioController
     }
 
     public function perfil(){
-        $this->render->printView('perfil');
+        $datosUsuario['usuario'] = $_SESSION['usuario'];
+        $this->render->printView('perfil', $datosUsuario);
     }
 
 }
