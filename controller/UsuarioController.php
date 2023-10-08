@@ -31,6 +31,7 @@ class UsuarioController
         $usuario = $_POST['usuario'];
         $contrasena = $_POST['contrasena'];
         $repetirContrasena = $_POST['repetirContrasena'];
+        $imagen = $_FILES["foto_perfil"];
 
         $usuarioExistente = $this->model->buscarUsuario($usuario);
 
@@ -42,7 +43,7 @@ class UsuarioController
             $_SESSION["error"] = "El nombre de usuario ya existe ";
             Redirect::to('/usuario/registro');
         } else {
-            $this->model->crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena);
+            $this->model->crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen);
             Redirect::to('/usuario/ingresar');
         }
     }

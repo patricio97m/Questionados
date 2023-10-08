@@ -17,7 +17,6 @@ class Database {
     }
 
     public function query($sql) {
-        Logger::info("Ejecutando Query $sql ");
         $result = mysqli_query($this->conn, $sql);
 
         if (!is_bool($result))
