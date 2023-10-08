@@ -43,6 +43,7 @@ class UsuarioController
             $_SESSION["error"] = "El nombre de usuario ya existe ";
             Redirect::to('/usuario/registro');
         } else {
+            $_SESSION["modal"] = "$mail";
             $this->model->crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen);
             Redirect::to('/usuario/ingresar');
         }
@@ -54,6 +55,10 @@ class UsuarioController
         if(!empty($_SESSION['error'])){
             $data["error"] = $_SESSION['error'];
             unset( $_SESSION['error']);
+        }
+        if(!empty($_SESSION['modal'])){
+            $data["modal"] = $_SESSION['modal'];
+            unset( $_SESSION['modal']);
         }
 
         $this->render->printView('ingresar', $data);
