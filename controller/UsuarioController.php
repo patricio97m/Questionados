@@ -76,7 +76,16 @@ class UsuarioController
 
     public function perfil(){
         $datosUsuario['usuario'] = $_SESSION['usuario'];
-        $this->render->printView('perfil', $datosUsuario);
+        if ($datosUsuario['usuario']){$this->render->printView('perfil', $datosUsuario);}
+        else Redirect::to('/usuario/ingresar');
+    }
+
+    public function cerrarSesion(){
+        unset( $_SESSION['usuario']);
+        Redirect::to('/usuario/ingresar');
+    }
+
+    public function actualizarUsuario() {
     }
 
 }

@@ -27,12 +27,14 @@ class UsuarioModel
     }
 
     public function buscarUsuario($nombreUsuario) {
-        $usuario = $this->database->query("SELECT * FROM `usuario` WHERE usuario LIKE '%$nombreUsuario%'");
-        return $usuario;
+        return $this->database->query("SELECT * FROM `usuario` WHERE usuario LIKE '$nombreUsuario'");
     }
 
     public function verificarUsuario($nombreUsuario, $contrasena) {
-        $usuario = $this->database->query("SELECT * FROM `usuario` WHERE usuario LIKE '%$nombreUsuario%' && contrasena LIKE '%$contrasena%' ");
-        return $usuario;
+        return $this->database->query("SELECT * FROM `usuario` WHERE usuario LIKE '$nombreUsuario' && contrasena LIKE '$contrasena' ");
+    }
+
+    public function actualizarUsuario($id_usuario, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen) {
+
     }
 }
