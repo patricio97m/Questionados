@@ -8,6 +8,9 @@ include_once('helper/Redirect.php');
 
 include_once('controller/UsuarioController.php');
 include_once("model/UsuarioModel.php");
+include_once('controller/JuegoController.php');
+include_once("model/JuegoModel.php");
+
 
 include_once('third-party/mustache/src/Mustache/Autoloader.php');
 
@@ -35,6 +38,11 @@ class Configuracion {
     public function getUsuarioController() {
         $model = new UsuarioModel($this->getDatabase());
         return new UsuarioController($this->getRender(), $model);
+    }
+
+    public function getJuegoController() {
+        $model = new JuegoModel($this->getDatabase());
+        return new JuegoController($this->getRender(), $model);
     }
 
     public function getRouter() {
