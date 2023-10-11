@@ -14,8 +14,8 @@ class JuegoModel
         $pregunta = $this->database->query($query);
 
         if ($pregunta) {
-            // Se obtienen las respuestas de esa pregunta
-            $respuestasQuery = "SELECT idRespuesta, respuesta, esCorrecta FROM Respuesta WHERE idPregunta = " . $pregunta[0]['idPregunta'];
+            // Se obtienen las respuestas de esa pregunta al azar
+            $respuestasQuery = "SELECT idRespuesta, respuesta, esCorrecta FROM Respuesta WHERE idPregunta = " . $pregunta[0]['idPregunta'] . " ORDER BY RAND()";
             $respuestas = $this->database->query($respuestasQuery);
 
             // Se combina la pregunta con sus respuestas
@@ -25,7 +25,6 @@ class JuegoModel
                 'respuestas' => $respuestas
             ];
         }
-
         return null;
     }
 }

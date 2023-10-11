@@ -17,12 +17,14 @@
 
         <div class="mt-5">
             {{#respuestas}}
-                <button class="btn btn-light btn-block btn-lg">{{respuesta}}</button>
+                <form method="post" action="/juego/verificarRespuesta">
+                    <button name="esCorrecta" value="{{esCorrecta}}" class="btn btn-light btn-block btn-lg">{{respuesta}}</button>
+                </form>
             {{/respuestas}}
         </div>
 
         <div class="mt-3 mb-3">
-            <h5 class="text-left text-light">Puntaje: 1</h5>
+            <h5 class="text-left text-light">Puntaje: {{puntaje}}</h5>
         </div>
     </div>
 </main>

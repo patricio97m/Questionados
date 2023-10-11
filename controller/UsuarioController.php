@@ -10,7 +10,7 @@ class UsuarioController
         $this->model = $model;
     }
     public function registro(){
-        isset($_SESSION['usuario']) ? Redirect::to('/usuario/perfil') : null;
+        $this->redirigirSiUsuarioLogueado();
         $data = [];
 
         if(!empty($_SESSION['error'])){
@@ -37,11 +37,11 @@ class UsuarioController
         $usuarioExistente = $this->model->buscarUsuario($usuario);
 
         if ($contrasena !== $repetirContrasena) {
-            $_SESSION["error"] = "Las contraseñas no coinciden.";
+            $this->setSessionError("Las contraseñas no coinciden.");
             Redirect::to('/usuario/registro');
         }
         if ($usuarioExistente) {
-            $_SESSION["error"] = "El nombre de usuario ya existe.";
+            $this->setSessionError("El nombre de usuario ya existe.");
             Redirect::to('/usuario/registro');
         } else {
             $_SESSION["modal"] = "$mail";
@@ -51,7 +51,7 @@ class UsuarioController
     }
 
     public function ingresar(){
-        isset($_SESSION['usuario']) ? Redirect::to('/usuario/perfil') : null;
+        $this->redirigirSiUsuarioLogueado();
         $data = [];
 
         if(!empty($_SESSION['error'])){
@@ -76,7 +76,7 @@ class UsuarioController
             $_SESSION['usuario'] = $usuarioEncontrado;
             Redirect::to('/usuario/perfil');
         } else {
-            $_SESSION["error"] = "Usuario o contraseña incorrectos.";
+            $this->setSessionError("Usuario o contraseña incorrectos.");
             Redirect::to('/usuario/ingresar');
         }
     }
@@ -90,6 +90,16 @@ class UsuarioController
     public function cerrarSesion(){
         unset( $_SESSION['usuario']);
         Redirect::to('/usuario/ingresar');
+    }
+
+    private function redirigirSiUsuarioLogueado() {
+        if (isset($_SESSION['usuario'])) {
+            Redirect::to('/usuario/perfil');
+        }
+    }
+
+    private function setSessionError($mensaje) {
+        $_SESSION["error"] = $mensaje;
     }
 
     public function actualizarUsuario() {

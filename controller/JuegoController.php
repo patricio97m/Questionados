@@ -1,5 +1,4 @@
 <?php
-
 class JuegoController
 {
     private $render;
@@ -10,21 +9,18 @@ class JuegoController
         $this->model = $model;
     }
 
-    public function nuevaPartida(){
-        !isset($_SESSION['usuario']) ? Redirect::to('/usuario/ingresar') : null;
-        //Se buscan los datos del usuario para mostrarlos en el header
-        $data['usuario'] = $_SESSION['usuario'];
-
+    private function cargarPregunta() {
+        // Obtener una pregunta al azar
         $preguntaYRespuestas = $this->model->obtenerPreguntaAlAzar();
 
         if ($preguntaYRespuestas) {
-            //Esto define el color de la categoría en la vista
             $categoriaEstilos = [
                 'Ciencia' => 'success',
                 'Historia' => 'warning',
                 'Entretenimiento' => 'info',
                 'Geografía' => 'primary',
-                'Arte' => 'danger'
+                'Arte' => 'danger',
+                'Deporte' => 'secondary'
             ];
 
             $categoria = $preguntaYRespuestas['categoria'];
@@ -36,11 +32,41 @@ class JuegoController
                 'respuestas' => $preguntaYRespuestas['respuestas'],
                 'categoria' => $preguntaYRespuestas['categoria'],
                 'categoriaEstilo' => $estiloCategoria,
+                'puntaje' => isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] : 0,
             ];
 
-            $this->render->printView('juego', $data);
+            return $data;
         } else {
             Logger::info($_SESSION["errorRespuesta"] = "Ha ocurrido un error al cargar las respuestas");
+            return null;
+        }
+    }
+
+    public function nuevaPartida() {
+        !isset($_SESSION['usuario']) ? Redirect::to('/usuario/ingresar') : null;
+
+        $_SESSION['puntaje'] = 0;
+        $data = $this->cargarPregunta();
+
+        if ($data) {
+            $this->render->printView('juego', $data);
+        }
+    }
+
+    public function verificarRespuesta() {
+        $esCorrecta = $_POST["esCorrecta"];
+
+        if ($esCorrecta === "1") {
+            // Respuesta correcta, incrementa el puntaje
+            $_SESSION['puntaje'] += 1;
+        } else{
+            $_SESSION['puntaje'] = 0;
+        }
+
+        $data = $this->cargarPregunta();
+
+        if ($data) {
+            $this->render->printView('juego', $data);
         }
     }
 }
