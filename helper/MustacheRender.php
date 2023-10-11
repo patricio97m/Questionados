@@ -16,9 +16,9 @@ class MustacheRender {
     }
 
     public function generateHtml($contentFile, $data = array()) {
-        $contentAsString = file_get_contents('view/header.mustache');
+        $contentAsString = file_get_contents('view/partial/header.mustache');
         $contentAsString .= file_get_contents('view/' . $contentFile . "View.mustache");
-        $contentAsString .= file_get_contents('view/footer.mustache');
+        $contentAsString .= file_get_contents('view/partial/footer.mustache');
         return $this->mustache->render($contentAsString, $data);
     }
 }

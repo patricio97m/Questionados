@@ -10,6 +10,7 @@ class UsuarioController
         $this->model = $model;
     }
     public function registro(){
+        isset($_SESSION['usuario']) ? Redirect::to('/usuario/perfil') : null;
         $data = [];
 
         if(!empty($_SESSION['error'])){
@@ -36,11 +37,11 @@ class UsuarioController
         $usuarioExistente = $this->model->buscarUsuario($usuario);
 
         if ($contrasena !== $repetirContrasena) {
-            $_SESSION["error"] = "Las contraseñas no coinciden";
+            $_SESSION["error"] = "Las contraseñas no coinciden.";
             Redirect::to('/usuario/registro');
         }
         if ($usuarioExistente) {
-            $_SESSION["error"] = "El nombre de usuario ya existe ";
+            $_SESSION["error"] = "El nombre de usuario ya existe.";
             Redirect::to('/usuario/registro');
         } else {
             $_SESSION["modal"] = "$mail";
@@ -50,6 +51,7 @@ class UsuarioController
     }
 
     public function ingresar(){
+        isset($_SESSION['usuario']) ? Redirect::to('/usuario/perfil') : null;
         $data = [];
 
         if(!empty($_SESSION['error'])){
@@ -74,7 +76,7 @@ class UsuarioController
             $_SESSION['usuario'] = $usuarioEncontrado;
             Redirect::to('/usuario/perfil');
         } else {
-            $_SESSION["error"] = "Usuario o contraseña incorrectos";
+            $_SESSION["error"] = "Usuario o contraseña incorrectos.";
             Redirect::to('/usuario/ingresar');
         }
     }
