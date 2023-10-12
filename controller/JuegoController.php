@@ -62,6 +62,7 @@ class JuegoController
         }
         else {
             $puntajeFinal = $_SESSION['puntaje'];
+            $puntajeFinal = ($puntajeFinal === 0) ? $puntajeFinal . " " : $puntajeFinal; //Soluciona que no se abra el modal con el puntaje en 0
 
             $data = $_SESSION['juego_data'];
             $data['modal'] = "$puntajeFinal";
