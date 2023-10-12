@@ -10,10 +10,9 @@ class JuegoController
     }
 
     private function cargarPregunta() {
-        // Obtener una pregunta al azar
         $preguntaYRespuestas = $this->model->obtenerPreguntaAlAzar();
 
-        if ($preguntaYRespuestas) {
+        if ($preguntaYRespuestas) { //Array para comparar valores de las categorías y elegir el estilo correcto
             $categoriaEstilos = [
                 'Ciencia' => 'success',
                 'Historia' => 'warning',
@@ -26,16 +25,14 @@ class JuegoController
             $categoria = $preguntaYRespuestas['categoria'];
             $estiloCategoria = $categoriaEstilos[$categoria] ?? 'bg-light';
 
-            $data = [
+            return [
                 'usuario' => $_SESSION['usuario'],
                 'pregunta' => $preguntaYRespuestas['pregunta'],
                 'respuestas' => $preguntaYRespuestas['respuestas'],
                 'categoria' => $preguntaYRespuestas['categoria'],
                 'categoriaEstilo' => $estiloCategoria,
-                'puntaje' => isset($_SESSION['puntaje']) ? $_SESSION['puntaje'] : 0,
+                'puntaje' => $_SESSION['puntaje'] ?? 0,
             ];
-
-            return $data;
         } else {
             Logger::info($_SESSION["errorRespuesta"] = "Ha ocurrido un error al cargar las respuestas");
             return null;
@@ -44,13 +41,14 @@ class JuegoController
 
     public function nuevaPartida() {
         !isset($_SESSION['usuario']) ? Redirect::to('/usuario/ingresar') : null;
+        unset($_SESSION['modal']);
 
         $_SESSION['puntaje'] = 0;
         $data = $this->cargarPregunta();
+        $_SESSION['juego_data'] = $data;
 
-        if ($data) {
-            $this->render->printView('juego', $data);
-        }
+        $this->render->printView('juego', $data);
+
     }
 
     public function verificarRespuesta() {
@@ -59,14 +57,16 @@ class JuegoController
         if ($esCorrecta === "1") {
             // Respuesta correcta, incrementa el puntaje
             $_SESSION['puntaje'] += 1;
-        } else{
-            $_SESSION['puntaje'] = 0;
+            $data = $this->cargarPregunta();
+            $_SESSION['juego_data'] = $data; //Se guarda las preguntas actuales para mostar el modal por si se pierde
+        }
+        else {
+            $puntajeFinal = $_SESSION['puntaje'];
+
+            $data = $_SESSION['juego_data'];
+            $data['modal'] = "$puntajeFinal";
         }
 
-        $data = $this->cargarPregunta();
-
-        if ($data) {
-            $this->render->printView('juego', $data);
-        }
+        $this->render->printView('juego', $data);
     }
 }

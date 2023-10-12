@@ -74,7 +74,7 @@ class UsuarioController
 
         if ($usuarioEncontrado) {
             $_SESSION['usuario'] = $usuarioEncontrado;
-            Redirect::to('/usuario/perfil');
+            Redirect::to('/');
         } else {
             $this->setSessionError("Usuario o contraseña incorrectos.");
             Redirect::to('/usuario/ingresar');
@@ -94,7 +94,7 @@ class UsuarioController
 
     private function redirigirSiUsuarioLogueado() {
         if (isset($_SESSION['usuario'])) {
-            Redirect::to('/usuario/perfil');
+            Redirect::to('/');
         }
     }
 

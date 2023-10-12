@@ -6,6 +6,8 @@ include_once("helper/Router.php");
 include_once("helper/Logger.php");
 include_once('helper/Redirect.php');
 
+include_once('controller/HomeController.php');
+include_once('model/HomeModel.php');
 include_once('controller/UsuarioController.php');
 include_once("model/UsuarioModel.php");
 include_once('controller/JuegoController.php');
@@ -45,7 +47,12 @@ class Configuracion {
         return new JuegoController($this->getRender(), $model);
     }
 
+    public function getHomeController() {
+        $model = new HomeModel($this->getDatabase());
+        return new HomeController($this->getRender(), $model);
+    }
+
     public function getRouter() {
-        return new Router($this,"getUsuarioController","registro");
+        return new Router($this,"getHomeController","index");
     }
 }

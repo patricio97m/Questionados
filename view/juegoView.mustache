@@ -18,7 +18,7 @@
         <div class="mt-5">
             {{#respuestas}}
                 <form method="post" action="/juego/verificarRespuesta">
-                    <button name="esCorrecta" value="{{esCorrecta}}" class="btn btn-light btn-block btn-lg">{{respuesta}}</button>
+                    <button name="esCorrecta" id="esCorrecta" value="{{esCorrecta}}" class="btn btn-light btn-block btn-lg">{{respuesta}}</button>
                 </form>
             {{/respuestas}}
         </div>
@@ -28,4 +28,36 @@
         </div>
     </div>
 </main>
+
+<! – Modal que se lanza cuando se selecciona una pregunta incorrecta –>
+<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Fin de la partida</h5>
+            </div>
+            {{#modal}}
+                <div class="modal-body">
+                    Puntaje final alcanzado: <b>{{modal}}</b>
+                </div>
+            {{/modal}}
+            <div class="modal-footer">
+                <form method="post" action="/">
+                    <button type="submit" class="btn btn-secondary">Volver al inicio</button>
+                </form>
+                <form method="post" action="/juego/nuevaPartida">
+                    <button type="submit" class="btn btn-primary">Volver a jugar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#modal}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#miModal').modal('show'); // Muestra el modal al cargar la página
+        });
+    </script>
+{{/modal}}
 </body>
