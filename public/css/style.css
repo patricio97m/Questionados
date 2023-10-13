@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope&family=Open+Sans&family=Rubik&display=swap');
+
+@font-face {
+    font-family: 'Brandon Grotesque';
+    src: local('Brandon Grotesque Regular'), local('Brandon-Grotesque-Regular'),
+    url('BrandonGrotesque-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif !important;
+    background: url('../background.png') right repeat-y, url('../background-r.png') left repeat-y;
+    background-size: 120vh;
+}
+
+.card{
+    font-family: "Brandon Grotesque", serif !important;
+}
+
+.shadowE:hover
+{
+    transition:all 0.3s ease;
+    box-shadow:
+            1px 1px #53a7ea,
+            2px 2px #53a7ea,
+            3px 3px #53a7ea;
+    -webkit-transform: translateX(-3px);
+    transform: translateX(-3px);
+}
+.animate {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animate.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.footer-final {
+    min-height: 78vh;
+}
