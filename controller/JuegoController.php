@@ -42,6 +42,7 @@ class JuegoController
     public function nuevaPartida() {
         !isset($_SESSION['usuario']) ? Redirect::to('/usuario/ingresar') : null;
         unset($_SESSION['modal']);
+        unset($_SESSION['preguntas_utilizadas']);
 
         $_SESSION['puntaje'] = 0;
         $data = $this->cargarPregunta();
