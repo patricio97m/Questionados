@@ -31,7 +31,7 @@ class UsuarioModel
     }
 
     public function verificarUsuario($nombreUsuario, $contrasena) {
-        return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario' && contrasena = '$contrasena' ");
+        return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario' && BINARY contrasena = '$contrasena' ");
     }
 
     public function actualizarUsuario($id_usuario, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen) {
