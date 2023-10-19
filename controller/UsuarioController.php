@@ -88,7 +88,7 @@ class UsuarioController
     }
 
     public function cerrarSesion(){
-        unset( $_SESSION['usuario']);
+        session_destroy();
         Redirect::to('/usuario/ingresar');
     }
 
@@ -103,6 +103,25 @@ class UsuarioController
     }
 
     public function actualizarUsuario() {
+    }
+
+    public function datosUsuario() {
+        $usuarioNombre = $_GET['nombre'];
+        $partidas['partidas'] = $this->model->obtenerPartidasPorUsuario($usuarioNombre);
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+            'usuarioEncontrado' => $this->model->buscarUsuarioEspecifico($usuarioNombre),
+            'partidas' => $partidas['partidas']['ultimasPartidas'],
+            'puntajeTotal' => $partidas['partidas']['puntajeTotal'],
+            'rankingUsuarios' => $partidas['partidas']['rankingUsuario'],
+        ];
+
+        foreach ($datos['rankingUsuarios'] as &$rankingUsuario) {
+            $rankingUsuario['esUsuarioLogueado'] = ($rankingUsuario['usuario'] === $usuarioNombre);
+        }
+
+        $this->render->printView('datosUsuario', $datos);
     }
 
 }

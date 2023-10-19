@@ -1,0 +1,77 @@
+<main class="pt-3 container mt-5 p-4 border rounded col-md-6 footer-final bg-white">
+    <div class="container mt-4 rounded p-4">
+        {{#usuarioEncontrado}}
+            <div class="d-flex align-items-center justify-content-center mb-3">
+                <img src="{{fotoPerfil}}" alt="Imagen-de-usuario" width="150" height="150" class="rounded-circle img-fluid"/>
+                <h2 class="ms-3">
+                    {{nombre}} {{apellido}}
+                </h2>
+            </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="nombre">Nombre</span>
+            <input type="text" class="form-control" aria-label="nombre" aria-describedby="nombre" disabled value="{{nombre}}">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="apellido">Apellido</span>
+            <input type="text" class="form-control" aria-label="apellido" aria-describedby="apellido" disabled value="{{apellido}}">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="fecha_nac">Año de nacimiento</span>
+            <input type="text" class="form-control" aria-label="fecha_nac" aria-describedby="fecha_nac" disabled value="{{fecha_nac}}">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="sexo">Sexo</span>
+            <input type="text" class="form-control" aria-label="pais" aria-describedby="pais" disabled value="{{sexo}}">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="pais">País</span>
+            <input type="text" class="form-control" aria-label="pais" aria-describedby="pais" disabled value="{{pais}}">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="ciudad">Ciudad</span>
+            <input type="text" class="form-control" aria-label="ciudad" aria-describedby="ciudad" disabled value="{{ciudad}}">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="usuario">Usuario</span>
+            <input type="text" class="form-control" placeholder="usuario" aria-label="usuario" aria-describedby="usuario" disabled name="usuario" value="{{usuario}}">
+        </div>
+
+        {{/usuarioEncontrado}}
+
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="bg-dark text-uppercase d-inline p-1 text-light">Últimas partidas jugadas</h3>
+                    <ul class="list-group mt-3">
+                        {{#partidas}}
+                            <li class="list-group-item d-flex justify-content-between">{{fecha_partida}} <span>Puntaje: <b>{{puntaje_obtenido}}</b></span></li>
+                        {{/partidas}}
+                    </ul>
+                    {{^partidas}} <!-- Verifica si partidasUsuario está vacío -->
+                        <p>Aún no ha jugado ninguna partida.</p>
+                    {{/partidas}}
+                </div>
+                <div class="col-md-6">
+                    <h3 class="bg-dark text-uppercase d-inline p-1 text-light">puntaje total: {{puntajeTotal}}</h3>
+                    <ol class="list-group list-group-numbered mt-3">
+                        {{#rankingUsuarios}}
+                            <li class="list-group-item d-flex justify-content-between align-items-start {{#esUsuarioLogueado}}bg-info text-white{{/esUsuarioLogueado}}">
+                                <div class="ms-2 me-auto">
+                                    <a href="/usuario/datosUsuario?nombre={{usuario}}" class="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{usuario}}</a>
+                                </div>
+                                <span class="badge bg-dark text-light rounded-pill">{{puntaje_total}}</span>
+                            </li>
+                        {{/rankingUsuarios}}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

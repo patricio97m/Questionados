@@ -30,11 +30,41 @@ class UsuarioModel
         return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario'");
     }
 
+    public function buscarUsuarioEspecifico($nombreUsuario) {
+        return $this->database->query("SELECT nombre, idusuario, nombre, apellido, fecha_nac, sexo, pais, ciudad, usuario, fotoPerfil FROM `usuario` WHERE BINARY usuario = '$nombreUsuario'");
+    }
+
     public function verificarUsuario($nombreUsuario, $contrasena) {
         return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario' && BINARY contrasena = '$contrasena' ");
     }
 
     public function actualizarUsuario($id_usuario, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen) {
 
+    }
+
+    public function obtenerPartidasPorUsuario($usuarioNombre) {
+        $usuarioEncontrado = $this->buscarUsuarioEspecifico($usuarioNombre);
+        $idUsuario = $usuarioEncontrado[0]['idusuario'];
+
+        $queryPuntajeTotal = "SELECT SUM(puntaje_obtenido) AS puntaje_total FROM partida WHERE idusuario = '$idUsuario'";
+        $resultadoPuntajeTotal = $this->database->query($queryPuntajeTotal);
+
+        $queryUltimasPartidas = "SELECT * FROM `partida` WHERE idusuario = '$idUsuario' ORDER BY fecha_partida DESC LIMIT 10";
+        $resultadoUltimasPartidas = $this->database->query($queryUltimasPartidas);
+
+        $queryRanking = "SELECT u.usuario, SUM(p.puntaje_obtenido) AS puntaje_total
+              FROM Usuario u
+              INNER JOIN Partida p ON u.idUsuario = p.idUsuario
+              GROUP BY u.usuario
+              ORDER BY puntaje_total DESC
+              LIMIT 5";
+        $resultadoRankingUsuario = $this->database->query($queryRanking);
+
+        // Crea un array con los resultados de ambas consultas
+        return [
+            'puntajeTotal' => (int) $resultadoPuntajeTotal[0]['puntaje_total'],
+            'ultimasPartidas' => $resultadoUltimasPartidas,
+            'rankingUsuario' => $resultadoRankingUsuario
+        ];
     }
 }

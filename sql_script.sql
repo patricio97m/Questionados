@@ -27,11 +27,23 @@ CREATE TABLE Respuesta (
                            esCorrecta BOOLEAN,
                            FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
 );
+CREATE TABLE Partida (
+                         id INT AUTO_INCREMENT PRIMARY KEY,
+                         puntaje_obtenido INT,
+                         fecha_partida TIMESTAMP,
+                         idUsuario INT,
+                         FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+);
 
 -- Inserts de datos
 
-insert into Usuario (nombre, apellido, fecha_nac, sexo, pais, ciudad, mail, usuario, contrasena, fotoPerfil)
-values ("Juan Alberto","Dominguez", "1980", "Hombre", "Argentina", "Haedo", "JuanAlberto@hotmail.com", "admin", "admin", "../public/fotosPerfil/1.jpg");
+INSERT INTO Usuario (nombre, apellido, fecha_nac, sexo, pais, ciudad, mail, usuario, contrasena, fotoPerfil)
+VALUES ("Juan Alberto","Dominguez", "1980", "Hombre", "Argentina", "Haedo", "JuanAlberto@hotmail.com", "admin", "admin", "../public/fotosPerfil/1.jpg"),
+       ("Norville","Rogers", "1980", "Hombre", "Estados Unidos", "California", "shaggy@hotmail.com", "shaggy_08", "shaggy_08", "../public/fotosPerfil/shaggy_08.jpg"),
+       ("Bruce","Wayne", "1975", "Hombre", "Estados Unidos", "Gotham city", "batman@hotmail.com", "batman.24", "batman.24", "../public/fotosPerfil/batman.24.jpg");
+
+INSERT INTO Partida (puntaje_obtenido, fecha_partida, idusuario)
+VALUES (7, NOW(), 1), (17, NOW(),1), (7, NOW(), 1), (17, NOW(),1), (8, NOW(), 2), (10, NOW(), 2), (10, NOW(), 2), (2, NOW(), 3), (0, NOW(), 2);
 
 INSERT INTO Pregunta (pregunta, categoria) VALUES
                                                ('¿Cuál es la capital de Francia?', 'Geografía'),

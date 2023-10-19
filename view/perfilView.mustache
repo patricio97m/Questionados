@@ -6,7 +6,7 @@
         {{#usuario}}
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <img src="{{fotoPerfil}}" alt="Imagen-de-usuario" width="150" height="150" class="rounded-circle img-fluid"/>
-                <h2 class="ml-4">
+                <h2 class="ms-3">
                     {{nombre}} {{apellido}}
                 </h2>
             </div>
@@ -62,10 +62,9 @@
             </div>
 
             <div class="form-group">
-                <label for="imagen">Actualizar imagen de perfil:</label>
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="foto_perfil" name="foto_perfil" accept="image/*">
-                    <label class="custom-file-label" for="foto_perfil">Seleccionar archivo</label>
+                <label for="foto_perfil">Actualizar imagen de perfil:</label>
+                <div class="custom-file mt-1">
+                    <input type="file" class="form-control" id="foto_perfil" name="foto_perfil" accept="image/*">
                 </div>
             </div>
 

@@ -1,33 +1,31 @@
 <main class="footer-final">
-<div class="container mt-5 p-4 border rounded col-md-6 bg-white">
-    <h2>Ingresar</h2>
+    <div class="container mt-5 p-4 border rounded col-md-6 bg-white">
+        <h2>Ingresar</h2>
 
-    {{#error}}
-        <div class="alert alert-danger" role="alert">
-            {{error}}
-        </div>
-    {{/error}}
+        {{#error}}
+            <div class="alert alert-danger" role="alert">
+                {{error}}
+            </div>
+        {{/error}}
 
-    <form method="post" action="/usuario/procesarIngreso">
-        <div class="form-group">
-            <label for="usuario">Nombre de Usuario:</label>
-            <input type="text" class="form-control form-control-sm" id="usuario" name="usuario" required>
-        </div>
-        <div class="form-group">
-            <label for="contrasena">Contraseña:</label>
-            <input type="password" class="form-control form-control-sm" id="contrasena" name="contrasena" required>
-        </div>
+        <form method="post" action="/usuario/procesarIngreso">
+            <div class="mb-3">
+                <label for="usuario" class="form-label">Nombre de Usuario:</label>
+                <input type="text" class="form-control" id="usuario" name="usuario" required>
+            </div>
+            <div class="mb-3">
+                <label for="contrasena" class="form-label">Contraseña:</label>
+                <input type="password" class="form-control" id="contrasena" name="contrasena" required>
+            </div>
 
-        <p class="mt-3"><a href="/usuario/registro">¿No tenés cuenta? Registrate</a></p>
-        <div class="d-flex justify-content-between align-items-center">
-            <a href="#">¿Olvidaste tu contraseña?</a>
-            <button type="submit" class="btn btn-primary">Ingresar</button>
-        </div>
-    </form>
-
-</div>
-
-<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <p><a href="/usuario/registro">¿No tenés cuenta? Registrate</a></p>
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -40,16 +40,23 @@ class JuegoController
     }
 
     public function nuevaPartida() {
-        !isset($_SESSION['usuario']) ? Redirect::to('/usuario/ingresar') : null;
-        unset($_SESSION['modal']);
-        unset($_SESSION['preguntas_utilizadas']);
+        if (!isset($_SESSION['usuario'])) {
+            Redirect::to('/usuario/ingresar');
+            return;
+        }
 
-        $_SESSION['puntaje'] = 0;
-        $data = $this->cargarPregunta();
-        $_SESSION['juego_data'] = $data;
-
+        // Verifica si hay una partida en curso
+        if (isset($_SESSION['juego_data']) && !empty($_SESSION['juego_data'])) {
+            $data = $_SESSION['juego_data'];
+        } else {
+            // Si no hay una partida en curso, inicia una nueva partida
+            unset($_SESSION['modal']);
+            unset($_SESSION['preguntas_utilizadas']);
+            $_SESSION['puntaje'] = 0;
+            $data = $this->cargarPregunta();
+            $_SESSION['juego_data'] = $data;
+        }
         $this->render->printView('juego', $data);
-
     }
 
     public function verificarRespuesta() {
@@ -66,9 +73,17 @@ class JuegoController
             $puntajeFinal = ($puntajeFinal === 0) ? $puntajeFinal . " " : $puntajeFinal; //Soluciona que no se abra el modal con el puntaje en 0
 
             $data = $_SESSION['juego_data'];
+            unset($_SESSION['juego_data']);
+            $this->guardarPartida($puntajeFinal);
             $data['modal'] = "$puntajeFinal";
         }
 
         $this->render->printView('juego', $data);
+    }
+
+    private function guardarPartida($puntajeFinal) {
+        $idUsuario = $_SESSION['usuario'][0]['idUsuario'];
+        $this->model->guardarPartidaEnBD($idUsuario, $puntajeFinal);
+
     }
 }

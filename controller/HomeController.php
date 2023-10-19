@@ -10,8 +10,21 @@ class HomeController
         $this->model = $model;
     }
     public function index() {
-        $datosUsuario['usuario'] = $_SESSION['usuario'];
-        if ($datosUsuario['usuario']){$this->render->printView('home', $datosUsuario);}
+        $idUsuario = $_SESSION['usuario'][0]['idUsuario'];
+        $nombreUsuarioLogueado = $_SESSION['usuario'][0]['usuario'];
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+            'partidasUsuario' => $this->model->obtenerPartidasPorId($idUsuario),
+            'puntajeTotal' => $this->model->obtenerPuntajeTotalPorId($idUsuario),
+            'rankingUsuarios' => $this->model->obtenerRankingUsuarios()
+        ];
+
+        foreach ($datos['rankingUsuarios'] as &$rankingUsuario) {
+            $rankingUsuario['esUsuarioLogueado'] = ($rankingUsuario['usuario'] === $nombreUsuarioLogueado);
+        }
+
+        if ($datos['usuario']){$this->render->printView('home', $datos);}
         else Redirect::to('/usuario/ingresar');
     }
 }
