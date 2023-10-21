@@ -118,7 +118,6 @@ class UsuarioController
         }
         
 
-        Logger::info("actualizarUsuario");
         if($usuarioNuevo != $usuarioViejo){
             $usernameEnUso = $this->model->buscarUsuario($usuarioNuevo);
             if ($usernameEnUso) {

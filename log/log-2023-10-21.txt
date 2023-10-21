@@ -1,4 +1,0 @@
-
-[2023-10-21][INFO]actualizarUsuario
-[2023-10-21][INFO]Archivo de Foto de Perfil eliminado correctamente.
-[2023-10-21][INFO]Archivo de Foto de Perfil actualizada correctamente.
