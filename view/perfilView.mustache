@@ -14,22 +14,22 @@
         <form method="post" action="/usuario/actualizarUsuario" enctype="multipart/form-data">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="nombre">Nombre</span>
-                <input required type="text" class="form-control" placeholder="Ingrese un nombre" aria-label="nombre" aria-describedby="nombre" name="nombre" value="{{nombre}}">
+                <input required type="text" class="form-control" placeholder="Ingrese un nombre" {{editable}} aria-label="nombre" aria-describedby="nombre" name="nombre" value="{{nombre}}">
             </div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="apellido">Apellido</span>
-                <input required type="text" class="form-control" placeholder="Ingrese un apellido" aria-label="apellido" aria-describedby="apellido" name="apellido" value="{{apellido}}">
+                <input required type="text" class="form-control" placeholder="Ingrese un apellido" {{editable}} aria-label="apellido" aria-describedby="apellido" name="apellido" value="{{apellido}}">
             </div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="fecha_nac">Año de nacimiento</span>
-                <input required type="text" class="form-control" placeholder="Ingrese un nombre" aria-label="fecha_nac" aria-describedby="fecha_nac" name="fecha_nac" value="{{fecha_nac}}">
+                <input required type="text" class="form-control" placeholder="Ingrese un nombre" {{editable}} aria-label="fecha_nac" aria-describedby="fecha_nac" name="fecha_nac" value="{{fecha_nac}}">
             </div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="sexo">Sexo</span>
-                <select required class="form-control" id="sexo" name="sexo">
+                <select required class="form-control" id="sexo" {{editable}} name="sexo">
                     <option>Masculino</option>
                     <option>Femenino</option>
                     <option>Prefiero no cargarlo</option>
@@ -38,43 +38,50 @@
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="pais">País</span>
-                <input required type="text" class="form-control" placeholder="pais" aria-label="pais" aria-describedby="pais" name="pais" value="{{pais}}">
+                <input required type="text" class="form-control" placeholder="pais" aria-label="pais" aria-describedby="pais" {{editable}} name="pais" value="{{pais}}">
             </div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="ciudad">Ciudad</span>
-                <input required type="text" class="form-control" placeholder="ciudad" aria-label="ciudad" aria-describedby="ciudad" name="ciudad" value="{{ciudad}}">
+                <input required type="text" class="form-control" placeholder="ciudad" aria-label="ciudad" aria-describedby="ciudad" {{editable}} name="ciudad" value="{{ciudad}}">
             </div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="ciudad">Email</span>
-                <input required type="text" class="form-control" placeholder="mail" aria-label="mail" aria-describedby="mail" name="mail" value="{{mail}}">
+                <input required type="text" class="form-control" placeholder="mail" aria-label="mail" aria-describedby="mail" {{editable}} name="mail" value="{{mail}}">
             </div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="usuario">Usuario</span>
-                <input required type="text" class="form-control" placeholder="usuario" aria-label="usuario" aria-describedby="usuario" name="usuario" value="{{usuario}}">
+                <input required type="text" class="form-control" placeholder="usuario" aria-label="usuario" aria-describedby="usuario" {{editable}} name="usuario" value="{{usuario}}">
             </div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="contrasena">Contraseña</span>
-                <input required type="password" class="form-control" placeholder="contrasena" aria-label="contrasena" aria-describedby="contrasena" name="contrasena" value="{{contrasena}}">
+                <input required type="password" class="form-control" placeholder="contrasena" aria-label="contrasena" aria-describedby="contrasena" {{editable}} name="contrasena" value="{{contrasena}}">
             </div>
 
+        {{/usuario}}
+
+        {{#cambiarFoto}}
             <div class="form-group">
                 <label for="foto_perfil">Actualizar imagen de perfil:</label>
                 <div class="custom-file mt-1">
                     <input type="file" class="form-control" id="foto_perfil" name="foto_perfil" accept="image/*">
                 </div>
             </div>
-
-        {{/usuario}}
+        {{/cambiarFoto}}
 
             <div class="d-flex justify-content-between mt-4">
                 <a href="/usuario/cerrarSesion" class="btn btn-secondary">Cerrar sesión</a>
-                <button type="submit" class="btn btn-primary" >
-                    Actualizar datos
-                </button>
+                {{#modificaDatos}}
+                    <a class="btn btn-primary" href="/usuario/editar">Modificar datos</a>
+                {{/modificaDatos}}
+                {{#actualizarDatos}}
+                    <button type="submit" class="btn btn-primary" >
+                        Actualizar datos
+                    </button>
+                {{/actualizarDatos}}
             </div>
         </form>
     </div>

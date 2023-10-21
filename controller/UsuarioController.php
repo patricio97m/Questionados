@@ -82,9 +82,25 @@ class UsuarioController
     }
 
     public function perfil(){
-        $datosUsuario['usuario'] = $_SESSION['usuario'];
-        if ($datosUsuario['usuario']){$this->render->printView('perfil', $datosUsuario);}
+        $datos['usuario'] = $_SESSION['usuario'];
+        $datos['editable'] = "disabled";
+        $datos['cambiarFoto'] = false;
+        $datos['modificaDatos'] = true;
+        $datos['actualizarDatos'] = false;
+
+        if ($datos['usuario']){$this->render->printView('perfil', $datos);}
         else Redirect::to('/usuario/ingresar');
+    }
+
+    public function editar(){
+        $datos['usuario'] = $_SESSION['usuario'];
+        $datos['editable'] = "";
+        $datos['cambiarFoto'] = true;
+        $datos['modificaDatos'] = false;
+        $datos['actualizarDatos'] = true;
+
+        if ($datos['usuario']){$this->render->printView('perfil', $datos);}
+        else Redirect::to('/usuario/actualizarUsuario');
     }
 
     public function cerrarSesion(){
