@@ -1,5 +1,5 @@
 <?php
-
+include_once("helper/Logger.php");
 class UsuarioController
 {
     private $render;
@@ -103,6 +103,41 @@ class UsuarioController
     }
 
     public function actualizarUsuario() {
+        $nombre = $_POST["nombre"];
+        $apellido = $_POST['apellido'];
+        $fecha_nac = $_POST['fecha_nac'];
+        $sexo = $_POST['sexo'];
+        $pais = $_POST['pais'];
+        $ciudad = $_POST['ciudad'];
+        $mail = $_POST['mail'];
+        $usuarioViejo = $_SESSION['usuario'][0]['usuario'];
+        $usuarioNuevo = $_POST['usuario'];
+        $contrasena = $_POST['contrasena'];
+        if(isset($_FILES["foto_perfil"])){
+            $imagen = $_FILES["foto_perfil"];
+        }
+        
+
+        Logger::info("actualizarUsuario");
+        if($usuarioNuevo != $usuarioViejo){
+            $usernameEnUso = $this->model->buscarUsuario($usuarioNuevo);
+            if ($usernameEnUso) {
+                $this->setSessionError("El nombre de usuario ya existe.");
+                Redirect::to('/usuario/perfil');
+            } else {
+                $_SESSION["modal"] = "$mail";
+                $this->model->actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen);
+                unset($_SESSION["usuario"]);
+                Redirect::to('/usuario/ingresar');
+            }
+        }
+        else {
+            $_SESSION["modal"] = "$mail";
+            $this->model->actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen);
+            $this->procesarIngreso();
+            Redirect::to('/usuario/perfil');
+        }
+        
     }
 
     public function datosUsuario() {

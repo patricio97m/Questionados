@@ -25,6 +25,7 @@ class Logger {
 
     private static function writeLogFile(string $message): void {
         $filename = "log/log-" . self::getDate() . ".txt";
+
         file_put_contents($filename, $message, FILE_APPEND);
     }
 

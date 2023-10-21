@@ -38,9 +38,9 @@ CREATE TABLE Partida (
 -- Inserts de datos
 
 INSERT INTO Usuario (nombre, apellido, fecha_nac, sexo, pais, ciudad, mail, usuario, contrasena, fotoPerfil)
-VALUES ("Juan Alberto","Dominguez", "1980", "Hombre", "Argentina", "Haedo", "JuanAlberto@hotmail.com", "admin", "admin", "../public/fotosPerfil/1.jpg"),
-       ("Norville","Rogers", "1980", "Hombre", "Estados Unidos", "California", "shaggy@hotmail.com", "shaggy_08", "shaggy_08", "../public/fotosPerfil/shaggy_08.jpg"),
-       ("Bruce","Wayne", "1975", "Hombre", "Estados Unidos", "Gotham city", "batman@hotmail.com", "batman.24", "batman.24", "../public/fotosPerfil/batman.24.jpg");
+VALUES ("Juan Alberto","Dominguez", "1980", "Hombre", "Argentina", "Haedo", "JuanAlberto@hotmail.com", "admin", "admin", "../public/fotosPerfil/1000.jpg"),
+       ("Norville","Rogers", "1980", "Hombre", "Estados Unidos", "California", "shaggy@hotmail.com", "shaggy_08", "shaggy_08", "../public/fotosPerfil/1001.jpg"),
+       ("Bruce","Wayne", "1975", "Hombre", "Estados Unidos", "Gotham city", "batman@hotmail.com", "batman.24", "batman.24", "../public/fotosPerfil/1002.jpg");
 
 INSERT INTO Partida (puntaje_obtenido, fecha_partida, idusuario)
 VALUES (7, NOW(), 1), (17, NOW(),1), (7, NOW(), 1), (17, NOW(),1), (8, NOW(), 2), (10, NOW(), 2), (10, NOW(), 2), (2, NOW(), 3), (0, NOW(), 2);

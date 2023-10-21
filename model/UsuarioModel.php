@@ -9,21 +9,14 @@ class UsuarioModel
     }
 
     public function crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen) {
-        $pathImagenes = "public/fotosPerfil/";
-        $extensionDelArchivo = pathinfo(basename($imagen["name"]), PATHINFO_EXTENSION);
-        $destinoArchivo = $pathImagenes . $usuario . "." . $extensionDelArchivo;
+        $direccionImagen = $this->guardarFoto($imagen);
 
-        if(move_uploaded_file($imagen["tmp_name"], $destinoArchivo)) {
-            $destinoArchivo = "../" . $destinoArchivo;
-            $sql = "INSERT INTO `usuario` (
-                `nombre`, `apellido`, `fecha_nac`, `sexo`, `pais`, `ciudad`, `mail`, `usuario`, `contrasena`, `fotoPerfil`) 
-            VALUES 
-                ('$nombre', '$apellido', '$fecha_nac', '$sexo', '$pais', '$ciudad', '$mail', '$usuario', '$contrasena', '$destinoArchivo');";
-            Logger::info('UsuarioAlta: ' . $sql);
-            $this->database->query($sql);
-        }else {
-            Logger::info($_SESSION["errorAlta"] = "Ha ocurrido un error al cargar la Foto de Perfil");
-        }
+        $sql = "INSERT INTO `usuario` (
+            `nombre`, `apellido`, `fecha_nac`, `sexo`, `pais`, `ciudad`, `mail`, `usuario`, `contrasena`, `fotoPerfil`) 
+        VALUES 
+            ('$nombre', '$apellido', '$fecha_nac', '$sexo', '$pais', '$ciudad', '$mail', '$usuario', '$contrasena', '$direccionImagen');";
+        Logger::info('UsuarioAlta: ' . $sql);
+        $this->database->query($sql);
     }
 
     public function buscarUsuario($nombreUsuario) {
@@ -31,15 +24,46 @@ class UsuarioModel
     }
 
     public function buscarUsuarioEspecifico($nombreUsuario) {
-        return $this->database->query("SELECT nombre, idusuario, nombre, apellido, fecha_nac, sexo, pais, ciudad, usuario, fotoPerfil FROM `usuario` WHERE BINARY usuario = '$nombreUsuario'");
+        return $this->database->query("SELECT idusuario, nombre, apellido, fecha_nac, sexo, pais, ciudad, usuario, fotoPerfil FROM `usuario` WHERE BINARY usuario = '$nombreUsuario'");
     }
 
     public function verificarUsuario($nombreUsuario, $contrasena) {
         return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario' && BINARY contrasena = '$contrasena' ");
     }
 
-    public function actualizarUsuario($id_usuario, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen) {
+    public function actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen) {
+        $idUsuario = $this->buscarUsuarioEspecifico($usuarioViejo)[0]["idusuario"];
+        $this->database->query("UPDATE usuario
+        SET
+            nombre = '$nombre',
+            apellido = '$apellido',
+            fecha_nac = '$fecha_nac',
+            sexo = '$sexo',
+            pais = '$pais',
+            ciudad = '$ciudad',
+            mail = '$mail',
+            usuario = '$usuarioNuevo',
+            contrasena = '$contrasena'
+        WHERE idUsuario = '$idUsuario';"
+        );
 
+        if(isset($imagen)){
+            $fotoVieja = substr($this->buscarUsuarioEspecifico($usuarioViejo)[0]["fotoPerfil"], 3);
+            $fotoNueva = $this->guardarFoto($imagen);
+
+            if (file_exists($fotoVieja)) {
+                if (unlink($fotoVieja)) {
+                    Logger::info("Archivo de Foto de Perfil eliminado correctamente.");
+                }
+            }
+
+            $this->database->query("UPDATE usuario
+            SET
+                fotoPerfil = '$fotoNueva'
+            WHERE idUsuario = '$idUsuario';"
+            );
+            Logger::info("Archivo de Foto de Perfil actualizada correctamente.");
+        }
     }
 
     public function obtenerPartidasPorUsuario($usuarioNombre) {
@@ -67,4 +91,25 @@ class UsuarioModel
             'rankingUsuario' => $resultadoRankingUsuario
         ];
     }
+
+    public function guardarFoto($imagen){
+        $pathImagenes = "public/fotosPerfil/";
+        $extensionDelArchivo = pathinfo(basename($imagen["name"]), PATHINFO_EXTENSION);
+        $numeroRandom = rand(1,100000);
+        $destinoArchivo = $pathImagenes . $numeroRandom . "." . $extensionDelArchivo;
+
+        while(file_exists($destinoArchivo)){
+            $numeroRandom = rand(1,100000);
+            $destinoArchivo = $pathImagenes . $numeroRandom . "." . $extensionDelArchivo;
+        }
+        if(move_uploaded_file($imagen["tmp_name"], $destinoArchivo)) {
+            $destinoArchivo = "../" . $destinoArchivo;
+            return $destinoArchivo;
+        }
+        else{
+            $_SESSION["errorAlta"] = "Ha ocurrido un error al cargar la Foto de Perfil";
+        }
+    }
+    
+        
 }
