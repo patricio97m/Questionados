@@ -13,10 +13,7 @@ class UsuarioController
         $this->redirigirSiUsuarioLogueado();
         $data = [];
 
-        if(!empty($_SESSION['error'])){
-            $data["error"] = $_SESSION['error'];
-            unset( $_SESSION['error']);
-        }
+        $this->setDatosError($data);
 
         $this->render->printView('registro', $data);
     }
@@ -37,11 +34,11 @@ class UsuarioController
         $usuarioExistente = $this->model->buscarUsuario($usuario);
 
         if ($contrasena !== $repetirContrasena) {
-            $this->setSessionError("Las contraseñas no coinciden.");
+            $_SESSION["error"] = "Las contraseñas no coinciden.";
             Redirect::to('/usuario/registro');
         }
         if ($usuarioExistente) {
-            $this->setSessionError("El nombre de usuario ya existe.");
+            $_SESSION["error"] ="El nombre de usuario ya existe.";
             Redirect::to('/usuario/registro');
         } else {
             $_SESSION["modal"] = "$mail";
@@ -54,14 +51,7 @@ class UsuarioController
         $this->redirigirSiUsuarioLogueado();
         $data = [];
 
-        if(!empty($_SESSION['error'])){
-            $data["error"] = $_SESSION['error'];
-            unset( $_SESSION['error']);
-        }
-        if(!empty($_SESSION['modal'])){
-            $data["modal"] = $_SESSION['modal'];
-            unset( $_SESSION['modal']);
-        }
+        $this->setDatosError($data);
 
         $this->render->printView('ingresar', $data);
     }
@@ -76,31 +66,37 @@ class UsuarioController
             $_SESSION['usuario'] = $usuarioEncontrado;
             Redirect::to('/');
         } else {
-            $this->setSessionError("Usuario o contraseña incorrectos.");
+            $_SESSION["error"] ="Usuario o contraseña incorrectos.";
             Redirect::to('/usuario/ingresar');
         }
     }
 
     public function perfil(){
-        $datos['usuario'] = $_SESSION['usuario'];
-        $datos['editable'] = "disabled";
-        $datos['cambiarFoto'] = false;
-        $datos['modificaDatos'] = true;
-        $datos['actualizarDatos'] = false;
+        $data['usuario'] = $_SESSION['usuario'];
+        $data['editable'] = "disabled";
+        $data['cambiarFoto'] = false;
+        $data['modificaDatos'] = true;
+        $data['actualizarDatos'] = false;
 
-        if ($datos['usuario']){$this->render->printView('perfil', $datos);}
+        $this->setDatosError($data);
+        if(!empty($_SESSION['mensajeExito'])){
+            $data["exito"] = $_SESSION['mensajeExito'];
+            unset( $_SESSION['mensajeExito']);
+        }
+
+        if ($data['usuario']){$this->render->printView('perfil', $data);}
         else Redirect::to('/usuario/ingresar');
     }
 
     public function editar(){
-        $datos['usuario'] = $_SESSION['usuario'];
-        $datos['editable'] = "";
-        $datos['cambiarFoto'] = true;
-        $datos['modificaDatos'] = false;
-        $datos['actualizarDatos'] = true;
+        $data['usuario'] = $_SESSION['usuario'];
+        $data['editable'] = "";
+        $data['cambiarFoto'] = true;
+        $data['modificaDatos'] = false;
+        $data['actualizarDatos'] = true;
 
-        if ($datos['usuario']){$this->render->printView('perfil', $datos);}
-        else Redirect::to('/usuario/actualizarUsuario');
+        if ($data['usuario']){$this->render->printView('perfil', $data);}
+        else Redirect::to('/usuario/ingresar');
     }
 
     public function cerrarSesion(){
@@ -114,10 +110,16 @@ class UsuarioController
         }
     }
 
-    private function setSessionError($mensaje) {
-        $_SESSION["error"] = $mensaje;
+    private function setDatosError(&$data) {
+        if(!empty($_SESSION['error'])){
+            $data["error"] = $_SESSION['error'];
+            unset( $_SESSION['error']);
+        }
+        if(!empty($_SESSION['modal'])){
+            $data["modal"] = $_SESSION['modal'];
+            unset( $_SESSION['modal']);
+        }
     }
-
     public function actualizarUsuario() {
         $nombre = $_POST["nombre"];
         $apellido = $_POST['apellido'];
@@ -132,24 +134,23 @@ class UsuarioController
         if(isset($_FILES["foto_perfil"])){
             $imagen = $_FILES["foto_perfil"];
         }
-        
 
         if($usuarioNuevo != $usuarioViejo){
             $usernameEnUso = $this->model->buscarUsuario($usuarioNuevo);
             if ($usernameEnUso) {
-                $this->setSessionError("El nombre de usuario ya existe.");
+                $_SESSION["error"] = "El nombre de usuario ya existe.";
                 Redirect::to('/usuario/perfil');
             } else {
-                $_SESSION["modal"] = "$mail";
                 $this->model->actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen);
                 unset($_SESSION["usuario"]);
                 Redirect::to('/usuario/ingresar');
             }
         }
         else {
-            $_SESSION["modal"] = "$mail";
             $this->model->actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen);
-            $this->procesarIngreso();
+            $usuarioEncontrado  = $this->model->verificarUsuario($usuarioNuevo, $contrasena);
+            $_SESSION['usuario'] = $usuarioEncontrado;
+            $_SESSION['mensajeExito'] = "Usuario modificado correctamente.";
             Redirect::to('/usuario/perfil');
         }
         

@@ -2,6 +2,7 @@
     <div class="text-center">
         <h1 class="bg-dark text-uppercase d-inline px-3 text-light">Mi perfil</h1>
     </div>
+
     <div class="container mt-4 rounded p-4">
         {{#usuario}}
             <div class="d-flex align-items-center justify-content-center mb-3">
@@ -10,6 +11,17 @@
                     {{nombre}} {{apellido}}
                 </h2>
             </div>
+
+            {{#error}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+            {{/error}}
+            {{#exito}}
+                <div class="alert alert-success" role="alert">
+                    {{exito}}
+                </div>
+            {{/exito}}
 
         <form method="post" action="/usuario/actualizarUsuario" enctype="multipart/form-data">
             <div class="input-group mb-3">
