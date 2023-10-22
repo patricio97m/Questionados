@@ -9,12 +9,18 @@ class UsuarioModel
     }
 
     public function crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen) {
-        $direccionImagen = $this->guardarFoto($imagen);
+        // Comprueba si $imagen no está vacío
+        if (!empty($imagen['name'])) {
+            $direccionImagen = $this->guardarFoto($imagen);
+        } else {
+            $direccionImagen = "../public/perfil_placeholder.png";
+        }
 
         $sql = "INSERT INTO `usuario` (
-            `nombre`, `apellido`, `fecha_nac`, `sexo`, `pais`, `ciudad`, `mail`, `usuario`, `contrasena`, `fotoPerfil`) 
-        VALUES 
-            ('$nombre', '$apellido', '$fecha_nac', '$sexo', '$pais', '$ciudad', '$mail', '$usuario', '$contrasena', '$direccionImagen');";
+        `nombre`, `apellido`, `fecha_nac`, `sexo`, `pais`, `ciudad`, `mail`, `usuario`, `contrasena`, `fotoPerfil`) 
+    VALUES 
+        ('$nombre', '$apellido', '$fecha_nac', '$sexo', '$pais', '$ciudad', '$mail', '$usuario', '$contrasena', '$direccionImagen');";
+
         Logger::info('UsuarioAlta: ' . $sql);
         $this->database->query($sql);
     }
@@ -34,33 +40,35 @@ class UsuarioModel
     public function actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen) {
         $idUsuario = $this->buscarUsuarioEspecifico($usuarioViejo)[0]["idusuario"];
         $this->database->query("UPDATE usuario
-        SET
-            nombre = '$nombre',
-            apellido = '$apellido',
-            fecha_nac = '$fecha_nac',
-            sexo = '$sexo',
-            pais = '$pais',
-            ciudad = '$ciudad',
-            mail = '$mail',
-            usuario = '$usuarioNuevo',
-            contrasena = '$contrasena'
-        WHERE idUsuario = '$idUsuario';"
+    SET
+        nombre = '$nombre',
+        apellido = '$apellido',
+        fecha_nac = '$fecha_nac',
+        sexo = '$sexo',
+        pais = '$pais',
+        ciudad = '$ciudad',
+        mail = '$mail',
+        usuario = '$usuarioNuevo',
+        contrasena = '$contrasena'
+    WHERE idUsuario = '$idUsuario';"
         );
 
-        if(isset($imagen)){
+        if (!empty($imagen['name'])) {
             $fotoVieja = substr($this->buscarUsuarioEspecifico($usuarioViejo)[0]["fotoPerfil"], 3);
             $fotoNueva = $this->guardarFoto($imagen);
 
             if (file_exists($fotoVieja)) {
-                if (unlink($fotoVieja)) {
-                    Logger::info("Archivo de Foto de Perfil eliminado correctamente.");
+                if ($fotoVieja != "public/perfil_placeholder.png") {
+                    if (unlink($fotoVieja)) {
+                        Logger::info("Archivo de Foto de Perfil anterior eliminado correctamente.");
+                    }
                 }
             }
 
             $this->database->query("UPDATE usuario
-            SET
-                fotoPerfil = '$fotoNueva'
-            WHERE idUsuario = '$idUsuario';"
+        SET
+            fotoPerfil = '$fotoNueva'
+        WHERE idUsuario = '$idUsuario';"
             );
             Logger::info("Archivo de Foto de Perfil actualizada correctamente.");
         }
