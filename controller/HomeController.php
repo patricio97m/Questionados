@@ -27,4 +27,17 @@ class HomeController
         if ($datos['usuario']){$this->render->printView('home', $datos);}
         else Redirect::to('/usuario/ingresar');
     }
+
+    public function ranking() {
+        $periodo = $_GET['periodo'] ?? 'mes';
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+            'ranking' => $this->model->obtenerMejoresPuntajesPorFecha($periodo),
+            'periodo' => $periodo
+        ];
+
+        if ($datos['usuario']){$this->render->printView('ranking', $datos);}
+        else Redirect::to('/usuario/ingresar');
+    }
 }

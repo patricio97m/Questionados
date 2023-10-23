@@ -40,10 +40,35 @@ CREATE TABLE Partida (
 INSERT INTO Usuario (nombre, apellido, fecha_nac, sexo, pais, ciudad, mail, usuario, contrasena, fotoPerfil)
 VALUES ("Juan Alberto","Dominguez", "1980", "Hombre", "Argentina", "Haedo", "JuanAlberto@hotmail.com", "admin", "admin", "../public/fotosPerfil/1000.jpg"),
        ("Norville","Rogers", "1980", "Hombre", "Estados Unidos", "California", "shaggy@hotmail.com", "shaggy_08", "shaggy_08", "../public/fotosPerfil/1001.jpg"),
-       ("Bruce","Wayne", "1975", "Hombre", "Estados Unidos", "Gotham city", "batman@hotmail.com", "batman.24", "batman.24", "../public/fotosPerfil/1002.jpg");
+       ("Bruce","Wayne", "1975", "Hombre", "Estados Unidos", "Gotham city", "batman@hotmail.com", "batman.24", "batman.24", "../public/fotosPerfil/1002.jpg"),
+       ("Carlos", "Rodriguez", "1990-01-01", "Hombre", "Argentina", "Castelar", "ejemplo1@example.com", "carlos10", "contrasena1", "../public/perfil_placeholder.png"),
+       ("Marta", "Martinez", "1995-02-02", "Mujer", "Argentina", "Castelar", "ejemplo2@example.com", "marta.14", "contrasena2", "../public/perfil_placeholder.png"),
+       ("Lucas", "Guzman", "1988-03-03", "Hombre", "Argentina", "Castelar", "ejemplo3@example.com", "lucas_53", "contrasena3", "../public/perfil_placeholder.png"),
+       ("Pamela", "Fernandez", "1992-04-04", "Mujer", "Uruguay", "Montevideo", "ejemplo4@example.com", "pamela-22", "contrasena4", "../public/perfil_placeholder.png"),
+       ("Nahuel", "Hernandez", "1987-05-05", "Hombre", "Brasil", "Sao Paulo", "ejemplo5@example.com", "nahuel77", "contrasena5", "../public/perfil_placeholder.png"),
+       ("Nahir", "Nuñez", "1991-06-06", "Mujer", "Paraguay", "Ciudad del Este", "ejemplo6@example.com", "hanirN", "contrasena6", "../public/perfil_placeholder.png"),
+       ("Pedro", "Lopez", "1989-07-07", "Hombre", "Chile", "Santiago de Chile", "ejemplo7@example.com", "pedro_lopez", "contrasena7", "../public/perfil_placeholder.png"),
+       ("Rocío", "Cisneros", "1996-08-08", "Mujer", "Venezuela", "Caracas", "ejemplo8@example.com", "rocio2", "contrasena8", "../public/perfil_placeholder.png"),
+       ("Nicolas", "Velíz", "1986-09-09", "Hombre", "Ecuador", "Lima", "ejemplo9@example.com", "nico44", "contrasena9", "../public/perfil_placeholder.png"),
+       ("Brenda", "Muñoz", "1993-10-10", "Mujer", "Colombia", "Medellin", "ejemplo10@example.com", "brendaM", "contrasena10", "../public/perfil_placeholder.png");
 
 INSERT INTO Partida (puntaje_obtenido, fecha_partida, idusuario)
-VALUES (7, NOW(), 1), (17, NOW(),1), (7, NOW(), 1), (17, NOW(),1), (8, NOW(), 2), (10, NOW(), 2), (10, NOW(), 2), (2, NOW(), 3), (0, NOW(), 2);
+VALUES (7, DATE_SUB(NOW(), INTERVAL 7 DAY), 1), (17, DATE_SUB(NOW(), INTERVAL 30 DAY), 1), (7, DATE_SUB(NOW(), INTERVAL 1 DAY), 1), (17, DATE_SUB(NOW(), INTERVAL 7 DAY), 1);
+
+INSERT INTO Partida (puntaje_obtenido, fecha_partida, idusuario)
+VALUES (8, DATE_SUB(NOW(), INTERVAL 7 DAY), 2), (10, DATE_SUB(NOW(), INTERVAL 30 DAY), 2), (10, DATE_SUB(NOW(), INTERVAL 1 DAY), 2);
+
+INSERT INTO Partida (puntaje_obtenido, fecha_partida, idusuario)
+VALUES (2, DATE_SUB(NOW(), INTERVAL 7 DAY), 3), (0, DATE_SUB(NOW(), INTERVAL 30 DAY), 3), (2, DATE_SUB(NOW(), INTERVAL 1 DAY), 3);
+
+INSERT INTO Partida (puntaje_obtenido, fecha_partida, idusuario)
+VALUES (12, DATE_SUB(NOW(), INTERVAL 7 DAY), 4), (20, NOW(), 4), (14, DATE_SUB(NOW(), INTERVAL 1 DAY), 4),
+       (9, DATE_SUB(NOW(), INTERVAL 7 DAY), 5), (18, DATE_SUB(NOW(), INTERVAL 30 DAY), 5), (15, DATE_SUB(NOW(), INTERVAL 1 DAY), 5),
+       (6, DATE_SUB(NOW(), INTERVAL 7 DAY), 6), (22, DATE_SUB(NOW(), INTERVAL 30 DAY), 6), (11, DATE_SUB(NOW(), INTERVAL 1 DAY), 6),
+       (14, DATE_SUB(NOW(), INTERVAL 7 DAY), 7), (28, DATE_SUB(NOW(), INTERVAL 30 DAY), 7), (10, DATE_SUB(NOW(), INTERVAL 1 DAY), 7),
+       (10, DATE_SUB(NOW(), INTERVAL 7 DAY), 8), (22, DATE_SUB(NOW(), INTERVAL 30 DAY), 8), (8, NOW(), 8),
+       (8, DATE_SUB(NOW(), INTERVAL 7 DAY), 9), (24, DATE_SUB(NOW(), INTERVAL 30 DAY), 9), (12, DATE_SUB(NOW(), INTERVAL 1 DAY), 9),
+       (15, DATE_SUB(NOW(), INTERVAL 7 DAY), 10), (32, DATE_SUB(NOW(), INTERVAL 30 DAY), 10), (13, DATE_SUB(NOW(), INTERVAL 1 DAY), 10);
 
 INSERT INTO Pregunta (pregunta, categoria) VALUES
                                                ('¿Cuál es la capital de Francia?', 'Geografía'),
