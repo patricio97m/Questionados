@@ -4,10 +4,12 @@ class UsuarioController
 {
     private $render;
     private $model;
+    private $mailer;
 
-    public function __construct($render, $model) {
+    public function __construct($render, $model, $mailer) {
         $this->render = $render;
         $this->model = $model;
+        $this->mailer = $mailer;
     }
     public function registro(){
         $this->redirigirSiUsuarioLogueado();
@@ -19,31 +21,54 @@ class UsuarioController
     }
 
     public function procesarUsuario(){
-        $nombre = $_POST["nombre"];
-        $apellido = $_POST['apellido'];
-        $fecha_nac = $_POST['fecha_nac'];
-        $sexo = $_POST['sexo'];
-        $pais = $_POST['pais'];
-        $ciudad = $_POST['ciudad'];
-        $mail = $_POST['mail'];
-        $usuario = $_POST['usuario'];
-        $contrasena = $_POST['contrasena'];
-        $repetirContrasena = $_POST['repetirContrasena'];
-        $imagen = $_FILES["foto_perfil"];
 
-        $usuarioExistente = $this->model->buscarUsuario($usuario);
+        if($_POST){
+            $nombre = $_POST["nombre"];
+            $apellido = $_POST['apellido'];
+            $fecha_nac = $_POST['fecha_nac'];
+            $sexo = $_POST['sexo'];
+            $pais = $_POST['pais'];
+            $ciudad = $_POST['ciudad'];
+            $mail = $_POST['mail'];
+            $usuario = $_POST['usuario'];
+            $contrasena = $_POST['contrasena'];
+            $repetirContrasena = $_POST['repetirContrasena'];
+            $imagen = $_FILES["foto_perfil"];
 
-        if ($contrasena !== $repetirContrasena) {
-            $_SESSION["error"] = "Las contraseñas no coinciden.";
+            $usuarioExistente = $this->model->buscarUsuario($usuario);
+
+            if ($contrasena !== $repetirContrasena) {
+                $_SESSION["error"] = "Las contraseñas no coinciden.";
+                Redirect::to('/usuario/registro');
+            }
+            if ($usuarioExistente) {
+                $_SESSION["error"] ="El nombre de usuario ya existe.";
+                Redirect::to('/usuario/registro');
+            } else {
+                $_SESSION["modal"] = "$mail";
+                $this->enviarCorreoVerificacion($mail, $nombre);
+                $this->model->crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen);
+                Redirect::to('/usuario/ingresar');
+            }
+        }else{
+            $_SESSION["error"] ="Cargue datos validos.";
             Redirect::to('/usuario/registro');
         }
-        if ($usuarioExistente) {
-            $_SESSION["error"] ="El nombre de usuario ya existe.";
-            Redirect::to('/usuario/registro');
-        } else {
-            $_SESSION["modal"] = "$mail";
-            $this->model->crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen);
-            Redirect::to('/usuario/ingresar');
+    }
+
+    public function enviarCorreoVerificacion($mail, $nombre){
+        try{
+            $this->mailer->setFrom('info@questionados.com.ar', 'Questionados');
+            $this->mailer->addAddress($mail, $nombre);     //Add a recipient
+            $this->mailer->addReplyTo('info@questionados.com.ar', 'Questionados');
+
+            $this->mailer->isHTML(true);                                  //Set email format to HTML
+            $this->mailer->Subject = 'Mail de registro en Questionados';
+            $this->mailer->Body    = 'Para registrarse debe darle click al siguiente link <b>LINK!</b>';
+
+            $this->mailer->send();
+        } catch (Exception $e) {
+            echo "El mensaje no pudo ser enviado: {$this->mailer->ErrorInfo}";
         }
     }
 

@@ -1,4 +1,9 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 include_once('helper/Database.php');
 include_once('helper/Render.php');
 include_once('helper/MustacheRender.php');
@@ -15,6 +20,9 @@ include_once("model/JuegoModel.php");
 
 
 include_once('third-party/mustache/src/Mustache/Autoloader.php');
+include_once('third-party/PHPMailer/src/Exception.php');
+include_once('third-party/PHPMailer/src/PHPMailer.php');
+include_once('third-party/PHPMailer/src/SMTP.php');
 
 class Configuracion {
     public function __construct() {
@@ -39,7 +47,7 @@ class Configuracion {
 
     public function getUsuarioController() {
         $model = new UsuarioModel($this->getDatabase());
-        return new UsuarioController($this->getRender(), $model);
+        return new UsuarioController($this->getRender(), $model, $this->getMailer());
     }
 
     public function getJuegoController() {
@@ -54,5 +62,20 @@ class Configuracion {
 
     public function getRouter() {
         return new Router($this,"getHomeController","index");
+    }
+
+    public function getMailer(){
+        $config = parse_ini_file('configuration.ini');
+        $mail = new PHPMailer(true);
+        $mail->SMTPDebug = SMTP::DEBUG_OFF;                      //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = $config['mailerhost'];                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = $config['mailerusername'];                     //SMTP username
+        $mail->Password   = $config['mailerpassword'];                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = $config['mailerport'];
+
+        return $mail;
     }
 }
