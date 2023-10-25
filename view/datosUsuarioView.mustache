@@ -7,6 +7,28 @@
                     {{nombre}} {{apellido}}
                 </h2>
             </div>
+            <div class="d-flex align-items-center justify-content-center mb-3">
+                <!-- <a href="">MotrarQR</a> -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQR">
+                    Mostrar QR
+                </button>
+                <div class="modal fade" id="modalQR" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{{usuario}}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="d-flex modal-body align-items-center justify-content-center">
+                                <img src="{{qrUsuario}}" alt="">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         <div class="input-group mb-3">
             <span class="input-group-text" id="nombre">Nombre</span>

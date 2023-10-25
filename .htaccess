@@ -8,6 +8,7 @@ Options -Indexes
     RewriteEngine On
     RewriteBase /
     RewriteRule ^(public)($|/) - [L,NC]
+    RewriteRule ^(tmp)($|/) - [L,NC]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/(.*)/(.*)$ index.php?controller=$1&method=$2&$3 [L,QSA]
