@@ -1,5 +1,6 @@
 <?php
 include_once("helper/Logger.php");
+include_once("third-party/phpqrcode/qrlib.php");
 class UsuarioController
 {
     private $render;
@@ -192,6 +193,7 @@ class UsuarioController
     public function datosUsuario() {
         $usuarioNombre = $_GET['nombre'];
         $partidas['partidas'] = $this->model->obtenerPartidasPorUsuario($usuarioNombre);
+        QRcode::png('http://localhost/usuario/datosUsuario?nombre='.$_GET['nombre'], './public/qr/qr_'.$_GET['nombre'].'.png',QR_ECLEVEL_H,4);
 
         $datos = [
             'usuario' => $_SESSION['usuario'][0],
@@ -199,6 +201,7 @@ class UsuarioController
             'partidas' => $partidas['partidas']['ultimasPartidas'],
             'puntajeTotal' => $partidas['partidas']['puntajeTotal'],
             'rankingUsuarios' => $partidas['partidas']['rankingUsuario'],
+            'qrUsuario' => '../public/qr/qr_'.$_GET['nombre'].'.png',
         ];
 
         foreach ($datos['rankingUsuarios'] as &$rankingUsuario) {
