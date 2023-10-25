@@ -56,7 +56,7 @@ class JuegoModel
         $baseQuery = "SELECT idPregunta, pregunta, categoria, dificultad FROM Pregunta";
         if (!empty($preguntasUtilizadas)) {
             // Si hay preguntas utilizadas, exclúyelas de la consulta
-            $baseQuery .= " WHERE idPregunta NOT IN (1)";
+            $baseQuery .= " WHERE idPregunta NOT IN (". implode(',', $preguntasUtilizadas) . ")";
         }
         $baseQuery .= " ORDER BY RAND() LIMIT 1";
         $pregunta = $this->database->query($baseQuery);
