@@ -45,10 +45,13 @@ class UsuarioController
                 $_SESSION["error"] ="El nombre de usuario ya existe.";
                 Redirect::to('/usuario/registro');
             } else {
+                $_SESSION['alertaVerificacion'] = "Chequea tu bandeja de correo y verificá tu cuenta!";
                 $_SESSION["modal"] = "$mail";
                 $this->enviarCorreoVerificacion($mail, $nombre);
                 $this->model->crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen);
-                Redirect::to('/usuario/ingresar');
+                $usuarioEncontrado  = $this->model->loguearUsuario($usuario, $contrasena);
+                $_SESSION['usuario'] = $usuarioEncontrado;
+                Redirect::to('/');
             }
         }else{
             $_SESSION["error"] ="Cargue datos validos.";
@@ -64,7 +67,9 @@ class UsuarioController
 
             $this->mailer->isHTML(true);                                  //Set email format to HTML
             $this->mailer->Subject = 'Mail de registro en Questionados';
-            $this->mailer->Body    = 'Para registrarse debe darle click al siguiente link <b>LINK!</b>';
+            $this->mailer->Body    = '<b>¡Debe verificar su cuenta!<b> <br>
+                                      Para hacerlo, clickee en el siguiente link: <br> 
+                                      http://localhost/usuario/verificarUsuario';
 
             $this->mailer->send();
         } catch (Exception $e) {
@@ -85,7 +90,7 @@ class UsuarioController
         $usuario = $_POST['usuario'];
         $contrasena = $_POST['contrasena'];
 
-        $usuarioEncontrado  = $this->model->verificarUsuario($usuario, $contrasena);
+        $usuarioEncontrado  = $this->model->loguearUsuario($usuario, $contrasena);
 
         if ($usuarioEncontrado) {
             $_SESSION['usuario'] = $usuarioEncontrado;
@@ -144,6 +149,9 @@ class UsuarioController
             $data["modal"] = $_SESSION['modal'];
             unset( $_SESSION['modal']);
         }
+        if(!empty($_SESSION['alertaVerificacion'])){
+            $data["alertaVerificacion"] = $_SESSION['alertaVerificacion'];
+        }
     }
     public function actualizarUsuario() {
         $nombre = $_POST["nombre"];
@@ -173,7 +181,7 @@ class UsuarioController
         }
         else {
             $this->model->actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen);
-            $usuarioEncontrado  = $this->model->verificarUsuario($usuarioNuevo, $contrasena);
+            $usuarioEncontrado  = $this->model->loguearUsuario($usuarioNuevo, $contrasena);
             $_SESSION['usuario'] = $usuarioEncontrado;
             $_SESSION['mensajeExito'] = "Usuario modificado correctamente.";
             Redirect::to('/usuario/perfil');
@@ -187,7 +195,7 @@ class UsuarioController
 
         $datos = [
             'usuario' => $_SESSION['usuario'][0],
-            'usuarioEncontrado' => $this->model->buscarUsuarioEspecifico($usuarioNombre),
+            'usuarioEncontrado' => $this->model->buscarUsuario($usuarioNombre),
             'partidas' => $partidas['partidas']['ultimasPartidas'],
             'puntajeTotal' => $partidas['partidas']['puntajeTotal'],
             'rankingUsuarios' => $partidas['partidas']['rankingUsuario'],
@@ -198,6 +206,15 @@ class UsuarioController
         }
 
         $this->render->printView('datosUsuario', $datos);
+    }    
+    
+    public function verificarUsuario(){
+       if(isset($_SESSION['usuario'])){
+        $username = $_SESSION['usuario'][0]['usuario'];
+        $this->model->verificarUsuario($username);
+       }
+       unset($_SESSION['alertaVerificacion']);
+       Redirect::to('/');
     }
 
 }
