@@ -53,12 +53,14 @@ class JuegoModel
         }
 
         // Si la dificultad del usuario no existe o no se encuentra una pregunta, busca cualquier pregunta no utilizada sin restricciones de dificultad
-        $baseQuery = "SELECT idPregunta, pregunta, categoria, dificultad FROM Pregunta
-                 WHERE idPregunta NOT IN (" . implode(',', $preguntasUtilizadas) . ")
-                 ORDER BY RAND() LIMIT 1";
-        Logger::info("pregunta de dificultad diferente.");
-
+        $baseQuery = "SELECT idPregunta, pregunta, categoria, dificultad FROM Pregunta";
+        if (!empty($preguntasUtilizadas)) {
+            // Si hay preguntas utilizadas, exclúyelas de la consulta
+            $baseQuery .= " WHERE idPregunta NOT IN (1)";
+        }
+        $baseQuery .= " ORDER BY RAND() LIMIT 1";
         $pregunta = $this->database->query($baseQuery);
+        Logger::info("pregunta de dificultad diferente.");
 
         if ($pregunta) {
             $preguntasUtilizadas[] = $pregunta[0]['idPregunta'];
