@@ -17,9 +17,9 @@ class UsuarioModel
         }
 
         $sql = "INSERT INTO `usuario` (
-        `nombre`, `apellido`, `fecha_nac`, `sexo`, `pais`, `ciudad`, `mail`, `usuario`, `contrasena`, `fotoPerfil`) 
+        `nombre`, `apellido`, `fecha_nac`, `sexo`, `pais`, `ciudad`, `mail`, `usuario`, `contrasena`, `estaVerificado`, `fotoPerfil`) 
     VALUES 
-        ('$nombre', '$apellido', '$fecha_nac', '$sexo', '$pais', '$ciudad', '$mail', '$usuario', '$contrasena', '$direccionImagen');";
+        ('$nombre', '$apellido', '$fecha_nac', '$sexo', '$pais', '$ciudad', '$mail', '$usuario', '$contrasena', false, '$direccionImagen');";
 
         Logger::info('UsuarioAlta: ' . $sql);
         $this->database->query($sql);
@@ -29,16 +29,12 @@ class UsuarioModel
         return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario'");
     }
 
-    public function buscarUsuarioEspecifico($nombreUsuario) {
-        return $this->database->query("SELECT idusuario, nombre, apellido, fecha_nac, sexo, pais, ciudad, usuario, fotoPerfil FROM `usuario` WHERE BINARY usuario = '$nombreUsuario'");
-    }
-
-    public function verificarUsuario($nombreUsuario, $contrasena) {
+    public function loguearUsuario($nombreUsuario, $contrasena) {
         return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario' && BINARY contrasena = '$contrasena' ");
     }
 
     public function actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen) {
-        $idUsuario = $this->buscarUsuarioEspecifico($usuarioViejo)[0]["idusuario"];
+        $idUsuario = $this->buscarUsuario($usuarioViejo)[0]["idusuario"];
         $this->database->query("UPDATE usuario
     SET
         nombre = '$nombre',
@@ -54,7 +50,7 @@ class UsuarioModel
         );
 
         if (!empty($imagen['name'])) {
-            $fotoVieja = substr($this->buscarUsuarioEspecifico($usuarioViejo)[0]["fotoPerfil"], 3);
+            $fotoVieja = substr($this->buscarUsuario($usuarioViejo)[0]["fotoPerfil"], 3);
             $fotoNueva = $this->guardarFoto($imagen);
 
             if (file_exists($fotoVieja)) {
@@ -75,7 +71,7 @@ class UsuarioModel
     }
 
     public function obtenerPartidasPorUsuario($usuarioNombre) {
-        $usuarioEncontrado = $this->buscarUsuarioEspecifico($usuarioNombre);
+        $usuarioEncontrado = $this->buscarUsuario($usuarioNombre);
         $idUsuario = $usuarioEncontrado[0]['idusuario'];
 
         $queryPuntajeTotal = "SELECT SUM(puntaje_obtenido) AS puntaje_total FROM partida WHERE idusuario = '$idUsuario'";
@@ -118,6 +114,14 @@ class UsuarioModel
             $_SESSION["errorAlta"] = "Ha ocurrido un error al cargar la Foto de Perfil";
         }
     }
-    
-        
+
+    public function verificarUsuario($username){
+        $usuario = $this->buscarUsuario($username);
+        $idUsuario = $usuario[0]['idUsuario'];
+        $this->database->query("UPDATE usuario
+        SET
+            estaVerificado = true
+        WHERE idUsuario = '$idUsuario';");
+    }
+
 }

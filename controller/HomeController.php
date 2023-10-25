@@ -17,8 +17,12 @@ class HomeController
             'usuario' => $_SESSION['usuario'][0],
             'partidasUsuario' => $this->model->obtenerPartidasPorId($idUsuario),
             'puntajeTotal' => $this->model->obtenerPuntajeTotalPorId($idUsuario),
-            'rankingUsuarios' => $this->model->obtenerRankingUsuarios()
+            'rankingUsuarios' => $this->model->obtenerRankingUsuarios(),
         ];
+
+        if(!empty($_SESSION['alertaVerificacion'])){
+            $datos["alertaVerificacion"] = $_SESSION['alertaVerificacion'];
+        }
 
         foreach ($datos['rankingUsuarios'] as &$rankingUsuario) {
             $rankingUsuario['esUsuarioLogueado'] = ($rankingUsuario['usuario'] === $nombreUsuarioLogueado);
