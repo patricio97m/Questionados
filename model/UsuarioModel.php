@@ -72,7 +72,7 @@ class UsuarioModel
 
     public function obtenerPartidasPorUsuario($usuarioNombre) {
         $usuarioEncontrado = $this->buscarUsuario($usuarioNombre);
-        $idUsuario = $usuarioEncontrado[0]['idusuario'];
+        $idUsuario = $usuarioEncontrado[0]['idUsuario'];
 
         $queryPuntajeTotal = "SELECT SUM(puntaje_obtenido) AS puntaje_total FROM partida WHERE idusuario = '$idUsuario'";
         $resultadoPuntajeTotal = $this->database->query($queryPuntajeTotal);
