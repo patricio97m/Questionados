@@ -35,6 +35,15 @@ CREATE TABLE Partida (
                          FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
 
+CREATE TABLE RespuestasUsuario (
+                                   idRespuestaUsuario INT AUTO_INCREMENT PRIMARY KEY,
+                                   idUsuario INT,
+                                   idPregunta INT,
+                                   esCorrecta BOOLEAN,
+                                   FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+                                   FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
+);
+
 -- Inserts de datos
 
 INSERT INTO Usuario (nombre, apellido, fecha_nac, sexo, pais, ciudad, mail, usuario, contrasena, fotoPerfil)
@@ -97,4 +106,7 @@ INSERT INTO Respuesta (idPregunta, respuesta, esCorrecta) VALUES
                                             (10, 'Mercurio', 1),(10, 'Venus', 0),(10, 'Marte', 0),(10, 'Júpiter', 0),
                                             (11, 'Francia', 0),(11, 'Brasil', 0),(11, 'Alemania', 0),(11, 'Argentina', 1),
                                             (12, 'Avengers: Endgame', 1),(12, 'Avatar', 0),(12, 'Titanic', 0),(12, 'Star Wars: El despertar de la Fuerza', 0);
+
+INSERT INTO RespuestasUsuario (idUsuario, idPregunta, esCorrecta)
+VALUES (1, 1, 1);
 

@@ -24,6 +24,7 @@ class JuegoController
 
             $categoria = $preguntaYRespuestas['categoria'];
             $estiloCategoria = $categoriaEstilos[$categoria] ?? 'bg-light';
+            $_SESSION['idPregunta'] = $preguntaYRespuestas['idPregunta'];
 
             return [
                 'usuario' => $_SESSION['usuario'],
@@ -65,6 +66,8 @@ class JuegoController
         if ($esCorrecta === "1") {
             // Respuesta correcta, incrementa el puntaje
             $_SESSION['puntaje'] += 1;
+            $idUsuario = $_SESSION['usuario'][0]['idUsuario']; $idPregunta = $_SESSION['idPregunta'];
+            $this->model->guardarRespuestaUsuario($idUsuario, $idPregunta, 1);
             $data = $this->cargarPregunta();
             $_SESSION['juego_data'] = $data; //Se guarda las preguntas actuales para mostar el modal por si se pierde
         }
@@ -72,6 +75,8 @@ class JuegoController
             $puntajeFinal = $_SESSION['puntaje'];
             $puntajeFinal = ($puntajeFinal === 0) ? $puntajeFinal . " " : $puntajeFinal; //Soluciona que no se abra el modal con el puntaje en 0
 
+            $idUsuario = $_SESSION['usuario'][0]['idUsuario']; $idPregunta = $_SESSION['idPregunta'];
+            $this->model->guardarRespuestaUsuario($idUsuario, $idPregunta, 0);
             $data = $_SESSION['juego_data'];
             unset($_SESSION['juego_data']);
             $this->guardarPartida($puntajeFinal);

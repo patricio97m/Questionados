@@ -42,6 +42,7 @@ class JuegoModel
             // Combinar la pregunta con sus respuestas
             return [
                 'pregunta' => $pregunta[0]['pregunta'],
+                'idPregunta' => $pregunta[0]['idPregunta'],
                 'categoria' => $pregunta[0]['categoria'],
                 'respuestas' => $respuestas
             ];
@@ -64,6 +65,11 @@ class JuegoModel
         $sql = "INSERT INTO `partida` (`puntaje_obtenido`, `fecha_partida`, `idUsuario`) 
             VALUES ('$puntaje', NOW(), '$idUsuario');";
         $this->database->query($sql);
+    }
 
+    public function guardarRespuestaUsuario($idUsuario, $idPregunta, $esCorrecta){
+        $sql = "INSERT INTO `RespuestasUsuario` (`idUsuario`, `idPregunta`, `esCorrecta`) 
+            VALUES ('$idUsuario', '$idPregunta', '$esCorrecta');";
+        $this->database->query($sql);
     }
 }
