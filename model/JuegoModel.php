@@ -52,11 +52,11 @@ class JuegoModel
             }
         }
 
-        // Si la dificultad del usuario no existe o no se encuentra una pregunta, busca cualquier pregunta no utilizada sin restricciones de dificultad
+        // Si no se encuentra una pregunta de la misma dificultad, busca cualquier pregunta no utilizada sin restricciones de dificultad
         $baseQuery = "SELECT idPregunta, pregunta, categoria, dificultad FROM Pregunta";
         if (!empty($preguntasUtilizadas)) {
-            // Si hay preguntas utilizadas, exclúyelas de la consulta
-            $baseQuery .= " WHERE idPregunta NOT IN (". implode(',', $preguntasUtilizadas) . ")";
+            // Si hay preguntas utilizadas, se excluyen de la consulta
+            $baseQuery .= " WHERE idPregunta NOT IN (" . implode(',', $preguntasUtilizadas) . ")";
         }
         $baseQuery .= " ORDER BY RAND() LIMIT 1";
         $pregunta = $this->database->query($baseQuery);
@@ -80,7 +80,9 @@ class JuegoModel
             ];
         }
 
-        return null;
+        // Si no se encuentra ninguna pregunta disponible, reinicia las preguntas y busca nuevamente
+        $_SESSION['preguntas_utilizadas'] = [];
+        return $this->obtenerPreguntaAlAzar($idUsuario);
     }
 
     private function obtenerCantidadTotalDePreguntas() {
