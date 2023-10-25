@@ -19,7 +19,8 @@ create table Usuario(
 CREATE TABLE Pregunta (
                           idPregunta INT AUTO_INCREMENT PRIMARY KEY,
                           pregunta VARCHAR(255),
-                          categoria VARCHAR(15)
+                          categoria VARCHAR(15),
+                          dificultad VARCHAR(15)
 );
 CREATE TABLE Respuesta (
                            idRespuesta INT AUTO_INCREMENT PRIMARY KEY,
@@ -80,19 +81,19 @@ VALUES (12, DATE_SUB(NOW(), INTERVAL 7 DAY), 4), (20, NOW(), 4), (14, DATE_SUB(N
        (8, DATE_SUB(NOW(), INTERVAL 7 DAY), 9), (24, DATE_SUB(NOW(), INTERVAL 30 DAY), 9), (12, DATE_SUB(NOW(), INTERVAL 1 DAY), 9),
        (15, DATE_SUB(NOW(), INTERVAL 7 DAY), 10), (32, DATE_SUB(NOW(), INTERVAL 30 DAY), 10), (13, DATE_SUB(NOW(), INTERVAL 1 DAY), 10);
 
-INSERT INTO Pregunta (pregunta, categoria) VALUES
-                                               ('¿Cuál es la capital de Francia?', 'Geografía'),
-                                               ('¿Quién escribió Romeo y Julieta?', 'Arte'),
-                                               ('¿Cuál es el símbolo químico del oxígeno?', 'Ciencia'),
-                                               ('¿Cuál es el deporte más popular en Brasil?', 'Deporte'),
-                                               ('¿Quién es el actor principal de la película "Titanic"?', 'Entretenimiento'),
-                                               ('¿En qué año comenzó la Primera Guerra Mundial?', 'Historia'),
-                                               ('¿Cuál es el río más largo del mundo?', 'Geografía'),
-                                               ('¿En qué año se firmó la Declaración de Independencia de los Estados Unidos?', 'Historia'),
-                                               ('¿Quién pintó la Mona Lisa?', 'Arte'),
-                                               ('¿Cuál es el planeta más cercano al Sol?', 'Ciencia'),
-                                               ('¿Quién ganó el Mundial de Fútbol en 2022?', 'Deporte'),
-                                               ('¿Cuál es la película más taquillera de todos los tiempos?', 'Entretenimiento');
+INSERT INTO Pregunta (pregunta, categoria, dificultad) VALUES
+                                               ('¿Cuál es la capital de Francia?', 'Geografía', 'facil'),
+                                               ('¿Quién escribió Romeo y Julieta?', 'Arte', 'medio'),
+                                               ('¿Cuál es el símbolo químico del oxígeno?', 'Ciencia' , 'facil'),
+                                               ('¿Cuál es el deporte más popular en Brasil?', 'Deporte' , 'facil'),
+                                               ('¿Quién es el actor principal de la película "Titanic"?', 'Entretenimiento', 'medio'),
+                                               ('¿En qué año comenzó la Primera Guerra Mundial?', 'Historia', 'dificil'),
+                                               ('¿Cuál es el río más largo del mundo?', 'Geografía', 'dificil'),
+                                               ('¿En qué año se firmó la Declaración de Independencia de los Estados Unidos?', 'Historia', 'dificil'),
+                                               ('¿Quién pintó la Mona Lisa?', 'Arte', 'medio'),
+                                               ('¿Cuál es el planeta más cercano al Sol?', 'Ciencia', 'dificil'),
+                                               ('¿Quién ganó el Mundial de Fútbol en 2022?', 'Deporte', 'facil'),
+                                               ('¿Cuál es la película más taquillera de todos los tiempos?', 'Entretenimiento', 'medio');
 
 INSERT INTO Respuesta (idPregunta, respuesta, esCorrecta) VALUES
                                             (1, 'París', 1), (1, 'Londres', 0), (1, 'Lisboa', 0),(1, 'Madrid', 0),

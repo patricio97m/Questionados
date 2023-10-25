@@ -10,7 +10,7 @@ class JuegoController
     }
 
     private function cargarPregunta() {
-        $preguntaYRespuestas = $this->model->obtenerPreguntaAlAzar();
+        $preguntaYRespuestas = $this->model->obtenerPreguntaAlAzar($_SESSION['usuario'][0]['idUsuario']);
 
         if ($preguntaYRespuestas) { //Array para comparar valores de las categorías y elegir el estilo correcto
             $categoriaEstilos = [
@@ -68,6 +68,7 @@ class JuegoController
             $_SESSION['puntaje'] += 1;
             $idUsuario = $_SESSION['usuario'][0]['idUsuario']; $idPregunta = $_SESSION['idPregunta'];
             $this->model->guardarRespuestaUsuario($idUsuario, $idPregunta, 1);
+            $this->model->actualizarDificultadPregunta($idPregunta);
             $data = $this->cargarPregunta();
             $_SESSION['juego_data'] = $data; //Se guarda las preguntas actuales para mostar el modal por si se pierde
         }
@@ -77,6 +78,7 @@ class JuegoController
 
             $idUsuario = $_SESSION['usuario'][0]['idUsuario']; $idPregunta = $_SESSION['idPregunta'];
             $this->model->guardarRespuestaUsuario($idUsuario, $idPregunta, 0);
+            $this->model->actualizarDificultadPregunta($idPregunta);
             $data = $_SESSION['juego_data'];
             unset($_SESSION['juego_data']);
             $this->guardarPartida($puntajeFinal);
