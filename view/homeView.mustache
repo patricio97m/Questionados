@@ -6,13 +6,17 @@
     {{/alertaVerificacion}}
 
     {{#usuario}}
-        <h1 class="text-center mb-3 p-3">Bienvenido {{nombre}} 👋</h1>
+        <h1 class="text-center mb-1 p-3">Bienvenido {{nombre}} 👋</h1>
     {{/usuario}}
+
+    <div class="container text-center">
+        <a href="/juego/NuevaPartida" class="btn btn-success mb-4 btn-lg btn-block w-50">Nueva partida</a>
+    </div>
 
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
-                <h3 class="bg-dark text-uppercase d-inline p-1 text-light">Últimas partidas jugadas</h3>
+            <div class="col-md-6 mb-3">
+                <h3 class="bg-primary text-uppercase d-inline p-1 text-light">Últimas partidas jugadas</h3>
                     <ul class="list-group mt-3">
                         {{#partidasUsuario}}
                         <li class="list-group-item d-flex justify-content-between">{{fecha_partida}} <span>Puntaje: <b>{{puntaje_obtenido}}</b></span></li>
@@ -23,14 +27,14 @@
                 {{/partidasUsuario}}
             </div>
             <div class="col-md-6">
-                <h3 class="bg-dark text-uppercase d-inline p-1 text-light">puntaje total: {{puntajeTotal}}</h3>
+                <h3 class="bg-primary text-uppercase d-inline p-1 text-light">puntaje total: {{puntajeTotal}}</h3>
                 <ol class="list-group list-group-numbered mt-3">
                     {{#rankingUsuarios}}
-                        <li class="list-group-item d-flex justify-content-between align-items-start {{#esUsuarioLogueado}}bg-info text-white{{/esUsuarioLogueado}}">
+                        <li class="list-group-item d-flex justify-content-between align-items-start {{#esUsuarioLogueado}}bg-secondary text-white{{/esUsuarioLogueado}}">
                             <div class="ms-2 me-auto">
                                 <a href="/usuario/datosUsuario?nombre={{usuario}}" class="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{usuario}}</a>
                             </div>
-                            <span class="badge bg-dark text-light rounded-pill">{{puntaje_total}}</span>
+                            <span class="badge bg-success text-light rounded-pill">{{puntaje_total}}</span>
                         </li>
                     {{/rankingUsuarios}}
                 </ol>

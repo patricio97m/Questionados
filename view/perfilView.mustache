@@ -6,10 +6,10 @@
     {{/alertaVerificacion}}
 
     <div class="text-center">
-        <h1 class="bg-dark text-uppercase d-inline px-3 text-light">Mi perfil</h1>
+        <h1 class="bg-primary text-uppercase d-inline px-3 text-light">Mi perfil</h1>
     </div>
 
-    <div class="container mt-4 rounded p-4">
+    <div class="container rounded p-4">
         {{#usuario}}
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <img src="{{fotoPerfil}}" alt="Imagen-de-usuario" width="150" height="150" class="rounded-circle img-fluid"/>
@@ -91,11 +91,12 @@
         {{/cambiarFoto}}
 
             <div class="d-flex justify-content-between mt-4">
-                <a href="/usuario/cerrarSesion" class="btn btn-secondary">Cerrar sesión</a>
                 {{#modificaDatos}}
+                    <a href="/usuario/cerrarSesion" class="btn btn-secondary">Cerrar sesión</a>
                     <a class="btn btn-primary" href="/usuario/editar">Modificar datos</a>
                 {{/modificaDatos}}
                 {{#actualizarDatos}}
+                    <a href="/usuario/perfil" class="btn btn-danger">Cancelar cambios</a>
                     <button type="submit" class="btn btn-primary" >
                         Actualizar datos
                     </button>

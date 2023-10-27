@@ -7,7 +7,24 @@
     font-weight: 400;
     font-style: normal;
 }
-
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0,0,0,0.1);
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    background: rgba(0,0,0,0.2);
+}
+::-webkit-scrollbar-thumb:hover{
+    background: rgba(0,0,0,0.4);
+}
+::-webkit-scrollbar-thumb:active{
+    background: rgba(0,0,0,.9);
+}
 body {
     font-family: 'Open Sans', sans-serif !important;
     background: url('../background.png') right repeat-y, url('../background-r.png') left repeat-y;
@@ -44,5 +61,15 @@ body {
 }
 
 .footer-final {
-    min-height: 78vh;
+    min-height: 82vh;
+}
+
+@media (max-width: 768px) {
+    body {
+        background-size: 65vh;
+    }
+
+    .footer-final {
+        min-height: 81vh;
+    }
 }

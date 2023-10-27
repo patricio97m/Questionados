@@ -1,7 +1,7 @@
-<main class="pt-3 container mt-5 p-4 border rounded col-md-6 footer-final bg-white">
-    <div class="container mt-4 rounded p-4">
+<main class="pt-1 container mt-2 p-4 border rounded col-md-6 footer-final bg-white">
+    <div class="container mt-1 rounded p-2">
         {{#usuarioEncontrado}}
-            <div class="d-flex align-items-center justify-content-center mb-3">
+            <div class="d-flex align-items-center justify-content-center mb-2">
                 <img src="{{fotoPerfil}}" alt="Imagen-de-usuario" width="150" height="150" class="rounded-circle img-fluid"/>
                 <h2 class="ms-3">
                     {{nombre}} {{apellido}}
@@ -9,7 +9,7 @@
             </div>
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <!-- <a href="">MotrarQR</a> -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalQR">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalQR">
                     Mostrar QR
                 </button>
                 <div class="modal fade" id="modalQR" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -67,10 +67,10 @@
 
         {{/usuarioEncontrado}}
 
-        <div class="container mt-3">
+        <div class="container mt-4">
             <div class="row">
-                <div class="col-md-6">
-                    <h3 class="bg-dark text-uppercase d-inline p-1 text-light">Últimas partidas jugadas</h3>
+                <div class="col-md-6 mb-4">
+                    <h3 class="bg-primary text-uppercase d-inline p-1 text-light">Últimas partidas jugadas</h3>
                     <ul class="list-group mt-3">
                         {{#partidas}}
                             <li class="list-group-item d-flex justify-content-between">{{fecha_partida}} <span>Puntaje: <b>{{puntaje_obtenido}}</b></span></li>
@@ -81,14 +81,14 @@
                     {{/partidas}}
                 </div>
                 <div class="col-md-6">
-                    <h3 class="bg-dark text-uppercase d-inline p-1 text-light">puntaje total: {{puntajeTotal}}</h3>
+                    <h3 class="bg-primary text-uppercase d-inline p-1 text-light">puntaje total: {{puntajeTotal}}</h3>
                     <ol class="list-group list-group-numbered mt-3">
                         {{#rankingUsuarios}}
-                            <li class="list-group-item d-flex justify-content-between align-items-start {{#esUsuarioLogueado}}bg-info text-white{{/esUsuarioLogueado}}">
+                            <li class="list-group-item d-flex justify-content-between align-items-start {{#esUsuarioLogueado}}bg-secondary text-white{{/esUsuarioLogueado}}">
                                 <div class="ms-2 me-auto">
                                     <a href="/usuario/datosUsuario?nombre={{usuario}}" class="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{usuario}}</a>
                                 </div>
-                                <span class="badge bg-dark text-light rounded-pill">{{puntaje_total}}</span>
+                                <span class="badge bg-success text-light rounded-pill">{{puntaje_total}}</span>
                             </li>
                         {{/rankingUsuarios}}
                     </ol>

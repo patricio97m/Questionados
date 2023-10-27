@@ -26,11 +26,11 @@ class UsuarioModel
     }
 
     public function buscarUsuario($nombreUsuario) {
-        return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario'");
+        return $this->database->query("SELECT * FROM `usuario` WHERE usuario = '$nombreUsuario'");
     }
 
     public function loguearUsuario($nombreUsuario, $contrasena) {
-        return $this->database->query("SELECT * FROM `usuario` WHERE BINARY usuario = '$nombreUsuario' && BINARY contrasena = '$contrasena' ");
+        return $this->database->query("SELECT * FROM `usuario` WHERE usuario = '$nombreUsuario' && BINARY contrasena = '$contrasena' ");
     }
 
     public function actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen) {

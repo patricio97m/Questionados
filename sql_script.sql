@@ -93,7 +93,23 @@ INSERT INTO Pregunta (pregunta, categoria, dificultad) VALUES
                                                ('¿Quién pintó la Mona Lisa?', 'Arte', 'medio'),
                                                ('¿Cuál es el planeta más cercano al Sol?', 'Ciencia', 'dificil'),
                                                ('¿Quién ganó el Mundial de Fútbol en 2022?', 'Deporte', 'facil'),
-                                               ('¿Cuál es la película más taquillera de todos los tiempos?', 'Entretenimiento', 'medio');
+                                               ('¿Cuál es la película más taquillera de todos los tiempos?', 'Entretenimiento', 'medio'),
+                                               ('¿Cuál es el océano más grande del mundo?', 'Geografía', 'facil'),
+                                               ('¿Quién fue el primer presidente de los Estados Unidos?', 'Historia', 'facil'),
+                                               ('¿Cuál es el elemento más abundante en la corteza terrestre?', 'Ciencia', 'medio'),
+                                               ('¿Cuál es el país más poblado del mundo?', 'Geografía', 'dificil'),
+                                               ('¿Quién escribió Don Quijote de la Mancha?', 'Arte', 'dificil'),
+                                               ('¿Cuál es el deporte que se juega en el Super Bowl?', 'Deporte', 'medio'),
+                                               ('¿En qué año se fundó Google?', 'Ciencia', 'medio'),
+                                               ('¿Cuál es el río que atraviesa El Cairo?', 'Geografía', 'facil'),
+                                               ('¿Cuál es la capital de Noruega?', 'Geografía', 'dificil'),
+                                               ('¿Quién pintó La Noche Estrellada?', 'Arte', 'dificil'),
+                                               ('¿Cuál es la capital de Japón?', 'Geografía', 'facil'),
+                                               ('¿Cuál es el país conocido como la Tierra del Sol Naciente?', 'Geografía', 'facil'),
+                                               ('¿Quién escribió Hamlet?', 'Arte', 'dificil'),
+                                               ('¿Cuál es el país donde se originó el tango?', 'Arte', 'medio'),
+                                               ('¿Cuál es el deporte que se juega en Wimbledon?', 'Deporte', 'facil'),
+                                               ('¿En qué año se estrenó la película Star Wars: Episodio IV - Una Nueva Esperanza?', 'Entretenimiento', 'dificil');
 
 INSERT INTO Respuesta (idPregunta, respuesta, esCorrecta) VALUES
                                             (1, 'París', 1), (1, 'Londres', 0), (1, 'Lisboa', 0),(1, 'Madrid', 0),
@@ -107,8 +123,25 @@ INSERT INTO Respuesta (idPregunta, respuesta, esCorrecta) VALUES
                                             (9, 'Leonardo da Vinci', 1),(9, 'Vincent van Gogh', 0),(9, 'Pablo Picasso', 0),(9, 'Miguel Ángel', 0),
                                             (10, 'Mercurio', 1),(10, 'Venus', 0),(10, 'Marte', 0),(10, 'Júpiter', 0),
                                             (11, 'Francia', 0),(11, 'Brasil', 0),(11, 'Alemania', 0),(11, 'Argentina', 1),
-                                            (12, 'Avengers: Endgame', 1),(12, 'Avatar', 0),(12, 'Titanic', 0),(12, 'Star Wars: El despertar de la Fuerza', 0);
+                                            (12, 'Avengers: Endgame', 1),(12, 'Avatar', 0),(12, 'Titanic', 0),(12, 'Star Wars: El despertar de la Fuerza', 0),
+                                            (13, 'Océano Pacífico', 1), (13, 'Océano Atlántico', 0), (13, 'Océano Índico', 0), (13, 'Océano Antártico', 0),
+                                            (14, 'George Washington', 1), (14, 'Thomas Jefferson', 0), (14, 'John Adams', 0), (14, 'Benjamin Franklin', 0),
+                                            (15, 'Oxígeno', 1), (15, 'Hidrógeno', 0), (15, 'Nitrógeno', 0), (15, 'Carbono', 0),
+                                            (16, 'China', 1), (16, 'India', 0), (16, 'Estados Unidos', 0), (16, 'Brasil', 0),
+                                            (17, 'Miguel de Cervantes', 1), (17, 'Gustavo Adolfo Bécquer', 0), (17, 'Federico García Lorca', 0), (17, 'Pablo Neruda', 0),
+                                            (18, 'Fútbol americano', 1), (18, 'Fútbol soccer', 0), (18, 'Baloncesto', 0), (18, 'Béisbol', 0),
+                                            (19, '1998', 0), (19, '2004', 0), (19, '2000', 1), (19, '1996', 0),
+                                            (20, 'Nilo', 1), (20, 'Amazonas', 0), (20, 'Misisipi', 0), (20, 'Yangtsé', 0),
+                                            (21, 'Oslo', 1), (21, 'Estocolmo', 0), (21, 'Helsinki', 0), (21, 'Copenhague', 0),
+                                            (22, 'Van Gogh', 1), (22, 'Picasso', 0), (22, 'Rembrandt', 0), (22, 'Leonardo da Vinci', 0),
+                                            (23, 'Tokio', 1), (23, 'Pekín', 0), (23, 'Bangkok', 0), (23, 'Nueva Delhi', 0),
+                                            (24, 'Japón', 1), (24, 'China', 0), (24, 'Corea del Sur', 0), (24, 'India', 0),
+                                            (25, 'William Shakespeare', 1), (25, 'Charles Dickens', 0), (25, 'Jane Austen', 0), (25, 'Oscar Wilde', 0),
+                                            (26, 'Argentina', 1), (26, 'Uruguay', 0), (26, 'España', 0), (26, 'México', 0),
+                                            (27, 'Tenis', 1), (27, 'Críquet', 0), (27, 'Rugby', 0), (27, 'Golf', 0),
+                                            (28, '1977', 0), (28, '1980', 0), (28, '1979', 1), (28, '1975', 0);
 
 INSERT INTO RespuestasUsuario (idUsuario, idPregunta, esCorrecta)
-VALUES (1, 1, 1);
+VALUES (1, 1, 1), (4, 1, 0), (4, 2, 1), (4, 3, 0), (4, 4, 1), (4, 5, 0), (4, 6, 0), (4, 7, 1), (4, 8, 0), (4, 9, 1),
+       (7, 10, 0), (6, 11, 0), (5, 12, 1), (4, 13, 0), (3, 14, 1), (2, 15, 0), (1, 16, 0), (8, 17, 1), (7, 18, 0), (13, 9, 1);
 
