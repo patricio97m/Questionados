@@ -180,4 +180,21 @@ class JuegoModel
         Logger::info("La dificultad de la pregunta " . $idPregunta . " ahora es ". $dificultad);
         return $dificultad;
     }
+
+    public function crearPregunta($pregunta, $respuestaCorrecta, $respuestaIncorrecta1, $respuestaIncorrecta2, $respuestaIncorrecta3, $categoria, $dificultad, $idUsuario) {
+        $sql = "INSERT INTO Pregunta_pendiente (pregunta, categoria, dificultad, idUsuario) 
+            VALUES ('$pregunta', '$categoria', '$dificultad', $idUsuario)";
+        $this->database->query($sql);
+
+        $idPreguntaArray = $this->database->query("SELECT idPregunta FROM Pregunta_pendiente ORDER BY idPregunta DESC LIMIT 1");
+        $idPregunta = $idPreguntaArray[0]['idPregunta'];
+
+        $sql = "INSERT INTO Respuesta_pendiente (idPregunta, respuesta, esCorrecta) 
+            VALUES ($idPregunta, '$respuestaCorrecta', 1),
+                   ($idPregunta, '$respuestaIncorrecta1', 0),
+                   ($idPregunta, '$respuestaIncorrecta2', 0),
+                   ($idPregunta, '$respuestaIncorrecta3', 0)";
+        $this->database->query($sql);
+        Logger::info('PreguntaAlta: ' . $sql);
+    }
 }

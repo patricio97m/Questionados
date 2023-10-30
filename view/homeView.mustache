@@ -4,13 +4,25 @@
             {{alertaVerificacion}}
         </div>
     {{/alertaVerificacion}}
+    {{#alertaPregunta}}
+        <div class="alert alert-success" role="alert">
+            {{alertaPregunta}}
+        </div>
+    {{/alertaPregunta}}
 
     {{#usuario}}
         <h1 class="text-center mb-1 p-3">Bienvenido {{nombre}} 👋</h1>
     {{/usuario}}
 
-    <div class="container text-center">
-        <a href="/juego/NuevaPartida" class="btn btn-success mb-4 btn-lg btn-block w-50">Nueva partida</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <a href="/juego/NuevaPartida" class="btn btn-success mb-4 btn-lg w-100">Nueva partida</a>
+            </div>
+            <div class="col-md-6 text-center">
+                <a href="/juego/nuevaPregunta" class="btn btn-warning mb-4 btn-lg w-100">Sugerir nueva pregunta</a>
+            </div>
+        </div>
     </div>
 
     <div class="container">

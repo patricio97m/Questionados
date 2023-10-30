@@ -29,6 +29,21 @@ CREATE TABLE Respuesta (
                            esCorrecta BOOLEAN,
                            FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
 );
+CREATE TABLE Pregunta_pendiente (
+                          idPregunta INT AUTO_INCREMENT PRIMARY KEY,
+                          pregunta VARCHAR(255),
+                          categoria VARCHAR(15),
+                          dificultad VARCHAR(15),
+                          idUsuario INT,
+                          FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+);
+CREATE TABLE Respuesta_pendiente (
+                           idRespuesta INT AUTO_INCREMENT PRIMARY KEY,
+                           idPregunta INT,
+                           respuesta VARCHAR(255),
+                           esCorrecta BOOLEAN,
+                           FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
+);
 CREATE TABLE Partida (
                          id INT AUTO_INCREMENT PRIMARY KEY,
                          puntaje_obtenido INT,

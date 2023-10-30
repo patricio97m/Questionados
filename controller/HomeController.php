@@ -24,6 +24,11 @@ class HomeController
             $datos["alertaVerificacion"] = $_SESSION['alertaVerificacion'];
         }
 
+        if(!empty($_SESSION['alertaPregunta'])){
+            $datos["alertaPregunta"] = $_SESSION['alertaPregunta'];
+            unset( $_SESSION['alertaPregunta']);
+        }
+
         foreach ($datos['rankingUsuarios'] as &$rankingUsuario) {
             $rankingUsuario['esUsuarioLogueado'] = ($rankingUsuario['usuario'] === $nombreUsuarioLogueado);
         }

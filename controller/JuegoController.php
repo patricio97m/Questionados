@@ -71,6 +71,7 @@ class JuegoController
             $this->model->actualizarDificultadPregunta($idPregunta);
             $data = $this->cargarPregunta();
             $_SESSION['juego_data'] = $data; //Se guarda las preguntas actuales para mostar el modal por si se pierde
+            Redirect::to('/juego/nuevaPartida');
         }
         else {
             $puntajeFinal = $_SESSION['puntaje'];
@@ -91,6 +92,29 @@ class JuegoController
     private function guardarPartida($puntajeFinal) {
         $idUsuario = $_SESSION['usuario'][0]['idUsuario'];
         $this->model->guardarPartidaEnBD($idUsuario, $puntajeFinal);
+    }
 
+    public function nuevaPregunta() {
+        $data['usuario'] = $_SESSION['usuario'];
+        $this->render->printView('nuevaPregunta', $data);
+    }
+    public function procesarNuevaPregunta() {
+        if($_POST){
+            $pregunta = $_POST["pregunta"];
+            $respuestaCorrecta = $_POST['respuestaCorrecta'];
+            $respuestaIncorrecta1 = $_POST['respuestaIncorrecta1'];
+            $respuestaIncorrecta2 = $_POST['respuestaIncorrecta2'];
+            $respuestaIncorrecta3 = $_POST['respuestaIncorrecta3'];
+            $categoria = $_POST['categoria'];
+            $dificultad = $_POST['dificultad'];
+            $idUsuario = $_SESSION['usuario'][0]['idUsuario'];
+
+            $this->model->crearPregunta($pregunta, $respuestaCorrecta, $respuestaIncorrecta1, $respuestaIncorrecta2, $respuestaIncorrecta3, $categoria, $dificultad, $idUsuario);
+            $_SESSION['alertaPregunta'] = "Pregunta subida con éxito. Pendiente aprobación de un administrador.";
+            Redirect::to('/');
+        }else{
+            $_SESSION["error"] ="Cargue datos validos.";
+            Redirect::to('/juego/nuevaPregunta');
+        }
     }
 }

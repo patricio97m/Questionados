@@ -64,6 +64,32 @@ body {
     min-height: 82vh;
 }
 
+.input-group > span {
+    width: 9em;
+}
+.card-header {
+    position: relative;
+    text-align: center;
+}
+.card-header > h3{
+    position: relative;
+    top: 4px;
+    right: 15px;
+}
+
+.texto-cronometro {
+    position: absolute;
+    top: 8px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.texto-cronometro > h3{
+    position: relative;
+    top: 5px;
+}
+
 @media (max-width: 768px) {
     body {
         background-size: 65vh;

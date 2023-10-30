@@ -1,0 +1,78 @@
+<main class="footer-final">
+    <div class="container mt-3 p-4 border rounded col-md-6 bg-white">
+        <h2>Nueva sugerencia de pregunta</h2>
+
+        {{#error}}
+            <div class="alert alert-danger" role="alert">
+                {{error}}
+            </div>
+        {{/error}}
+
+        <form method="post" action="/juego/procesarNuevaPregunta" enctype="multipart/form-data">
+            <div class="mb-3">
+                <div class="mb-2">
+                    <label for="pregunta" class="form-label">Pregunta: </label>
+                    <input type="text" class="form-control" id="pregunta" name="pregunta" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label for="respuestaCorrecta" class="form-label">Respuesta <b class="text-success">correcta</b>: </label>
+                            <input type="text" class="form-control" id="respuestaCorrecta" name="respuestaCorrecta" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label for="respuestaIncorrecta1" class="form-label">Respuesta <b class="text-danger">incorrecta</b> #1:</label>
+                            <input type="text" class="form-control" id="respuestaIncorrecta1" name="respuestaIncorrecta1" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label for="respuestaIncorrecta2" class="form-label">Respuesta <b class="text-danger">incorrecta</b> #2:</label>
+                            <input type="text" class="form-control" id="respuestaIncorrecta2" name="respuestaIncorrecta2" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label for="respuestaIncorrecta3" class="form-label">Respuesta <b class="text-danger">incorrecta</b> #3:</label>
+                            <input type="text" class="form-control" id="respuestaIncorrecta3" name="respuestaIncorrecta3" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label for="categoria" class="form-label">Categoría:</label>
+                            <select class="form-select" id="categoria" name="categoria" required>
+                                <option selected>Elija una categoría...</option>
+                                <option value="Arte">Arte</option>
+                                <option value="Ciencia">Ciencia</option>
+                                <option value="Deporte">Deporte</option>
+                                <option value="Entretenimiento">Entretenimiento</option>
+                                <option value="Geografía">Geografía</option>
+                                <option value="Historia">Historia</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label for="dificultad" class="form-label">Dificultad:</label>
+                            <select class="form-select" id="dificultad" name="dificultad" required>
+                                <option selected>Elija una dificultad...</option>
+                                <option value="facil">Fácil</option>
+                                <option value="medio">Medio</option>
+                                <option value="dificil">Difícil</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <button type="submit" class="btn btn-primary">Ingresar pregunta</button>
+            </div>
+        </form>
+    </div>
+</main>
