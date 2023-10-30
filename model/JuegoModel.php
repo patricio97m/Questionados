@@ -182,8 +182,8 @@ class JuegoModel
     }
 
     public function crearPregunta($pregunta, $respuestaCorrecta, $respuestaIncorrecta1, $respuestaIncorrecta2, $respuestaIncorrecta3, $categoria, $dificultad, $idUsuario) {
-        $sql = "INSERT INTO Pregunta_pendiente (pregunta, categoria, dificultad, idUsuario) 
-            VALUES ('$pregunta', '$categoria', '$dificultad', $idUsuario)";
+        $sql = "INSERT INTO Pregunta_pendiente (pregunta, categoria, dificultad, fecha_pregunta, idUsuario) 
+            VALUES ('$pregunta', '$categoria', '$dificultad', NOW(), $idUsuario)";
         $this->database->query($sql);
 
         $idPreguntaArray = $this->database->query("SELECT idPregunta FROM Pregunta_pendiente ORDER BY idPregunta DESC LIMIT 1");

@@ -34,6 +34,7 @@ CREATE TABLE Pregunta_pendiente (
                           pregunta VARCHAR(255),
                           categoria VARCHAR(15),
                           dificultad VARCHAR(15),
+                          fecha_pregunta TIMESTAMP,
                           idUsuario INT,
                           FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
