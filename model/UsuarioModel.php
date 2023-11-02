@@ -34,19 +34,21 @@ class UsuarioModel
     }
 
     public function actualizarUsuario($usuarioViejo, $nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuarioNuevo, $contrasena, $imagen) {
-        $idUsuario = $this->buscarUsuario($usuarioViejo)[0]["idusuario"];
+        $usuarioEncontrado = $this->buscarUsuario($usuarioViejo);
+        $idUsuario = $usuarioEncontrado[0]['idUsuario'];
+
         $this->database->query("UPDATE usuario
-    SET
-        nombre = '$nombre',
-        apellido = '$apellido',
-        fecha_nac = '$fecha_nac',
-        sexo = '$sexo',
-        pais = '$pais',
-        ciudad = '$ciudad',
-        mail = '$mail',
-        usuario = '$usuarioNuevo',
-        contrasena = '$contrasena'
-    WHERE idUsuario = '$idUsuario';"
+        SET
+            nombre = '$nombre',
+            apellido = '$apellido',
+            fecha_nac = '$fecha_nac',
+            sexo = '$sexo',
+            pais = '$pais',
+            ciudad = '$ciudad',
+            mail = '$mail',
+            usuario = '$usuarioNuevo',
+            contrasena = '$contrasena'
+        WHERE idUsuario = '$idUsuario';"
         );
 
         if (!empty($imagen['name'])) {

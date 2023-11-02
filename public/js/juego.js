@@ -16,7 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function modalActivo() {
         var miModal = document.getElementById('miModal');
-        return miModal && miModal.classList.contains('show');
+        var modalReporte = document.getElementById('modalReporte');
+
+        return (
+            (miModal && miModal.classList.contains('show')) ||
+            (modalReporte && modalReporte.classList.contains('show'))
+        );
     }
 
     function simularSubmit() {

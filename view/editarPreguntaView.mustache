@@ -1,47 +1,36 @@
 <main class="footer-final">
     <div class="container mt-3 p-4 border rounded col-md-6 bg-white">
-        <h2>Nueva sugerencia de pregunta</h2>
+        <h2>Editar pregunta</h2>
 
-        {{#error}}
-            <div class="alert alert-danger" role="alert">
-                {{error}}
-            </div>
-        {{/error}}
-
-        <form method="post" action="/juego/procesarNuevaPregunta" enctype="multipart/form-data">
+    {{#pregunta}}
+        <form method="post" action="/juego/actualizarPregunta" enctype="multipart/form-data">
             <div class="mb-3">
                 <div class="mb-2">
                     <label for="pregunta" class="form-label">Pregunta: </label>
-                    <input type="text" class="form-control" id="pregunta" name="pregunta" required>
+                    <input type="text" class="form-control" id="pregunta" name="pregunta" value="{{pregunta}}" required>
                 </div>
+
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <label for="respuestaCorrecta" class="form-label">Respuesta <b class="text-success">correcta</b>: </label>
-                            <input type="text" class="form-control" id="respuestaCorrecta" name="respuestaCorrecta" required>
+                {{#respuestas}}
+                    {{#esCorrecta}}
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <label for="respuestaCorrecta" class="form-label">Respuesta <b class="text-success">correcta</b>: </label>
+                                <input type="text" class="form-control" id="respuestaCorrecta" name="respuestaCorrecta" required value="{{respuesta}}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <label for="respuestaIncorrecta1" class="form-label">Respuesta <b class="text-danger">incorrecta</b> #1:</label>
-                            <input type="text" class="form-control" id="respuestaIncorrecta1" name="respuestaIncorrecta1" required>
+                    {{/esCorrecta}}
+                    {{^esCorrecta}}
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <label for="respuestaIncorrecta1" class="form-label">Respuesta <b class="text-danger">incorrecta</b>:</label>
+                                <input type="text" class="form-control" id="respuestaIncorrecta{{idRespuesta}}" name="respuestaIncorrecta[{{idRespuesta}}]" required value="{{respuesta}}">
+                            </div>
                         </div>
-                    </div>
+                    {{/esCorrecta}}
+                {{/respuestas}}
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <label for="respuestaIncorrecta2" class="form-label">Respuesta <b class="text-danger">incorrecta</b> #2:</label>
-                            <input type="text" class="form-control" id="respuestaIncorrecta2" name="respuestaIncorrecta2" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <label for="respuestaIncorrecta3" class="form-label">Respuesta <b class="text-danger">incorrecta</b> #3:</label>
-                            <input type="text" class="form-control" id="respuestaIncorrecta3" name="respuestaIncorrecta3" required>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-2">
@@ -71,8 +60,10 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end align-items-center">
-                <button type="submit" class="btn btn-primary">Ingresar pregunta</button>
+                <a href="/home/{{redirigirA}}" class="btn btn-secondary me-1">Volver</a>
+                <button type="submit" class="btn btn-primary" name="idPregunta" value="{{idPregunta}}">Actualizar pregunta</button>
             </div>
         </form>
+    {{/pregunta}}
     </div>
 </main>

@@ -53,4 +53,118 @@ class HomeModel
 
         return $this->database->query($query);
     }
+
+    public function obtenerPreguntasAModerar() {
+        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario
+        FROM Pregunta AS P
+        LEFT JOIN Respuesta AS R ON P.idPregunta = R.idPregunta
+        LEFT JOIN usuario AS U ON P.idUsuario = U.idUsuario
+        WHERE P.esVerificada = false
+        ORDER BY P.fecha_pregunta";
+
+        $preguntasConRespuestas = $this->database->query($query);
+
+        $preguntas = [];
+
+        foreach ($preguntasConRespuestas as $row) {
+            $idPregunta = $row['idPregunta'];
+
+            if (!isset($preguntas[$idPregunta])) {
+                $preguntas[$idPregunta] = [
+                    'idPregunta' => $row['idPregunta'],
+                    'pregunta' => $row['pregunta'],
+                    'fecha_pregunta' => $row['fecha_pregunta'],
+                    'categoria' => $row['categoria'],
+                    'dificultad' => $row['dificultad'],
+                    'usuario' => $row['usuario'],
+                    'respuestas' => [],
+                ];
+            }
+
+            $preguntas[$idPregunta]['respuestas'][] = [
+                'idRespuesta' => $row['idRespuesta'],
+                'respuesta' => $row['respuesta'],
+                'esCorrecta' => $row['esCorrecta'],
+            ];
+        }
+
+        return array_values($preguntas);
+
+    }
+
+    public function obtenerReportes() {
+        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, REP.motivoReporte
+        FROM Pregunta AS P
+        LEFT JOIN Respuesta AS R ON P.idPregunta = R.idPregunta
+        INNER JOIN Reporte AS REP ON P.idPregunta = REP.idPregunta
+        LEFT JOIN Usuario AS U ON REP.idUsuario = U.idUsuario
+        ORDER BY P.fecha_pregunta";
+
+        $preguntasConRespuestas = $this->database->query($query);
+        Logger::info(json_encode($preguntasConRespuestas));
+
+        $preguntas = [];
+
+        foreach ($preguntasConRespuestas as $row) {
+            $idPregunta = $row['idPregunta'];
+
+            if (!isset($preguntas[$idPregunta])) {
+                $preguntas[$idPregunta] = [
+                    'idPregunta' => $row['idPregunta'],
+                    'pregunta' => $row['pregunta'],
+                    'fecha_pregunta' => $row['fecha_pregunta'],
+                    'categoria' => $row['categoria'],
+                    'dificultad' => $row['dificultad'],
+                    'usuario' => $row['usuario'],
+                    'motivoReporte' => $row['motivoReporte'],
+                    'respuestas' => [],
+                ];
+            }
+
+            $preguntas[$idPregunta]['respuestas'][] = [
+                'idRespuesta' => $row['idRespuesta'],
+                'respuesta' => $row['respuesta'],
+                'esCorrecta' => $row['esCorrecta'],
+            ];
+        }
+
+        return array_values($preguntas);
+    }
+
+    public function obtenerPreguntasVerificadas() {
+        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario
+        FROM Pregunta AS P
+        LEFT JOIN Respuesta AS R ON P.idPregunta = R.idPregunta
+        LEFT JOIN usuario AS U ON P.idUsuario = U.idUsuario
+        WHERE P.esVerificada = true
+        ORDER BY P.fecha_pregunta DESC";
+
+        $preguntasConRespuestas = $this->database->query($query);
+
+        $preguntas = [];
+
+        foreach ($preguntasConRespuestas as $row) {
+            $idPregunta = $row['idPregunta'];
+
+            if (!isset($preguntas[$idPregunta])) {
+                $preguntas[$idPregunta] = [
+                    'idPregunta' => $row['idPregunta'],
+                    'pregunta' => $row['pregunta'],
+                    'fecha_pregunta' => $row['fecha_pregunta'],
+                    'categoria' => $row['categoria'],
+                    'dificultad' => $row['dificultad'],
+                    'usuario' => $row['usuario'],
+                    'respuestas' => [],
+                ];
+            }
+
+            $preguntas[$idPregunta]['respuestas'][] = [
+                'idRespuesta' => $row['idRespuesta'],
+                'respuesta' => $row['respuesta'],
+                'esCorrecta' => $row['esCorrecta'],
+            ];
+        }
+
+        return array_values($preguntas);
+    }
 }

@@ -6,7 +6,7 @@ create table Usuario(
                         idUsuario int auto_increment not null primary key,
                         nombre varchar(32) not null,
                         apellido varchar(32) not null,
-                        fecha_nac int not null,
+                        fecha_nac date not null,
                         sexo varchar(15) not null,
                         pais varchar(32) not null,
                         ciudad varchar(32) not null,
@@ -14,13 +14,19 @@ create table Usuario(
                         usuario varchar(25) not null unique,
                         contrasena varchar(32) not null,
                         estaVerificado boolean not null,
-                        fotoPerfil varchar(60)
+                        fotoPerfil varchar(60),
+                        esEditor boolean,
+                        esAdmin boolean
 );
 CREATE TABLE Pregunta (
                           idPregunta INT AUTO_INCREMENT PRIMARY KEY,
                           pregunta VARCHAR(255),
                           categoria VARCHAR(15),
-                          dificultad VARCHAR(15)
+                          dificultad VARCHAR(15),
+                          fecha_pregunta TIMESTAMP,
+                          idUsuario INT,
+                          esVerificada BOOLEAN,
+                          FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
 CREATE TABLE Respuesta (
                            idRespuesta INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,23 +34,9 @@ CREATE TABLE Respuesta (
                            respuesta VARCHAR(255),
                            esCorrecta BOOLEAN,
                            FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
+                            ON DELETE CASCADE
 );
-CREATE TABLE Pregunta_pendiente (
-                          idPregunta INT AUTO_INCREMENT PRIMARY KEY,
-                          pregunta VARCHAR(255),
-                          categoria VARCHAR(15),
-                          dificultad VARCHAR(15),
-                          fecha_pregunta TIMESTAMP,
-                          idUsuario INT,
-                          FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
-);
-CREATE TABLE Respuesta_pendiente (
-                           idRespuesta INT AUTO_INCREMENT PRIMARY KEY,
-                           idPregunta INT,
-                           respuesta VARCHAR(255),
-                           esCorrecta BOOLEAN,
-                           FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
-);
+
 CREATE TABLE Partida (
                          id INT AUTO_INCREMENT PRIMARY KEY,
                          puntaje_obtenido INT,
@@ -60,24 +52,35 @@ CREATE TABLE RespuestasUsuario (
                                    esCorrecta BOOLEAN,
                                    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
                                    FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
+                                    ON DELETE CASCADE
+);
+
+CREATE TABLE Reporte (
+                                   idReporte INT AUTO_INCREMENT PRIMARY KEY,
+                                   idUsuario INT,
+                                   idPregunta INT,
+                                   motivoReporte VARCHAR(100),
+                                   FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+                                   FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
+                                    ON DELETE CASCADE
 );
 
 -- Inserts de datos
 
-INSERT INTO Usuario (nombre, apellido, fecha_nac, sexo, pais, ciudad, mail, usuario, contrasena, estaVerificado, fotoPerfil)
-VALUES ("Juan Alberto","Dominguez", "1980", "Hombre", "Argentina", "Haedo", "JuanAlberto@hotmail.com", "admin", "admin", true, "../public/fotosPerfil/1000.jpg"),
-       ("Norville","Rogers", "1980", "Hombre", "Estados Unidos", "California", "shaggy@hotmail.com", "shaggy_08", "shaggy_08", true, "../public/fotosPerfil/1001.jpg"),
-       ("Bruce","Wayne", "1975", "Hombre", "Estados Unidos", "Gotham city", "batman@hotmail.com", "batman.24", "batman.24", true, "../public/fotosPerfil/1002.jpg"),
-       ("Carlos", "Rodriguez", "1990-01-01", "Hombre", "Argentina", "Castelar", "ejemplo1@example.com", "carlos10", "contrasena1", true, "../public/perfil_placeholder.png"),
-       ("Marta", "Martinez", "1995-02-02", "Mujer", "Argentina", "Castelar", "ejemplo2@example.com", "marta.14", "contrasena2", true, "../public/perfil_placeholder.png"),
-       ("Lucas", "Guzman", "1988-03-03", "Hombre", "Argentina", "Castelar", "ejemplo3@example.com", "lucas_53", "contrasena3", true, "../public/perfil_placeholder.png"),
-       ("Pamela", "Fernandez", "1992-04-04", "Mujer", "Uruguay", "Montevideo", "ejemplo4@example.com", "pamela-22", "contrasena4", true, "../public/perfil_placeholder.png"),
-       ("Nahuel", "Hernandez", "1987-05-05", "Hombre", "Brasil", "Sao Paulo", "ejemplo5@example.com", "nahuel77", "contrasena5", true, "../public/perfil_placeholder.png"),
-       ("Nahir", "Nuñez", "1991-06-06", "Mujer", "Paraguay", "Ciudad del Este", "ejemplo6@example.com", "hanirN", "contrasena6", true, "../public/perfil_placeholder.png"),
-       ("Pedro", "Lopez", "1989-07-07", "Hombre", "Chile", "Santiago de Chile", "ejemplo7@example.com", "pedro_lopez", "contrasena7", true, "../public/perfil_placeholder.png"),
-       ("Rocío", "Cisneros", "1996-08-08", "Mujer", "Venezuela", "Caracas", "ejemplo8@example.com", "rocio2", "contrasena8", true, "../public/perfil_placeholder.png"),
-       ("Nicolas", "Velíz", "1986-09-09", "Hombre", "Ecuador", "Lima", "ejemplo9@example.com", "nico44", "contrasena9", true, "../public/perfil_placeholder.png"),
-       ("Brenda", "Muñoz", "1993-10-10", "Mujer", "Colombia", "Medellin", "ejemplo10@example.com", "brendaM", "contrasena10", true, "../public/perfil_placeholder.png");
+INSERT INTO Usuario (nombre, apellido, fecha_nac, sexo, pais, ciudad, mail, usuario, contrasena, estaVerificado, fotoPerfil, esEditor, esAdmin)
+VALUES ("Juan Alberto","Dominguez", "1980-01-01", "Hombre", "Argentina", "Haedo", "JuanAlberto@hotmail.com", "admin", "admin", true, "../public/fotosPerfil/1000.jpg", true, true),
+       ("Shaggy","Rogers", "1980-01-01", "Hombre", "Estados Unidos", "California", "shaggy@hotmail.com", "shaggy_08", "shaggy_08", true, "../public/fotosPerfil/1001.jpg", true, false),
+       ("Bruce","Wayne", "1975-01-01", "Hombre", "Estados Unidos", "Gotham city", "batman@hotmail.com", "batman.24", "batman.24", true, "../public/fotosPerfil/1002.jpg", false, false),
+       ("Carlos", "Rodriguez", "1990-01-01", "Hombre", "Argentina", "Castelar", "ejemplo1@example.com", "carlos10", "contrasena1", true, "../public/perfil_placeholder.png", false, false),
+       ("Marta", "Martinez", "1995-02-02", "Mujer", "Argentina", "Castelar", "ejemplo2@example.com", "marta.14", "contrasena2", true, "../public/perfil_placeholder.png", false, false),
+       ("Lucas", "Guzman", "1988-03-03", "Hombre", "Argentina", "Castelar", "ejemplo3@example.com", "lucas_53", "contrasena3", true, "../public/perfil_placeholder.png", false, false),
+       ("Pamela", "Fernandez", "1992-04-04", "Mujer", "Uruguay", "Montevideo", "ejemplo4@example.com", "pamela-22", "contrasena4", true, "../public/perfil_placeholder.png", false, false),
+       ("Nahuel", "Hernandez", "1987-05-05", "Hombre", "Brasil", "Sao Paulo", "ejemplo5@example.com", "nahuel77", "contrasena5", true, "../public/perfil_placeholder.png", false, false),
+       ("Nahir", "Nuñez", "1991-06-06", "Mujer", "Paraguay", "Ciudad del Este", "ejemplo6@example.com", "hanirN", "contrasena6", true, "../public/perfil_placeholder.png", false, false),
+       ("Pedro", "Lopez", "1989-07-07", "Hombre", "Chile", "Santiago de Chile", "ejemplo7@example.com", "pedro_lopez", "contrasena7", true, "../public/perfil_placeholder.png", false, false),
+       ("Rocío", "Cisneros", "1996-08-08", "Mujer", "Venezuela", "Caracas", "ejemplo8@example.com", "rocio2", "contrasena8", true, "../public/perfil_placeholder.png", false, false),
+       ("Nicolas", "Velíz", "1986-09-09", "Hombre", "Ecuador", "Lima", "ejemplo9@example.com", "nico44", "contrasena9", true, "../public/perfil_placeholder.png", false, false),
+       ("Brenda", "Muñoz", "1993-10-10", "Mujer", "Colombia", "Medellin", "ejemplo10@example.com", "brendaM", "contrasena10", true, "../public/perfil_placeholder.png", false, false);
 
 INSERT INTO Partida (puntaje_obtenido, fecha_partida, idusuario)
 VALUES (7, DATE_SUB(NOW(), INTERVAL 7 DAY), 1), (17, DATE_SUB(NOW(), INTERVAL 30 DAY), 1), (7, DATE_SUB(NOW(), INTERVAL 1 DAY), 1), (17, DATE_SUB(NOW(), INTERVAL 7 DAY), 1);
@@ -97,35 +100,35 @@ VALUES (12, DATE_SUB(NOW(), INTERVAL 7 DAY), 4), (20, NOW(), 4), (14, DATE_SUB(N
        (8, DATE_SUB(NOW(), INTERVAL 7 DAY), 9), (24, DATE_SUB(NOW(), INTERVAL 30 DAY), 9), (12, DATE_SUB(NOW(), INTERVAL 1 DAY), 9),
        (15, DATE_SUB(NOW(), INTERVAL 7 DAY), 10), (32, DATE_SUB(NOW(), INTERVAL 30 DAY), 10), (13, DATE_SUB(NOW(), INTERVAL 1 DAY), 10);
 
-INSERT INTO Pregunta (pregunta, categoria, dificultad) VALUES
-                                               ('¿Cuál es la capital de Francia?', 'Geografía', 'facil'),
-                                               ('¿Quién escribió Romeo y Julieta?', 'Arte', 'medio'),
-                                               ('¿Cuál es el símbolo químico del oxígeno?', 'Ciencia' , 'facil'),
-                                               ('¿Cuál es el deporte más popular en Brasil?', 'Deporte' , 'facil'),
-                                               ('¿Quién es el actor principal de la película "Titanic"?', 'Entretenimiento', 'medio'),
-                                               ('¿En qué año comenzó la Primera Guerra Mundial?', 'Historia', 'dificil'),
-                                               ('¿Cuál es el río más largo del mundo?', 'Geografía', 'dificil'),
-                                               ('¿En qué año se firmó la Declaración de Independencia de los Estados Unidos?', 'Historia', 'dificil'),
-                                               ('¿Quién pintó la Mona Lisa?', 'Arte', 'medio'),
-                                               ('¿Cuál es el planeta más cercano al Sol?', 'Ciencia', 'dificil'),
-                                               ('¿Quién ganó el Mundial de Fútbol en 2022?', 'Deporte', 'facil'),
-                                               ('¿Cuál es la película más taquillera de todos los tiempos?', 'Entretenimiento', 'medio'),
-                                               ('¿Cuál es el océano más grande del mundo?', 'Geografía', 'facil'),
-                                               ('¿Quién fue el primer presidente de los Estados Unidos?', 'Historia', 'facil'),
-                                               ('¿Cuál es el elemento más abundante en la corteza terrestre?', 'Ciencia', 'medio'),
-                                               ('¿Cuál es el país más poblado del mundo?', 'Geografía', 'dificil'),
-                                               ('¿Quién escribió Don Quijote de la Mancha?', 'Arte', 'dificil'),
-                                               ('¿Cuál es el deporte que se juega en el Super Bowl?', 'Deporte', 'medio'),
-                                               ('¿En qué año se fundó Google?', 'Ciencia', 'medio'),
-                                               ('¿Cuál es el río que atraviesa El Cairo?', 'Geografía', 'facil'),
-                                               ('¿Cuál es la capital de Noruega?', 'Geografía', 'dificil'),
-                                               ('¿Quién pintó La Noche Estrellada?', 'Arte', 'dificil'),
-                                               ('¿Cuál es la capital de Japón?', 'Geografía', 'facil'),
-                                               ('¿Cuál es el país conocido como la Tierra del Sol Naciente?', 'Geografía', 'facil'),
-                                               ('¿Quién escribió Hamlet?', 'Arte', 'dificil'),
-                                               ('¿Cuál es el país donde se originó el tango?', 'Arte', 'medio'),
-                                               ('¿Cuál es el deporte que se juega en Wimbledon?', 'Deporte', 'facil'),
-                                               ('¿En qué año se estrenó la película Star Wars: Episodio IV - Una Nueva Esperanza?', 'Entretenimiento', 'dificil');
+INSERT INTO Pregunta (pregunta, categoria, dificultad, fecha_pregunta, idUsuario, esVerificada) VALUES
+                                               ('¿Cuál es la capital de Francia?', 'Geografía', 'facil', NOW(), 1, true),
+                                               ('¿Quién escribió Romeo y Julieta?', 'Arte', 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el símbolo químico del oxígeno?', 'Ciencia' , 'facil', NOW(), 1, true),
+                                               ('¿Cuál es el deporte más popular en Brasil?', 'Deporte' , 'facil', NOW(), 1, true),
+                                               ('¿Quién es el actor principal de la película "Titanic"?', 'Entretenimiento', 'medio', NOW(), 1, true),
+                                               ('¿En qué año comenzó la Primera Guerra Mundial?', 'Historia', 'dificil', NOW(), 1, true),
+                                               ('¿Cuál es el río más largo del mundo?', 'Geografía', 'dificil', NOW(), 1, true),
+                                               ('¿En qué año se firmó la Declaración de Independencia de los Estados Unidos?', 'Historia', 'dificil', NOW(), 1, true),
+                                               ('¿Quién pintó la Mona Lisa?', 'Arte', 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el planeta más cercano al Sol?', 'Ciencia', 'dificil', NOW(), 1, true),
+                                               ('¿Quién ganó el Mundial de Fútbol en 2022?', 'Deporte', 'facil', NOW(), 1, true),
+                                               ('¿Cuál es la película más taquillera de todos los tiempos?', 'Entretenimiento', 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el océano más grande del mundo?', 'Geografía', 'facil', NOW(), 1, true),
+                                               ('¿Quién fue el primer presidente de los Estados Unidos?', 'Historia', 'facil', NOW(), 1, true),
+                                               ('¿Cuál es el elemento más abundante en la corteza terrestre?', 'Ciencia', 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el país más poblado del mundo?', 'Geografía', 'dificil', NOW(), 1, true),
+                                               ('¿Quién escribió Don Quijote de la Mancha?', 'Arte', 'dificil', NOW(), 1, true),
+                                               ('¿Cuál es el deporte que se juega en el Super Bowl?', 'Deporte', 'medio', NOW(), 1, true),
+                                               ('¿En qué año se fundó Google?', 'Ciencia', 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el río que atraviesa El Cairo?', 'Geografía', 'facil', NOW(), 1, true),
+                                               ('¿Cuál es la capital de Noruega?', 'Geografía', 'dificil', NOW(), 1, true),
+                                               ('¿Quién pintó La Noche Estrellada?', 'Arte', 'dificil', NOW(), 1, true),
+                                               ('¿Cuál es la capital de Japón?', 'Geografía', 'facil', NOW(), 1, true),
+                                               ('¿Cuál es el país conocido como la Tierra del Sol Naciente?', 'Geografía', 'facil', NOW(), 1, true),
+                                               ('¿Quién escribió Hamlet?', 'Arte', 'dificil', NOW(), 1, true),
+                                               ('¿Cuál es el país donde se originó el tango?', 'Arte', 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el deporte que se juega en Wimbledon?', 'Deporte', 'facil', NOW(), 1, true),
+                                               ('¿En qué año se estrenó la película Star Wars: Episodio IV - Una Nueva Esperanza?', 'Entretenimiento', 'dificil', NOW(), 1, true);
 
 INSERT INTO Respuesta (idPregunta, respuesta, esCorrecta) VALUES
                                             (1, 'París', 1), (1, 'Londres', 0), (1, 'Lisboa', 0),(1, 'Madrid', 0),

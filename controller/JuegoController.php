@@ -10,7 +10,8 @@ class JuegoController
     }
 
     private function cargarPregunta() {
-        $preguntaYRespuestas = $this->model->obtenerPreguntaAlAzar($_SESSION['usuario'][0]['idUsuario']);
+        $idUsuario = $_SESSION['usuario'][0]['idUsuario'];
+        $preguntaYRespuestas = $this->model->obtenerPreguntaAlAzar($idUsuario);
 
         if ($preguntaYRespuestas) { //Array para comparar valores de las categorías y elegir el estilo correcto
             $categoriaEstilos = [
@@ -116,5 +117,96 @@ class JuegoController
             $_SESSION["error"] ="Cargue datos validos.";
             Redirect::to('/juego/nuevaPregunta');
         }
+    }
+
+    public function eliminarSugerencia() {
+        if (!$_SESSION['usuario'][0]['esEditor']){
+            Redirect::to('/');
+        }
+
+        $idPregunta = $_POST['idPregunta'];
+        $this->model->eliminarSugerencia($idPregunta);
+        $_SESSION["notificacionPregunta"] = "Pregunta eliminada con éxito.";
+        $redigirA = $_SESSION['redirigirA'];
+        unset($_SESSION['juego_data']);
+        Redirect::to('/home/' . $redigirA);
+    }
+
+    public function aceptarSugerencia() {
+        if (!$_SESSION['usuario'][0]['esEditor']){
+            Redirect::to('/');
+        }
+
+        $redigirA = $_SESSION['redirigirA'];
+
+        $idPregunta = $_POST['idPregunta'];
+        $this->model->aceptarSugerencia($idPregunta);
+        $_SESSION["notificacionPregunta"] = "Pregunta aceptada con éxito.";
+        Redirect::to('/home/' . $redigirA);
+    }
+
+    public function editarPregunta() {
+        if (!$_SESSION['usuario'][0]['esEditor']){
+            Redirect::to('/');
+        }
+
+        $idPregunta = $_POST['idPregunta'];
+        $preguntaYRespuestas = $this->model->obtenerPreguntaPorId($idPregunta);
+
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+            'pregunta' => $preguntaYRespuestas['pregunta'],
+            'respuestas' => $preguntaYRespuestas['respuestas'],
+            'idPregunta' => $idPregunta,
+            'redirigirA' => $_SESSION['redirigirA']
+        ];
+        $this->render->printView('editarPregunta', $datos);
+    }
+
+    public function actualizarPregunta() {
+        if (!$_SESSION['usuario'][0]['esEditor']){
+            Redirect::to('/');
+        }
+
+        $idPregunta = $_POST["idPregunta"];
+        $pregunta = $_POST["pregunta"];
+        $respuestaCorrecta = $_POST['respuestaCorrecta'];
+        $respuestasIncorrectas = $_POST['respuestaIncorrecta'];
+        $categoria = $_POST['categoria'];
+        $dificultad = $_POST['dificultad'];
+
+        $redigirA = $_SESSION['redirigirA'];
+        unset($_SESSION['juego_data']);
+
+        $this->model->actualizarPregunta($pregunta, $idPregunta,  $respuestaCorrecta, $respuestasIncorrectas, $categoria, $dificultad);
+        $_SESSION["notificacionPregunta"] = "Pregunta modificada con éxito.";
+        Redirect::to('/home/' . $redigirA);
+    }
+
+    public function reportarPregunta() {
+        if (!isset($_SESSION['usuario'])){
+            Redirect::to('/usuario/ingresar');
+        }
+
+        $motivoReporte = $_POST['motivo'];
+        $idPregunta = $_SESSION['idPregunta'];
+        $idUsuario = $_SESSION['usuario'][0]['idUsuario'];
+
+        $this->model->ReportarPregunta($idPregunta, $idUsuario,  $motivoReporte);
+        $_SESSION['alertaPregunta'] = "Pregunta reportada con éxito. Pendiente revisión de un administrador.";
+        Redirect::to('/');
+    }
+
+    public function eliminarReporte() {
+        if (!$_SESSION['usuario'][0]['esEditor']){
+            Redirect::to('/');
+        }
+
+        $idPregunta = $_POST["idPregunta"];
+        $_SESSION["notificacionPregunta"] = "Reporte resuelto con éxito.";
+        $redigirA = $_SESSION['redirigirA'];
+        $this->model->eliminarReporte($idPregunta);
+        Redirect::to('/home/' . $redigirA);
     }
 }

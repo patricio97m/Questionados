@@ -65,7 +65,7 @@ body {
 }
 
 .input-group > span {
-    width: 9em;
+    width: 7em;
 }
 .card-header {
     position: relative;
@@ -88,6 +88,16 @@ body {
 .texto-cronometro > h3{
     position: relative;
     top: 5px;
+}
+
+.reportar {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    transition: filter 0.2s;
+}
+.reportar:hover{
+    filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)
 }
 
 @media (max-width: 768px) {

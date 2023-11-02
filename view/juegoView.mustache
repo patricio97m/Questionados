@@ -1,7 +1,7 @@
 <div class="footer-final">
 <main class="container mt-3 rounded col-md-6 text-center bg-dark card border-{{categoriaEstilo}}" >
     <div class="bg-{{categoriaEstilo}} card-header rounded d-flex">
-        <img src="../public/{{categoria}}.svg" alt="categoria">
+        <img src="../public/categorias/{{categoria}}.svg" alt="categoria">
         <h3 class="text-light mx-auto">{{categoria}}</h3>
         <div class="texto-cronometro">
             <h3 class="text-light" id="tiempo-restante">15</h3>
@@ -9,7 +9,11 @@
         </div>
     </div>
     <div class="container mt-5">
-        <h1 class="border rounded p-4 bg-light animate">{{pregunta}}</h1>
+        <h1 class="border rounded p-4 bg-light animate">{{pregunta}}
+            <a data-toggle="modal" data-target="#modalReporte">
+                <img src=".././public/reporte.svg" alt="reportar" class="reportar" title="Reportar pregunta">
+            </a>
+        </h1>
 
         <div class="mt-5">
             {{#respuestas}}
@@ -26,28 +30,58 @@
 </main>
 
 <! – Modal que se lanza cuando se selecciona una pregunta incorrecta –>
-<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Fin de la partida</h5>
-            </div>
-            {{#modal}}
-                <div class="modal-body">
-                    Puntaje final alcanzado: <b>{{modal}}</b>
+    <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Fin de la partida</h5>
                 </div>
-            {{/modal}}
-            <div class="modal-footer">
-                <form method="post" action="/">
-                    <button type="submit" class="btn btn-secondary">Volver al inicio</button>
-                </form>
-                <form method="post" action="/juego/nuevaPartida">
-                    <button type="submit" class="btn btn-primary">Volver a jugar</button>
+                {{#modal}}
+                    <div class="modal-body">
+                        Puntaje final alcanzado: <b>{{modal}}</b>
+                    </div>
+                {{/modal}}
+                <div class="modal-footer">
+                    <form method="post" action="/">
+                        <button type="submit" class="btn btn-secondary">Volver al inicio</button>
+                    </form>
+                    <form method="post" action="/juego/nuevaPartida">
+                        <button type="submit" class="btn btn-primary">Volver a jugar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <! – Modal que se lanza cuando se reporta una pregunta –>
+    <div class="modal fade" id="modalReporte" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="/juego/reportarPregunta">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Reportar pregunta</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="motivo">Por favor, seleccione un motivo de reporte</label>
+                        <select required class="form-select mt-2 form-select-sm" id="motivo" name="motivo">
+                            <option selected>Seleccione...</option>
+                            <option>Pregunta incorrecta</option>
+                            <option>Respuestas incorrectas</option>
+                            <option>Categoría incorrecta</option>
+                            <option>Pregunta inapropiada</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Reportar</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
 </div>
 <script src="../public/js/juego.js"></script>
 {{#modal}}

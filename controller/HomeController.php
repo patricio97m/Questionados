@@ -49,4 +49,79 @@ class HomeController
         if ($datos['usuario']){$this->render->printView('ranking', $datos);}
         else Redirect::to('/usuario/ingresar');
     }
+
+    public function moderarPreguntas() {
+        $preguntasConRespuestas = $this->model->obtenerPreguntasAModerar();
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+            'preguntas' => $preguntasConRespuestas,
+            'titulo' => 'Moderar nuevas sugerencias',
+            'actionBtnAceptar' => 'aceptarSugerencia',
+            'rolUsuario' => 'Autor'
+        ];
+
+        if (!empty($_SESSION['notificacionPregunta'])) {
+            $datos["notificacionPregunta"] = $_SESSION['notificacionPregunta'];
+            unset($_SESSION['notificacionPregunta']);
+        }
+
+        $_SESSION['redirigirA'] = "moderarPreguntas";
+
+        if ($_SESSION['usuario'][0]['esEditor']) {
+            $this->render->printView('editor', $datos);
+        } else {
+            Redirect::to('/usuario/ingresar');
+        }
+    }
+
+    public function verReportes() {
+        $preguntasConRespuestas = $this->model->obtenerReportes();
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+            'preguntas' => $preguntasConRespuestas,
+            'titulo' => 'Moderar nuevos reportes',
+            'actionBtnAceptar' => 'eliminarReporte',
+            'rolUsuario' => 'Reportado por'
+        ];
+
+        if (!empty($_SESSION['notificacionPregunta'])) {
+            $datos["notificacionPregunta"] = $_SESSION['notificacionPregunta'];
+            unset($_SESSION['notificacionPregunta']);
+        }
+
+        $_SESSION['redirigirA'] = "verReportes";
+
+        if ($_SESSION['usuario'][0]['esEditor']) {
+            $this->render->printView('editor', $datos);
+        } else {
+            Redirect::to('/usuario/ingresar');
+        }
+    }
+
+    public function verPreguntasVerificadas() {
+        $preguntasConRespuestas = $this->model->obtenerPreguntasVerificadas();
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+            'preguntas' => $preguntasConRespuestas,
+            'titulo' => 'Ver preguntas verificadas',
+            'actionBtnAceptar' => false,
+            'rolUsuario' => 'Autor'
+        ];
+
+        if (!empty($_SESSION['notificacionPregunta'])) {
+            $datos["notificacionPregunta"] = $_SESSION['notificacionPregunta'];
+            unset($_SESSION['notificacionPregunta']);
+        }
+
+        $_SESSION['redirigirA'] = "verPreguntasVerificadas";
+
+        if ($_SESSION['usuario'][0]['esEditor']) {
+            $this->render->printView('editor', $datos);
+        } else {
+            Redirect::to('/usuario/ingresar');
+        }
+    }
 }

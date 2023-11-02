@@ -24,6 +24,29 @@
                         <a class="nav-link active" href="/home/ranking">Mejores jugadores</a>
                     </li>
                 </ul>
+                {{#esEditor}}
+                    <div class="dropdown me-3">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../public/editar.svg" alt="editar" width="42" height="42">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="/home/moderarPreguntas">Ver sugerencias</a></li>
+                            <li><a class="dropdown-item" href="/home/verReportes">Ver reportes</a></li>
+                            <li><a class="dropdown-item" href="/home/verPreguntasVerificadas">Ver preguntas verificadas</a></li>
+                        </ul>
+                    </div>
+                {{/esEditor}}
+                {{#esAdmin}}
+                    <div class="dropdown me-3">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../../public/admin.svg" alt="editar" width="42" height="42">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="/usuario/perfil">Ver estadísticas</a></li>
+                            <li><a class="dropdown-item" href="/usuario/cerrarSesion">Ver reportes</a></li>
+                        </ul>
+                    </div>
+                {{/esAdmin}}
                 <div class="dropdown">
                     <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{fotoPerfil}}" alt="mdo" width="42" height="42" class="rounded-circle">
