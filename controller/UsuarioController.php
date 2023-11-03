@@ -5,12 +5,9 @@ class UsuarioController
 {
     private $render;
     private $model;
-    private $mailer;
-
-    public function __construct($render, $model, $mailer) {
+    public function __construct($render, $model) {
         $this->render = $render;
         $this->model = $model;
-        $this->mailer = $mailer;
     }
     public function registro(){
         $this->redirigirSiUsuarioLogueado();
@@ -53,8 +50,8 @@ class UsuarioController
             else {
                 $_SESSION['alertaVerificacion'] = "Chequea tu bandeja de correo y verificá tu cuenta!";
                 $_SESSION["modal"] = "$mail";
-                $this->enviarCorreoVerificacion($mail, $nombre);
                 $this->model->crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen);
+                $this->model->enviarCorreoVerificacion($mail, $nombre, $usuario);
                 $usuarioEncontrado  = $this->model->loguearUsuario($usuario, $contrasena);
                 $_SESSION['usuario'] = $usuarioEncontrado;
                 Redirect::to('/');
@@ -62,24 +59,6 @@ class UsuarioController
         }else{
             $_SESSION["error"] ="Cargue datos validos.";
             Redirect::to('/usuario/registro');
-        }
-    }
-
-    public function enviarCorreoVerificacion($mail, $nombre){
-        try{
-            $this->mailer->setFrom('info@questionados.com.ar', 'Questionados');
-            $this->mailer->addAddress($mail, $nombre);     //Add a recipient
-            $this->mailer->addReplyTo('info@questionados.com.ar', 'Questionados');
-
-            $this->mailer->isHTML(true);                                  //Set email format to HTML
-            $this->mailer->Subject = 'Mail de registro en Questionados';
-            $this->mailer->Body    = '<b>¡Debe verificar su cuenta!<b> <br>
-                                      Para hacerlo, clickee en el siguiente link: <br> 
-                                      http://localhost/usuario/verificarUsuario';
-
-            $this->mailer->send();
-        } catch (Exception $e) {
-            echo "El mensaje no pudo ser enviado: {$this->mailer->ErrorInfo}";
         }
     }
 
@@ -100,6 +79,9 @@ class UsuarioController
 
         if ($usuarioEncontrado) {
             $_SESSION['usuario'] = $usuarioEncontrado;
+            if(!($_SESSION['usuario'][0]['estaVerificado'])){
+                $_SESSION['alertaVerificacion'] = "Chequea tu bandeja de correo y verificá tu cuenta!";
+            }
             Redirect::to('/');
         } else {
             $_SESSION["error"] ="Usuario o contraseña incorrectos.";
@@ -225,11 +207,14 @@ class UsuarioController
     }    
     
     public function verificarUsuario(){
-       if(isset($_SESSION['usuario'])){
+       if(isset($_SESSION['usuario']) && isset($_GET['codigoVerificacion'])){
         $username = $_SESSION['usuario'][0]['usuario'];
-        $this->model->verificarUsuario($username);
+        $codigoVerificacion = $_GET['codigoVerificacion'];
+        if($this->model->verificarUsuario($username, $codigoVerificacion)){
+            unset($_SESSION['alertaVerificacion']);
+        }
        }
-       unset($_SESSION['alertaVerificacion']);
+       
        Redirect::to('/');
     }
 

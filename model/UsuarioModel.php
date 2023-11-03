@@ -3,9 +3,11 @@
 class UsuarioModel
 {
     private $database;
+    private $mailer;
 
-    public function __construct($database) {
+    public function __construct($database, $mailer) {
         $this->database = $database;
+        $this->mailer = $mailer;
     }
 
     public function crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen) {
@@ -117,13 +119,45 @@ class UsuarioModel
         }
     }
 
-    public function verificarUsuario($username){
+    public function verificarUsuario($username, $codigoRecibido){
+        $usuario = $this->buscarUsuario($username);
+        $codigoVerificacion = $usuario[0]['codigoVerificacion'];
+        if($codigoVerificacion == $codigoRecibido){
+            $idUsuario = $usuario[0]['idUsuario'];
+            $this->database->query("UPDATE usuario
+            SET estaVerificado = true
+            WHERE idUsuario = '$idUsuario';");
+            return true;
+        }
+        else return false;
+    }
+
+    public function enviarCorreoVerificacion($mail, $nombre, $usuario){
+        $codigoVerificacion = rand(100000, 999999);
+        $this->guardarCodigoVerificacion($usuario, $codigoVerificacion);
+
+        try{
+            $this->mailer->setFrom('info@questionados.com.ar', 'Questionados');
+            $this->mailer->addAddress($mail, $nombre);     //Add a recipient
+            $this->mailer->addReplyTo('info@questionados.com.ar', 'Questionados');
+
+            $this->mailer->isHTML(true);                                  //Set email format to HTML
+            $this->mailer->Subject = 'Mail de registro en Questionados';
+            $this->mailer->Body    = '<b>¡Debe verificar su cuenta!<b> <br>
+                                    Para hacerlo, clickee en el siguiente link: <br> 
+                                    http://localhost/usuario/verificarUsuario/codigoVerificacion=' . $codigoVerificacion;
+
+            $this->mailer->send();
+        } catch (Exception $e) {
+            echo "El mensaje no pudo ser enviado: {$this->mailer->ErrorInfo}";
+        }
+    }
+
+    public function guardarCodigoVerificacion($username, $codigoVerificacion){
         $usuario = $this->buscarUsuario($username);
         $idUsuario = $usuario[0]['idUsuario'];
         $this->database->query("UPDATE usuario
-        SET
-            estaVerificado = true
+        SET codigoVerificacion = $codigoVerificacion
         WHERE idUsuario = '$idUsuario';");
     }
-
 }

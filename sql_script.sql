@@ -14,6 +14,7 @@ create table Usuario(
                         usuario varchar(25) not null unique,
                         contrasena varchar(32) not null,
                         estaVerificado boolean not null,
+                        codigoVerificacion int,
                         fotoPerfil varchar(60),
                         esEditor boolean,
                         esAdmin boolean

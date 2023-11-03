@@ -46,8 +46,8 @@ class Configuracion {
 
 
     public function getUsuarioController() {
-        $model = new UsuarioModel($this->getDatabase());
-        return new UsuarioController($this->getRender(), $model, $this->getMailer());
+        $model = new UsuarioModel($this->getDatabase(), $this->getMailer());
+        return new UsuarioController($this->getRender(), $model);
     }
 
     public function getJuegoController() {
