@@ -7,7 +7,7 @@ create table Usuario(
                         nombre varchar(32) not null,
                         apellido varchar(32) not null,
                         fecha_nac date not null,
-                        sexo varchar(15) not null,
+                        sexo varchar(20) not null,
                         pais varchar(32) not null,
                         ciudad varchar(32) not null,
                         mail varchar(50) not null,

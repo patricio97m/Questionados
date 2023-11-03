@@ -45,7 +45,12 @@ class UsuarioController
             if ($usuarioExistente) {
                 $_SESSION["error"] ="El nombre de usuario ya existe.";
                 Redirect::to('/usuario/registro');
-            } else {
+            }
+            if (empty($pais) || empty($ciudad)) {
+                $_SESSION["error"] ="Ingrese una ubicación válida.";
+                Redirect::to('/usuario/registro');
+            }
+            else {
                 $_SESSION['alertaVerificacion'] = "Chequea tu bandeja de correo y verificá tu cuenta!";
                 $_SESSION["modal"] = "$mail";
                 $this->enviarCorreoVerificacion($mail, $nombre);
@@ -114,6 +119,7 @@ class UsuarioController
             $data["exito"] = $_SESSION['mensajeExito'];
             unset( $_SESSION['mensajeExito']);
         }
+        $this->setDatosError($data);
 
         if ($data['usuario']){$this->render->printView('perfil', $data);}
         else Redirect::to('/usuario/ingresar');
@@ -159,12 +165,19 @@ class UsuarioController
         $apellido = $_POST['apellido'];
         $fecha_nac = $_POST['fecha_nac'];
         $sexo = $_POST['sexo'];
+        Logger::info($sexo);
         $pais = $_POST['pais'];
         $ciudad = $_POST['ciudad'];
         $mail = $_POST['mail'];
         $usuarioViejo = $_SESSION['usuario'][0]['usuario'];
         $usuarioNuevo = $_POST['usuario'];
         $contrasena = $_POST['contrasena'];
+
+        if (empty($pais) || empty($ciudad)) {
+            $_SESSION["error"] ="Ingrese una ubicación válida.";
+            Redirect::to('/usuario/perfil');
+        }
+
         if(isset($_FILES["foto_perfil"])){
             $imagen = $_FILES["foto_perfil"];
         }

@@ -8,37 +8,30 @@
             </div>
         {{/error}}
 
-        <form method="post" action="/usuario/procesarUsuario" enctype="multipart/form-data">
+        <form method="post" action="/usuario/procesarUsuario" enctype="multipart/form-data" class="mb-2">
             <div class="mb-3">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-2">
                             <label for="nombre" class="form-label">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-2">
                             <label for="apellido" class="form-label">Apellido:</label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" required>
+                            <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingresa tu apellido" required>
                         </div>
                     </div>
                 </div>
                 <div class="mb-2">
                     <label for="sexo" class="form-label">Sexo:</label>
-                    <select class="form-select" id="sexo" name="sexo">
-                        <option>Masculino</option>
-                        <option>Femenino</option>
+                    <select class="form-select" id="sexo" name="sexo" required>
+                        <option value="" selected>Seleccione...</option>
+                        <option>Hombre</option>
+                        <option>Mujer</option>
                         <option>Prefiero no cargarlo</option>
                     </select>
-                </div>
-                <div class="mb-2">
-                    <label for="pais" class="form-label">País:</label>
-                    <input type="text" class="form-control" id="pais" name="pais" required>
-                </div>
-                <div class="mb-2">
-                    <label for="ciudad" class="form-label">Ciudad:</label>
-                    <input type="text" class="form-control" id="ciudad" name="ciudad" required>
                 </div>
                 <div class="mb-2">
                     <label for="fecha_nac" class="form-label">Fecha de Nacimiento:</label>
@@ -46,27 +39,39 @@
                 </div>
                 <div class="mb-2">
                     <label for="mail" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="mail" name="mail" required>
+                    <input type="email" class="form-control" id="mail" name="mail" placeholder="Ingresa tu mail" required>
                 </div>
                 <div class="mb-2">
                     <label for="usuario" class="form-label">Nombre de Usuario:</label>
-                    <input type="text" class="form-control" id="usuario" name="usuario" required>
+                    <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Ingrese un nombre de usuario" required>
                 </div>
                 <div class="mb-2">
                     <label for="contrasena" class="form-label">Contraseña:</label>
-                    <input type="password" class="form-control" id="contrasena" name="contrasena" required>
+                    <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Ingrese una contraseña" required>
                 </div>
                 <div class="mb-2">
                     <label for="repetirContrasena" class="form-label">Repetir Contraseña:</label>
-                    <input type="password" class="form-control" id="repetirContrasena" name="repetirContrasena" required>
+                    <input type="password" class="form-control" id="repetirContrasena" name="repetirContrasena" placeholder="Repita su contraseña" required>
                 </div>
-                <div class="mb-2">
+
+                <div class="mb-3">
+                    <label for="locationInput" class="form-label">Escribe tu ubicación:</label>
+                    <input type="text" class="form-control" id="locationInput" required>
+                </div>
+
+                <div id="map" style="width: 100%; height: 250px;" class="mb-2 rounded"></div>
+
+                <input type="text" id="pais" name="pais" hidden="hidden">
+                <input type="text" id="ciudad" name="ciudad" hidden="hidden">
+
+                <div class="mb-1">
                     <label for="imagen" class="form-label mt-2">Imagen de perfil:</label>
-                    <div class="input-group mt-2">
+                    <div class="input-group">
                         <input type="file" class="form-control" id="foto_perfil" name="foto_perfil" accept="image/*">
                     </div>
                 </div>
             </div>
+
             <div class="d-flex justify-content-between align-items-center">
                 <a href="/usuario/ingresar">¿Ya tenés cuenta? Ingresar</a>
                 <button type="submit" class="btn btn-primary">Registrarse</button>
@@ -74,3 +79,5 @@
         </form>
     </div>
 </main>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu6BZ-GE8v1mrSPNMf7JYYGI7KaHhnBqU&libraries=places"></script>
+<script src="../public/js/cargarDatosMapa.js"></script>
