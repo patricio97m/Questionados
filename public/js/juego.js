@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var tiempoRestante = 15;
     var tiempoRestanteElement = document.getElementById('tiempo-restante');
 
     var interval = setInterval(function() {

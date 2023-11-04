@@ -26,6 +26,7 @@ class JuegoController
             $categoria = $preguntaYRespuestas['categoria'];
             $estiloCategoria = $categoriaEstilos[$categoria] ?? 'bg-light';
             $_SESSION['idPregunta'] = $preguntaYRespuestas['idPregunta'];
+            $horaDeLaPregunta = time();
 
             return [
                 'usuario' => $_SESSION['usuario'],
@@ -34,6 +35,8 @@ class JuegoController
                 'categoria' => $preguntaYRespuestas['categoria'],
                 'categoriaEstilo' => $estiloCategoria,
                 'puntaje' => $_SESSION['puntaje'] ?? 0,
+                'horaDeLaPregunta' => $horaDeLaPregunta,
+                'tiempoRestante' => ($horaDeLaPregunta + 15) - time(),
             ];
         } else {
             Logger::info($_SESSION["errorRespuesta"] = "Ha ocurrido un error al cargar las respuestas");
@@ -50,6 +53,7 @@ class JuegoController
         // Verifica si hay una partida en curso
         if (isset($_SESSION['juego_data']) && !empty($_SESSION['juego_data'])) {
             $data = $_SESSION['juego_data'];
+            $data['tiempoRestante'] = ($data['horaDeLaPregunta'] + 15) - time();
         } else {
             // Si no hay una partida en curso, inicia una nueva partida
             unset($_SESSION['modal']);
@@ -63,8 +67,10 @@ class JuegoController
 
     public function verificarRespuesta() {
         $esCorrecta = $_POST["esCorrecta"];
+        $tiempoRestante = ($_SESSION['juego_data']['horaDeLaPregunta'] + 15) - time();
+        $contestoATiempo = ($tiempoRestante > 0);
 
-        if ($esCorrecta === "1") {
+        if ($esCorrecta === "1" && $contestoATiempo) {
             // Respuesta correcta, incrementa el puntaje
             $_SESSION['puntaje'] += 1;
             $idUsuario = $_SESSION['usuario'][0]['idUsuario']; $idPregunta = $_SESSION['idPregunta'];
