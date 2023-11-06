@@ -38,8 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         form.submit();
     }
-});
-document.addEventListener('DOMContentLoaded', function() {
+
     const animateElements = document.querySelectorAll('.animate');
     animateElements.forEach(element => {
         element.classList.add('active');
