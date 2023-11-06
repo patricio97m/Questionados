@@ -5,6 +5,7 @@ class UsuarioController
 {
     private $render;
     private $model;
+    private $mapsAPI = 'AIzaSyBu6BZ-GE8v1mrSPNMf7JYYGI7KaHhnBqU';
     public function __construct($render, $model) {
         $this->render = $render;
         $this->model = $model;
@@ -12,6 +13,7 @@ class UsuarioController
     public function registro(){
         $this->redirigirSiUsuarioLogueado();
         $data = [];
+        $data['mapsAPI'] = $this->mapsAPI;
 
         $this->setDatosError($data);
 
@@ -95,6 +97,7 @@ class UsuarioController
         $data['cambiarFoto'] = false;
         $data['modificaDatos'] = true;
         $data['actualizarDatos'] = false;
+        $data['mapsAPI'] = $this->mapsAPI;
 
         $this->setDatosError($data);
         if(!empty($_SESSION['mensajeExito'])){
@@ -113,6 +116,7 @@ class UsuarioController
         $data['cambiarFoto'] = true;
         $data['modificaDatos'] = false;
         $data['actualizarDatos'] = true;
+        $data['mapsAPI'] = $this->mapsAPI;
 
         if ($data['usuario']){$this->render->printView('perfil', $data);}
         else Redirect::to('/usuario/ingresar');
@@ -197,6 +201,7 @@ class UsuarioController
             'puntajeTotal' => $partidas['partidas']['puntajeTotal'],
             'rankingUsuarios' => $partidas['partidas']['rankingUsuario'],
             'qrUsuario' => '../public/qr/qr_'.$_GET['nombre'].'.png',
+            'mapsAPI' => $this->mapsAPI
         ];
 
         foreach ($datos['rankingUsuarios'] as &$rankingUsuario) {
