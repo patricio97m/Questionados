@@ -5,39 +5,30 @@
 
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="bg-primary text-uppercase d-inline p-1 text-light">Mejores jugadores por {{periodo}}</h3>
-            <form method="GET" action="/home/ranking" id="periodo-form">
+            <h3 class="bg-primary text-uppercase d-inline p-1 text-light" id="ranking-title">Mejores jugadores
+                por {{periodo}}</h3>
+            <div>
                 <select name="periodo" class="form-select" id="periodo-select">
-                    <option selected>Filtrar</option>
+                    <option selected value="">Filtrar</option>
                     <option value="dia">Último día</option>
                     <option value="semana">Última semana</option>
                     <option value="mes">Último mes</option>
                     <option value="historico">Histórico</option>
                 </select>
-            </form>
+            </div>
         </div>
         <ol class="list-group list-group-numbered mt-3">
             {{#ranking}}
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
-                        <a href="/usuario/datosUsuario?nombre={{usuario}}" class="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{usuario}}</a>
+                        <a href="/usuario/datosUsuario?nombre={{usuario}}" class="link-dark link-offset-2
+                        link-offset-3-hover link-underline link-underline-opacity-0
+                        link-underline-opacity-75-hover">{{usuario}}
                     </div>
                     <span class="badge bg-success text-light rounded-pill">{{puntaje_total}}</span>
                 </li>
             {{/ranking}}
-            {{^ranking}}
-                    <p>No hay datos por este periodo de tiempo.</p>
-            {{/ranking}}
         </ol>
     </div>
-
-    <!-- Script que envía por get el valor del select cuando seleccionamos una opción-->
-    <script>
-        const periodoSelect = document.getElementById("periodo-select");
-        const periodoForm = document.getElementById("periodo-form");
-
-        periodoSelect.addEventListener("change", function() {
-            periodoForm.submit();
-        });
-    </script>
 </main>
+<script src="../public/js/ranking.js"></script>

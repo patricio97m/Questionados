@@ -61,6 +61,7 @@ CREATE TABLE Reporte (
                                    idUsuario INT,
                                    idPregunta INT,
                                    motivoReporte VARCHAR(100),
+                                   fechaReporte TIMESTAMP,
                                    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
                                    FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta)
                                     ON DELETE CASCADE
