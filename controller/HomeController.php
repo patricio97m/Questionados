@@ -50,6 +50,13 @@ class HomeController
         else Redirect::to('/usuario/ingresar');
     }
 
+    public function rankingAjax() {
+        $periodo = $_GET['periodo'] ?? 'mes';
+        $ranking = $this->model->obtenerMejoresPuntajesPorFecha($periodo);
+
+        echo json_encode($ranking);
+    }
+
     public function moderarPreguntas() {
         $preguntasConRespuestas = $this->model->obtenerPreguntasAModerar();
 

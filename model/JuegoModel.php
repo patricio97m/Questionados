@@ -253,8 +253,8 @@ class JuegoModel
     }
 
     public function reportarPregunta($idPregunta, $idUsuario,  $motivoReporte){
-        $sql = "INSERT INTO reporte (idPregunta, idUsuario,  motivoReporte)
-        VALUES ('$idPregunta', '$idUsuario', '$motivoReporte')";
+        $sql = "INSERT INTO reporte (idPregunta, idUsuario,  motivoReporte, fechaReporte)
+        VALUES ('$idPregunta', '$idUsuario', '$motivoReporte', NOW())";
 
         $this->database->query($sql);
     }

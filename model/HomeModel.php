@@ -93,12 +93,12 @@ class HomeModel
     }
 
     public function obtenerReportes() {
-        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, REP.motivoReporte
+        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, REP.motivoReporte, REP.fechaReporte
         FROM Pregunta AS P
         LEFT JOIN Respuesta AS R ON P.idPregunta = R.idPregunta
         INNER JOIN Reporte AS REP ON P.idPregunta = REP.idPregunta
         LEFT JOIN Usuario AS U ON REP.idUsuario = U.idUsuario
-        ORDER BY P.fecha_pregunta";
+        ORDER BY REP.fechaReporte";
 
         $preguntasConRespuestas = $this->database->query($query);
         Logger::info(json_encode($preguntasConRespuestas));
@@ -112,7 +112,7 @@ class HomeModel
                 $preguntas[$idPregunta] = [
                     'idPregunta' => $row['idPregunta'],
                     'pregunta' => $row['pregunta'],
-                    'fecha_pregunta' => $row['fecha_pregunta'],
+                    'fecha_pregunta' => $row['fechaReporte'],
                     'categoria' => $row['categoria'],
                     'dificultad' => $row['dificultad'],
                     'usuario' => $row['usuario'],
