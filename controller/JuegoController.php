@@ -69,13 +69,16 @@ class JuegoController
         $esCorrecta = $_POST["esCorrecta"];
         $tiempoRestante = ($_SESSION['juego_data']['horaDeLaPregunta'] + 15) - time();
         $contestoATiempo = ($tiempoRestante > 0);
+        $contador_dificultad_media = $_SESSION['contador_dificultad_media'];
 
         if ($esCorrecta === "1" && $contestoATiempo) {
             // Respuesta correcta, incrementa el puntaje
             $_SESSION['puntaje'] += 1;
-            $idUsuario = $_SESSION['usuario'][0]['idUsuario']; $idPregunta = $_SESSION['idPregunta'];
-            $this->model->guardarRespuestaUsuario($idUsuario, $idPregunta, 1);
-            $this->model->actualizarDificultadPregunta($idPregunta);
+            if ($contador_dificultad_media > 10){ // Se actualiza la dificultad si se sobrepasa las 10 preguntas
+                $idUsuario = $_SESSION['usuario'][0]['idUsuario']; $idPregunta = $_SESSION['idPregunta'];
+                $this->model->guardarRespuestaUsuario($idUsuario, $idPregunta, 1);
+                $this->model->actualizarDificultadPregunta($idPregunta);
+            }
             $data = $this->cargarPregunta();
             $_SESSION['juego_data'] = $data; //Se guarda las preguntas actuales para mostar el modal por si se pierde
             Redirect::to('/juego/nuevaPartida');
@@ -85,6 +88,7 @@ class JuegoController
             $puntajeFinal = ($puntajeFinal === 0) ? $puntajeFinal . " " : $puntajeFinal; //Soluciona que no se abra el modal con el puntaje en 0
 
             $idUsuario = $_SESSION['usuario'][0]['idUsuario']; $idPregunta = $_SESSION['idPregunta'];
+            $_SESSION['contador_dificultad_media'] = 0;
             $this->model->guardarRespuestaUsuario($idUsuario, $idPregunta, 0);
             $this->model->actualizarDificultadPregunta($idPregunta);
             $data = $_SESSION['juego_data'];

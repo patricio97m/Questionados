@@ -11,9 +11,19 @@ class JuegoModel
 
     public function obtenerPreguntaAlAzar($idUsuario)
     {
-        // Obtén las preguntas utilizadas en la sesión
+        // Se obtienen las preguntas usadas en la sesión
         $preguntasUtilizadas = $_SESSION['preguntas_utilizadas'] ?? [];
         $dificultadUsuario = $this->calcularDificultadUsuario($idUsuario);
+
+        $preguntasDificultadMedia = 10; // Número de preguntas de dificultad media
+        $contadorDificultadMedia = $_SESSION['contador_dificultad_media'] ?? 0;
+
+        if ($contadorDificultadMedia < $preguntasDificultadMedia) {
+            // Se calcula si se respondieron las primeras 10 preguntas medias
+            $dificultadUsuario = 'media';
+            Logger::info("cant preguntas medias: " . $contadorDificultadMedia);
+        }
+
         Logger::info("Dificultad del usuario: " . $dificultadUsuario);
 
         // Verificar si la dificultad del usuario existe en la tabla Pregunta
@@ -26,7 +36,7 @@ class JuegoModel
             Logger::info("pregunta de la misma dificultad");
 
             if (!empty($preguntasUtilizadas)) {
-                // Si hay preguntas utilizadas, exclúyelas de la consulta
+                // Si hay preguntas utilizadas, excluirlas de la consulta
                 $baseQuery .= " AND idPregunta NOT IN (" . implode(',', $preguntasUtilizadas) . ")";
             }
 
@@ -34,6 +44,10 @@ class JuegoModel
             $pregunta = $this->database->query($baseQuery);
 
             if ($pregunta) {
+                if ($dificultadUsuario === 'media') { // Se verifica que las 10 primeras preguntas sean medias y se aumenta la cantidad en 1
+                    $contadorDificultadMedia++;
+                    $_SESSION['contador_dificultad_media'] = $contadorDificultadMedia;
+                }
                 $preguntasUtilizadas[] = $pregunta[0]['idPregunta'];
                 $_SESSION['preguntas_utilizadas'] = $preguntasUtilizadas;
 
@@ -63,6 +77,10 @@ class JuegoModel
         Logger::info("pregunta de dificultad diferente.");
 
         if ($pregunta) {
+            if ($dificultadUsuario === 'media') {
+                $contadorDificultadMedia++;
+                $_SESSION['contador_dificultad_media'] = $contadorDificultadMedia;
+            }
             $preguntasUtilizadas[] = $pregunta[0]['idPregunta'];
             $_SESSION['preguntas_utilizadas'] = $preguntasUtilizadas;
 
