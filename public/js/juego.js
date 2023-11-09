@@ -44,3 +44,20 @@ document.addEventListener('DOMContentLoaded', function() {
         element.classList.add('active');
     });
 });
+
+const $j = jQuery.noConflict();
+$j(document).ready(function(){
+    $j("#reportForm").submit(function(event){
+        event.preventDefault();
+
+        $j.ajax({
+            url: '/juego/reportarPregunta',
+            type: 'post',
+            data: $(this).serialize(),
+            success: function(response) {
+                window.location.href = "/";
+            }
+
+        });
+    });
+});

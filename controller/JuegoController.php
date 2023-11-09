@@ -196,7 +196,8 @@ class JuegoController
 
     public function reportarPregunta() {
         if (!isset($_SESSION['usuario'])){
-            Redirect::to('/usuario/ingresar');
+            echo "Debe iniciar sesión para reportar una pregunta.";
+            return;
         }
 
         $motivoReporte = $_POST['motivo'];
@@ -205,7 +206,6 @@ class JuegoController
 
         $this->model->ReportarPregunta($idPregunta, $idUsuario,  $motivoReporte);
         $_SESSION['alertaPregunta'] = "Pregunta reportada con éxito. Pendiente revisión de un administrador.";
-        Redirect::to('/');
     }
 
     public function eliminarReporte() {
