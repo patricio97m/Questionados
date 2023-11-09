@@ -27,8 +27,8 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-6 mb-3">
-                <h3 class="bg-primary text-uppercase d-inline p-1 text-light">Últimas partidas jugadas</h3>
+            <div class="col-md-6 mb-3 text-center">
+                <h3 class="text-uppercase d-inline p-1 text-light"><span class="badge rounded-pill text-bg-dark">Últimas partidas</span></h3>
                     <ul class="list-group mt-3">
                         {{#partidasUsuario}}
                         <li class="list-group-item d-flex justify-content-between">{{fecha_partida}} <span>Puntaje: <b>{{puntaje_obtenido}}</b></span></li>
@@ -38,8 +38,8 @@
                     <p>Aún no ha jugado ninguna partida. <a href="juego/nuevaPartida">Jugá ahora</a>.</p>
                 {{/partidasUsuario}}
             </div>
-            <div class="col-md-6">
-                <h3 class="bg-primary text-uppercase d-inline p-1 text-light">puntaje total: {{puntajeTotal}}</h3>
+            <div class="col-md-6 text-center">
+                <h3 class="text-uppercase d-inline p-1 text-light"><span class="badge rounded-pill text-bg-dark">puntaje total: {{puntajeTotal}}</span></h3>
                 <ol class="list-group list-group-numbered mt-3">
                     {{#rankingUsuarios}}
                         <li class="list-group-item d-flex justify-content-between align-items-start {{#esUsuarioLogueado}}bg-secondary text-white{{/esUsuarioLogueado}}">
