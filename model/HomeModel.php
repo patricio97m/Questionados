@@ -55,10 +55,11 @@ class HomeModel
     }
 
     public function obtenerPreguntasAModerar() {
-        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario
+        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, C.nombre as categoria
         FROM Pregunta AS P
         LEFT JOIN Respuesta AS R ON P.idPregunta = R.idPregunta
         LEFT JOIN usuario AS U ON P.idUsuario = U.idUsuario
+        LEFT JOIN Categoria AS C ON C.idCategoria = P.idCategoria
         WHERE P.esVerificada = false
         ORDER BY P.fecha_pregunta";
 
@@ -132,10 +133,11 @@ class HomeModel
     }
 
     public function obtenerPreguntasVerificadas() {
-        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario
+        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, C.nombre as categoria
         FROM Pregunta AS P
         LEFT JOIN Respuesta AS R ON P.idPregunta = R.idPregunta
         LEFT JOIN usuario AS U ON P.idUsuario = U.idUsuario
+        LEFT JOIN Categoria AS C ON C.idCategoria = P.idCategoria
         WHERE P.esVerificada = true
         ORDER BY P.fecha_pregunta DESC";
 
@@ -166,5 +168,13 @@ class HomeModel
         }
 
         return array_values($preguntas);
+    }
+
+    public function obtenerCategorias(){
+        $query = "SELECT C.*, U.usuario AS autor 
+                  FROM Categoria AS C
+                  LEFT JOIN usuario AS U ON C.idAutor = U.idUsuario";
+        $categorias = $this->database->query($query);
+        return $categorias;
     }
 }

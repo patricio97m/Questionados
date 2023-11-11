@@ -13,7 +13,8 @@ class UsuarioModel
     public function crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen) {
         // Comprueba si $imagen no está vacío
         if (!empty($imagen['name'])) {
-            $direccionImagen = $this->guardarFoto($imagen);
+            $destino = "public/fotosPerfil/";
+            $direccionImagen = $this->guardarFoto($imagen, $destino);
         } else {
             $direccionImagen = "../public/perfil_placeholder.png";
         }
@@ -55,7 +56,8 @@ class UsuarioModel
 
         if (!empty($imagen['name'])) {
             $fotoVieja = substr($this->buscarUsuario($usuarioViejo)[0]["fotoPerfil"], 3);
-            $fotoNueva = $this->guardarFoto($imagen);
+            $destino = "public/fotosPerfil/";
+            $fotoNueva = $this->guardarFoto($imagen, $destino);
 
             if (file_exists($fotoVieja)) {
                 if ($fotoVieja != "public/perfil_placeholder.png") {
@@ -100,22 +102,21 @@ class UsuarioModel
         ];
     }
 
-    public function guardarFoto($imagen){
-        $pathImagenes = "public/fotosPerfil/";
+    public function guardarFoto($imagen, $destino){
         $extensionDelArchivo = pathinfo(basename($imagen["name"]), PATHINFO_EXTENSION);
         $numeroRandom = rand(1,100000);
-        $destinoArchivo = $pathImagenes . $numeroRandom . "." . $extensionDelArchivo;
+        $destinoArchivo = $destino . $numeroRandom . "." . $extensionDelArchivo;
 
         while(file_exists($destinoArchivo)){
             $numeroRandom = rand(1,100000);
-            $destinoArchivo = $pathImagenes . $numeroRandom . "." . $extensionDelArchivo;
+            $destinoArchivo = $destino . $numeroRandom . "." . $extensionDelArchivo;
         }
         if(move_uploaded_file($imagen["tmp_name"], $destinoArchivo)) {
             $destinoArchivo = "../" . $destinoArchivo;
             return $destinoArchivo;
         }
         else{
-            $_SESSION["errorAlta"] = "Ha ocurrido un error al cargar la Foto de Perfil";
+            $_SESSION["errorAlta"] = "Ha ocurrido un error al cargar la Foto";
         }
     }
 

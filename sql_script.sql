@@ -19,15 +19,25 @@ create table Usuario(
                         esEditor boolean,
                         esAdmin boolean
 );
+
+CREATE TABLE Categoria (
+                        idCategoria INT AUTO_INCREMENT PRIMARY KEY,
+                        nombre varchar(32) not null,
+                        color varchar(16) not null,
+                        fecha TIMESTAMP,
+                        idAutor INT
+);
+
 CREATE TABLE Pregunta (
                           idPregunta INT AUTO_INCREMENT PRIMARY KEY,
                           pregunta VARCHAR(255),
-                          categoria VARCHAR(15),
+                          idCategoria INT not null,
                           dificultad VARCHAR(15),
                           fecha_pregunta TIMESTAMP,
                           idUsuario INT,
                           esVerificada BOOLEAN,
-                          FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+                          FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+                          FOREIGN KEY (idCategoria) REFERENCES Categoria(idCategoria) ON DELETE CASCADE
 );
 CREATE TABLE Respuesta (
                            idRespuesta INT AUTO_INCREMENT PRIMARY KEY,
@@ -102,35 +112,43 @@ VALUES (12, DATE_SUB(NOW(), INTERVAL 7 DAY), 4), (20, NOW(), 4), (14, DATE_SUB(N
        (8, DATE_SUB(NOW(), INTERVAL 7 DAY), 9), (24, DATE_SUB(NOW(), INTERVAL 30 DAY), 9), (12, DATE_SUB(NOW(), INTERVAL 1 DAY), 9),
        (15, DATE_SUB(NOW(), INTERVAL 7 DAY), 10), (32, DATE_SUB(NOW(), INTERVAL 30 DAY), 10), (13, DATE_SUB(NOW(), INTERVAL 1 DAY), 10);
 
-INSERT INTO Pregunta (pregunta, categoria, dificultad, fecha_pregunta, idUsuario, esVerificada) VALUES
-                                               ('¿Cuál es la capital de Francia?', 'Geografía', 'facil', NOW(), 1, true),
-                                               ('¿Quién escribió Romeo y Julieta?', 'Arte', 'medio', NOW(), 1, true),
-                                               ('¿Cuál es el símbolo químico del oxígeno?', 'Ciencia' , 'facil', NOW(), 1, true),
-                                               ('¿Cuál es el deporte más popular en Brasil?', 'Deporte' , 'facil', NOW(), 1, true),
-                                               ('¿Quién es el actor principal de la película "Titanic"?', 'Entretenimiento', 'medio', NOW(), 1, true),
-                                               ('¿En qué año comenzó la Primera Guerra Mundial?', 'Historia', 'dificil', NOW(), 1, true),
-                                               ('¿Cuál es el río más largo del mundo?', 'Geografía', 'dificil', NOW(), 1, true),
-                                               ('¿En qué año se firmó la Declaración de Independencia de los Estados Unidos?', 'Historia', 'dificil', NOW(), 1, true),
-                                               ('¿Quién pintó la Mona Lisa?', 'Arte', 'medio', NOW(), 1, true),
-                                               ('¿Cuál es el planeta más cercano al Sol?', 'Ciencia', 'dificil', NOW(), 1, true),
-                                               ('¿Quién ganó el Mundial de Fútbol en 2022?', 'Deporte', 'facil', NOW(), 1, true),
-                                               ('¿Cuál es la película más taquillera de todos los tiempos?', 'Entretenimiento', 'medio', NOW(), 1, true),
-                                               ('¿Cuál es el océano más grande del mundo?', 'Geografía', 'facil', NOW(), 1, true),
-                                               ('¿Quién fue el primer presidente de los Estados Unidos?', 'Historia', 'facil', NOW(), 1, true),
-                                               ('¿Cuál es el elemento más abundante en la corteza terrestre?', 'Ciencia', 'medio', NOW(), 1, true),
-                                               ('¿Cuál es el país más poblado del mundo?', 'Geografía', 'dificil', NOW(), 1, true),
-                                               ('¿Quién escribió Don Quijote de la Mancha?', 'Arte', 'dificil', NOW(), 1, true),
-                                               ('¿Cuál es el deporte que se juega en el Super Bowl?', 'Deporte', 'medio', NOW(), 1, true),
-                                               ('¿En qué año se fundó Google?', 'Ciencia', 'medio', NOW(), 1, true),
-                                               ('¿Cuál es el río que atraviesa El Cairo?', 'Geografía', 'facil', NOW(), 1, true),
-                                               ('¿Cuál es la capital de Noruega?', 'Geografía', 'dificil', NOW(), 1, true),
-                                               ('¿Quién pintó La Noche Estrellada?', 'Arte', 'dificil', NOW(), 1, true),
-                                               ('¿Cuál es la capital de Japón?', 'Geografía', 'facil', NOW(), 1, true),
-                                               ('¿Cuál es el país conocido como la Tierra del Sol Naciente?', 'Geografía', 'facil', NOW(), 1, true),
-                                               ('¿Quién escribió Hamlet?', 'Arte', 'dificil', NOW(), 1, true),
-                                               ('¿Cuál es el país donde se originó el tango?', 'Arte', 'medio', NOW(), 1, true),
-                                               ('¿Cuál es el deporte que se juega en Wimbledon?', 'Deporte', 'facil', NOW(), 1, true),
-                                               ('¿En qué año se estrenó la película Star Wars: Episodio IV - Una Nueva Esperanza?', 'Entretenimiento', 'dificil', NOW(), 1, true);
+INSERT INTO Categoria (nombre, color, fecha, idAutor) VALUES 
+                        ('Geografía', '#007BFF', NOW(), 1),
+                        ('Ciencia', '#28A745', NOW(), 1),
+                        ('Historia', '#FFC107', NOW(), 1),
+                        ('Entretenimiento', '#17A2B8', NOW(), 1),
+                        ('Arte', '#DC3545', NOW(), 1),
+                        ('Deporte', '#6C757D', NOW(), 1);
+
+INSERT INTO Pregunta (pregunta, idCategoria, dificultad, fecha_pregunta, idUsuario, esVerificada) VALUES
+                                               ('¿Cuál es la capital de Francia?', 1 , 'facil', NOW(), 1, true),
+                                               ('¿Quién escribió Romeo y Julieta?', 5, 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el símbolo químico del oxígeno?', 2, 'facil', NOW(), 1, true),
+                                               ('¿Cuál es el deporte más popular en Brasil?', 6, 'facil', NOW(), 1, true),
+                                               ('¿Quién es el actor principal de la película "Titanic"?', 4, 'medio', NOW(), 1, true),
+                                               ('¿En qué año comenzó la Primera Guerra Mundial?', 3, 'dificil', NOW(), 1, true),
+                                               ('¿Cuál es el río más largo del mundo?', 1, 'dificil', NOW(), 1, true),
+                                               ('¿En qué año se firmó la Declaración de Independencia de los Estados Unidos?', 3, 'dificil', NOW(), 1, true),
+                                               ('¿Quién pintó la Mona Lisa?', 5, 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el planeta más cercano al Sol?', 2, 'dificil', NOW(), 1, true),
+                                               ('¿Quién ganó el Mundial de Fútbol en 2022?', 6, 'facil', NOW(), 1, true),
+                                               ('¿Cuál es la película más taquillera de todos los tiempos?', 4, 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el océano más grande del mundo?', 1, 'facil', NOW(), 1, true),
+                                               ('¿Quién fue el primer presidente de los Estados Unidos?', 3, 'facil', NOW(), 1, true),
+                                               ('¿Cuál es el elemento más abundante en la corteza terrestre?', 2, 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el país más poblado del mundo?', 1, 'dificil', NOW(), 1, true),
+                                               ('¿Quién escribió Don Quijote de la Mancha?', 5, 'dificil', NOW(), 1, true),
+                                               ('¿Cuál es el deporte que se juega en el Super Bowl?', 6, 'medio', NOW(), 1, true),
+                                               ('¿En qué año se fundó Google?', 2, 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el río que atraviesa El Cairo?', 1, 'facil', NOW(), 1, true),
+                                               ('¿Cuál es la capital de Noruega?', 1, 'dificil', NOW(), 1, true),
+                                               ('¿Quién pintó La Noche Estrellada?', 5, 'dificil', NOW(), 1, true),
+                                               ('¿Cuál es la capital de Japón?', 1, 'facil', NOW(), 1, true),
+                                               ('¿Cuál es el país conocido como la Tierra del Sol Naciente?', 1, 'facil', NOW(), 1, true),
+                                               ('¿Quién escribió Hamlet?', 5, 'dificil', NOW(), 1, true),
+                                               ('¿Cuál es el país donde se originó el tango?', 5, 'medio', NOW(), 1, true),
+                                               ('¿Cuál es el deporte que se juega en Wimbledon?', 6, 'facil', NOW(), 1, true),
+                                               ('¿En qué año se estrenó la película Star Wars: Episodio IV - Una Nueva Esperanza?', 4, 'dificil', NOW(), 1, true);
 
 INSERT INTO Respuesta (idPregunta, respuesta, esCorrecta) VALUES
                                             (1, 'París', 1), (1, 'Londres', 0), (1, 'Lisboa', 0),(1, 'Madrid', 0),

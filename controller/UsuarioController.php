@@ -151,7 +151,6 @@ class UsuarioController
         $apellido = $_POST['apellido'];
         $fecha_nac = $_POST['fecha_nac'];
         $sexo = $_POST['sexo'];
-        Logger::info($sexo);
         $pais = $_POST['pais'];
         $ciudad = $_POST['ciudad'];
         $mail = $_POST['mail'];

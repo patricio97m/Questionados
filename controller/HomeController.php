@@ -131,4 +131,29 @@ class HomeController
             Redirect::to('/usuario/ingresar');
         }
     }
+
+    public function verCategorias() {
+        $categorias = $this->model->obtenerCategorias();
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+            'categorias' => $categorias,
+            'titulo' => 'Ver categorías',
+            'actionBtnAceptar' => false,
+            'rolUsuario' => 'Autor'
+        ];
+
+        if (!empty($_SESSION['notificacionCategoria'])) {
+            $datos["notificacionCategoria"] = $_SESSION['notificacionCategoria'];
+            unset($_SESSION['notificacionCategoria']);
+        }
+
+        $_SESSION['redirigirA'] = "verCategorias";
+
+        if ($_SESSION['usuario'][0]['esEditor']) {
+            $this->render->printView('verCategorias', $datos);
+        } else {
+            Redirect::to('/usuario/ingresar');
+        }
+    }
 }

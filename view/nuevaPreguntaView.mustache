@@ -48,12 +48,9 @@
                             <label for="categoria" class="form-label">Categoría:</label>
                             <select class="form-select" id="categoria" name="categoria" required>
                                 <option value="" selected>Elija una categoría...</option>
-                                <option value="Arte">Arte</option>
-                                <option value="Ciencia">Ciencia</option>
-                                <option value="Deporte">Deporte</option>
-                                <option value="Entretenimiento">Entretenimiento</option>
-                                <option value="Geografía">Geografía</option>
-                                <option value="Historia">Historia</option>
+                                {{#categorias}}
+                                    <option value="{{idCategoria}}">{{nombre}}</option>
+                                {{/categorias}}
                             </select>
                         </div>
                     </div>

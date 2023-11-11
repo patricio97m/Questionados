@@ -32,7 +32,7 @@ class JuegoModel
 
         if ($result && $result[0]['existe_dificultad'] > 0) {
             // Si la dificultad del usuario existe, intenta obtener una pregunta de esa dificultad
-            $baseQuery = "SELECT idPregunta, pregunta, categoria, dificultad FROM Pregunta WHERE dificultad = '$dificultadUsuario' AND esVerificada = true";
+            $baseQuery = "SELECT idPregunta, pregunta, idCategoria, dificultad FROM Pregunta WHERE dificultad = '$dificultadUsuario' AND esVerificada = true";
             Logger::info("pregunta de la misma dificultad");
 
             if (!empty($preguntasUtilizadas)) {
@@ -55,19 +55,24 @@ class JuegoModel
                 $respuestasQuery = "SELECT idRespuesta, respuesta, esCorrecta FROM Respuesta WHERE idPregunta = " . $pregunta[0]['idPregunta'] . " ORDER BY RAND()";
                 $respuestas = $this->database->query($respuestasQuery);
 
-                // Combinar la pregunta con sus respuestas
+                // Obtener datos de la categoría
+                $categoriaQuery = "SELECT nombre, color FROM Categoria WHERE idCategoria = " . $pregunta[0]['idCategoria'];
+                $categoria = $this->database->query($categoriaQuery);
+
+                // Combinar la pregunta con sus respuestas y su categoria
                 return [
                     'pregunta' => $pregunta[0]['pregunta'],
                     'idPregunta' => $pregunta[0]['idPregunta'],
-                    'categoria' => $pregunta[0]['categoria'],
                     'dificultad' => $pregunta[0]['dificultad'],
+                    'color' => $categoria[0]['color'],
+                    'categoria' => $categoria[0]['nombre'],
                     'respuestas' => $respuestas
                 ];
             }
         }
 
         // Si no se encuentra una pregunta de la misma dificultad, busca cualquier pregunta no utilizada sin restricciones de dificultad
-        $baseQuery = "SELECT idPregunta, pregunta, categoria, dificultad FROM Pregunta WHERE esVerificada = true";
+        $baseQuery = "SELECT idPregunta, pregunta, idCategoria, dificultad FROM Pregunta WHERE esVerificada = true";
         if (!empty($preguntasUtilizadas)) {
             // Si hay preguntas utilizadas, se excluyen de la consulta
             $baseQuery .= " AND idPregunta NOT IN (" . implode(',', $preguntasUtilizadas) . ")";
@@ -88,12 +93,17 @@ class JuegoModel
             $respuestasQuery = "SELECT idRespuesta, respuesta, esCorrecta FROM Respuesta WHERE idPregunta = " . $pregunta[0]['idPregunta'] . " ORDER BY RAND()";
             $respuestas = $this->database->query($respuestasQuery);
 
+            // Obtener datos de la categoría
+            $categoriaQuery = "SELECT nombre, color FROM Categoria WHERE idCategoria = " . $pregunta[0]['idCategoria'];
+            $categoria = $this->database->query($categoriaQuery);
+
             // Combinar la pregunta con sus respuestas
             return [
                 'pregunta' => $pregunta[0]['pregunta'],
                 'idPregunta' => $pregunta[0]['idPregunta'],
-                'categoria' => $pregunta[0]['categoria'],
                 'dificultad' => $pregunta[0]['dificultad'],
+                'color' => $categoria[0]['color'],
+                'categoria' => $categoria[0]['nombre'],
                 'respuestas' => $respuestas
             ];
         }
@@ -200,7 +210,7 @@ class JuegoModel
     }
 
     public function crearPregunta($pregunta, $respuestaCorrecta, $respuestaIncorrecta1, $respuestaIncorrecta2, $respuestaIncorrecta3, $categoria, $dificultad, $idUsuario) {
-        $sql = "INSERT INTO Pregunta (pregunta, categoria, dificultad, fecha_pregunta, idUsuario, esVerificada) 
+        $sql = "INSERT INTO Pregunta (pregunta, idCategoria, dificultad, fecha_pregunta, idUsuario, esVerificada) 
             VALUES ('$pregunta', '$categoria', '$dificultad', NOW(), $idUsuario, false)";
         $this->database->query($sql);
 
@@ -280,5 +290,79 @@ class JuegoModel
     public function eliminarReporte($idPregunta){
         $sql = "DELETE FROM reporte WHERE idPregunta = '$idPregunta'";
         $this->database->query($sql);
+    }
+
+    public function obtenerCategorias(){
+        $query = "SELECT * FROM Categoria";
+        $categorias = $this->database->query($query);
+        return $categorias;
+    }
+
+    public function crearCategoria($nombre, $color, $icono, $idAutor){
+        $destino = "public/categorias/";
+        $extensionDelArchivo = pathinfo(basename($icono["name"]), PATHINFO_EXTENSION);
+        if($extensionDelArchivo != "svg"){
+            $_SESSION["alertaCategoria"] = "Por favor, ingresa un archivo svg";
+            return false;
+        }
+        $destinoArchivo = $destino . $nombre . "." . $extensionDelArchivo;
+
+        if(move_uploaded_file($icono["tmp_name"], $destinoArchivo)){
+            $query = "INSERT INTO Categoria (nombre, color, fecha, idAutor)
+                      VALUES('$nombre', '$color', NOW(), $idAutor)";
+            $this->database->query($query); 
+        }
+        else{
+            $_SESSION["alertaCategoria"] = "Ha ocurrido un error al cargar el Icono";
+        }
+    }
+
+    public function eliminarCategoria($idCategoria){
+        $sql = "DELETE FROM Categoria WHERE idCategoria = '$idCategoria'";
+        $this->database->query($sql);
+    }
+
+    public function buscarCategoriaPorID($idCategoria){
+        $sql = "SELECT * FROM Categoria WHERE idCategoria = '$idCategoria'";
+        $categoria = $this->database->query($sql);
+        return $categoria[0];
+    }
+
+    public function editarCategoria($idCategoria, $nombreNuevo, $color, $icono){
+        $nombreViejo = $this->database->query("SELECT nombre FROM Categoria WHERE idCategoria = $idCategoria")[0][0];
+        Logger::info($nombreViejo);
+        $sql = "UPDATE Categoria SET nombre= '$nombreNuevo', color= '$color' WHERE idCategoria = $idCategoria";
+        $this->database->query($sql);
+
+        $destino = "public/categorias/";
+        $iconoAnterior = $destino . $nombreViejo . ".svg";
+        $iconoNuevo = $destino . $nombreNuevo . ".svg";
+
+        if(isset($icono)){
+            Logger::info("Icono es distintos de null");
+            Logger::info(implode(", ", $icono));
+            $extensionDelArchivo = pathinfo(basename($icono["name"]), PATHINFO_EXTENSION);
+            if($extensionDelArchivo != "svg"){
+                $_SESSION["alertaCategoria"] = "Por favor, ingresa un archivo svg";
+                return false;
+            }
+            
+            if(unlink($iconoAnterior)){
+                Logger::info("se elimino el icon anterior: " . $iconoAnterior);
+                if(!move_uploaded_file($icono["tmp_name"], $iconoNuevo)){
+                    $_SESSION["alertaCategoria"] = "Ha ocurrido un error al cargar el Icono";
+                }
+            }
+            else{
+                Logger::info("No se elimino el icon anterior: " . $iconoAnterior);
+                $_SESSION["alertaCategoria"] = "Ha ocurrido un error al eliminar al reemplazar el Icono";
+            }
+        }
+        else{
+            Logger::info("Icono es null");
+            if($nombreViejo != $nombreNuevo){
+                rename($iconoAnterior, $iconoNuevo);
+            }
+        }
     }
 }

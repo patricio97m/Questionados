@@ -13,18 +13,7 @@ class JuegoController
         $idUsuario = $_SESSION['usuario'][0]['idUsuario'];
         $preguntaYRespuestas = $this->model->obtenerPreguntaAlAzar($idUsuario);
 
-        if ($preguntaYRespuestas) { //Array para comparar valores de las categorías y elegir el estilo correcto
-            $categoriaEstilos = [
-                'Ciencia' => 'success',
-                'Historia' => 'warning',
-                'Entretenimiento' => 'info',
-                'Geografía' => 'primary',
-                'Arte' => 'danger',
-                'Deporte' => 'secondary'
-            ];
-
-            $categoria = $preguntaYRespuestas['categoria'];
-            $estiloCategoria = $categoriaEstilos[$categoria] ?? 'bg-light';
+        if ($preguntaYRespuestas){
             $_SESSION['idPregunta'] = $preguntaYRespuestas['idPregunta'];
             $horaDeLaPregunta = time();
 
@@ -33,7 +22,7 @@ class JuegoController
                 'pregunta' => $preguntaYRespuestas['pregunta'],
                 'respuestas' => $preguntaYRespuestas['respuestas'],
                 'categoria' => $preguntaYRespuestas['categoria'],
-                'categoriaEstilo' => $estiloCategoria,
+                'color' => $preguntaYRespuestas['color'],
                 'puntaje' => $_SESSION['puntaje'] ?? 0,
                 'horaDeLaPregunta' => $horaDeLaPregunta,
                 'tiempoRestante' => ($horaDeLaPregunta + 15) - time(),
@@ -107,6 +96,7 @@ class JuegoController
 
     public function nuevaPregunta() {
         $data['usuario'] = $_SESSION['usuario'];
+        $data['categorias'] = $this->model->obtenerCategorias();
         $this->render->printView('nuevaPregunta', $data);
     }
     public function procesarNuevaPregunta() {
@@ -218,5 +208,84 @@ class JuegoController
         $redigirA = $_SESSION['redirigirA'];
         $this->model->eliminarReporte($idPregunta);
         Redirect::to('/home/' . $redigirA);
+    }
+
+    public function procesarNuevaCategoria() {
+        if($_POST){
+            $nombre = $_POST["nombre"];
+            $color = $_POST["color"];
+            $icono = $_FILES["icono"];
+            $idAutor = $_SESSION['usuario'][0]['idUsuario'];
+
+            $this->model->crearCategoria($nombre, $color, $icono, $idAutor);
+            if(isset($_SESSION['error'])){
+                Redirect::to('/juego/nuevaCategoria');
+            }
+            else{
+                $_SESSION['error'] = "Categoría creada con éxito.";
+                Redirect::to('/');
+            }
+            
+        }else{
+            $_SESSION["error"] = "Cargue datos validos.";
+            Redirect::to('/juego/nuevaCategoria');
+        }
+    }
+
+    public function nuevaCategoria() {
+        $data['usuario'] = $_SESSION['usuario'];
+        $this->render->printView('nuevaCategoria', $data);
+    }
+
+    public function eliminarCategoria() {
+        if (!$_SESSION['usuario'][0]['esEditor']){
+            Redirect::to('/');
+        }
+
+        if($_POST){
+            $idCategoria = $_POST["idCategoria"];
+            $this->model->eliminarCategoria($idCategoria);
+            Redirect::to('/home/verCategorias');
+        }
+        else{
+            $_SESSION["error"] = "Cargue datos validos.";
+            Redirect::to('/home/verCategorias'); 
+        }
+    }
+
+    public function editarCategoria() {
+        if(isset($_POST['idCategoria'])){
+            $data['usuario'] = $_SESSION['usuario'];
+            $categoria = $this->model->buscarCategoriaPorID($_POST['idCategoria']);
+            $data['nombreCategoria'] = $categoria['nombre'];
+            $data['colorCategoria'] = $categoria['color'];
+            $data['idCategoria'] = $categoria['idCategoria'];
+            $this->render->printView('editarCategoria', $data);
+        }
+        
+    }
+
+    public function procesarEdicionCategoria(){
+        if($_POST){
+            $nombre = $_POST["nombre"];
+            $color = $_POST["color"];
+            $idCategoria = $_POST["idCategoria"];
+            if($_FILES["icono"]['tmp_name'] != null){
+                $icono = $_FILES["icono"];
+            }
+            
+            $this->model->editarCategoria($idCategoria, $nombre, $color, $icono);
+            if(isset($_SESSION['error'])){
+                Redirect::to('/home/verCategorias');
+            }
+            else{
+                $_SESSION['error'] = "Categoría creada con éxito.";
+                Redirect::to('/home/verCategorias');
+            }
+            
+        }else{
+            $_SESSION["error"] = "Cargue datos validos.";
+            Redirect::to('/home/verCategorias');
+        }
     }
 }
