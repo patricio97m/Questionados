@@ -1,0 +1,38 @@
+<main class="footer-final">
+    <div class="container mt-3 p-4 border rounded col-md-6 bg-white">
+        <h2>Editor de Categoría</h2>
+
+        {{#error}}
+            <div class="alert alert-danger" role="alert">
+                {{error}}
+            </div>
+        {{/error}}
+
+        <form method="post" action="/juego/procesarEdicionCategoria" enctype="multipart/form-data">
+            <input type="hidden" name="idCategoria" value="{{idCategoria}}" required>
+            <div class="mb-3">
+                <div class="mb-2">
+                    <label for="nombre" class="form-label">Nombre: </label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{nombreCategoria}}" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label for="color" class="form-label">Color: </label>
+                            <input type="color" class="form-control" id="color" name="color" value="{{colorCategoria}}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label for="icono" class="form-label">Icono: </label>
+                            <input type="file" class="form-control" id="icono" name="icono" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <button type="submit" class="btn btn-primary">Crear Categoría</button>
+            </div>
+        </form>
+    </div>
+</main>

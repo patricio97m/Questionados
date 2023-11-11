@@ -1,0 +1,50 @@
+<main class="footer-final">
+    <div class="container mt-3 p-4 border rounded col-md-6 bg-white">
+        {{#notificacionPregunta}}
+            <div class="alert alert-success" role="alert">
+                {{notificacionPregunta}}
+            </div>
+        {{/notificacionPregunta}}
+
+        <h2 class="text-center">{{titulo}}</h2>
+
+        <div class="container my-3">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 bs text-center">
+                    <a href="/juego/nuevaCategoria" class="btn btn-warning mb-4 btn-lg w-100">Nueva Categoría</a>
+                </div>
+            </div>
+        </div>
+
+        {{#categorias}}
+            <div class="list-group mt-3">
+                <a class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100">
+                        <h5 class="my-1 me-2" style="color: {{color}}">{{nombre}}</h5>
+                        <img src="../public/categorias/{{nombre}}.svg" alt="categoria" style="background-color: {{color}}">
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small>Autor: {{autor}} | Fecha: {{fecha}}</small>
+                        <div class="d-flex">
+                            <form method="post" action="/juego/editarCategoria" class="pe-1">
+                                <button type="submit" class="btn btn-sm btn-warning" name="idCategoria" value="{{idCategoria}}" title="Editar pregunta">
+                                    <img src="../public/editar_blanco.svg" alt="editar">
+                                </button>
+                            </form>
+                            <form method="post" action="/juego/eliminarCategoria" class="pe-1">
+                                <button type="submit" class="btn btn-sm btn-danger" name="idCategoria" value="{{idCategoria}}" title="Eliminar pregunta">
+                                    <img src="../public/eliminar.svg" alt="eliminar">
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {{/categorias}}
+
+        {{^categorias}}
+            <h5 class="mt-3">No hay categorías. <a href="/">Volver al inicio</a>.</h5>
+        {{/categorias}}
+
+    </div>
+</main>
