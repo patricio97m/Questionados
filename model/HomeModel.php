@@ -94,11 +94,12 @@ class HomeModel
     }
 
     public function obtenerReportes() {
-        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, REP.motivoReporte, REP.fechaReporte
+        $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, REP.motivoReporte, REP.fechaReporte, C.nombre
         FROM Pregunta AS P
         LEFT JOIN Respuesta AS R ON P.idPregunta = R.idPregunta
         INNER JOIN Reporte AS REP ON P.idPregunta = REP.idPregunta
         LEFT JOIN Usuario AS U ON REP.idUsuario = U.idUsuario
+        LEFT JOIN Categoria AS C ON P.idCategoria = C.idCategoria
         ORDER BY REP.fechaReporte";
 
         $preguntasConRespuestas = $this->database->query($query);
@@ -114,7 +115,7 @@ class HomeModel
                     'idPregunta' => $row['idPregunta'],
                     'pregunta' => $row['pregunta'],
                     'fecha_pregunta' => $row['fechaReporte'],
-                    'categoria' => $row['categoria'],
+                    'categoria' => $row['nombre'],
                     'dificultad' => $row['dificultad'],
                     'usuario' => $row['usuario'],
                     'motivoReporte' => $row['motivoReporte'],
