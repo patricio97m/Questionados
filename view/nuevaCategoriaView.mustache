@@ -2,11 +2,11 @@
     <div class="container mt-3 p-4 border rounded col-md-6 bg-white">
         <h2>Editor de Categoría</h2>
 
-        {{#error}}
+        {{#errorCategoria}}
             <div class="alert alert-danger" role="alert">
-                {{error}}
+                {{errorCategoria}}
             </div>
-        {{/error}}
+        {{/errorCategoria}}
 
         <form method="post" action="/juego/procesarNuevaCategoria" enctype="multipart/form-data">
             <div class="mb-3">
@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-2">
-                            <label for="icono" class="form-label">Icono: </label>
+                            <label for="icono" class="form-label">Icono (solo se admiten íconos .SVG): </label>
                             <input type="file" class="form-control" id="icono" name="icono" accept="image/*" required>
                         </div>
                     </div>

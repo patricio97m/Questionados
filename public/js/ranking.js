@@ -23,8 +23,7 @@ periodoSelect.addEventListener("change", function () {
                             <div class="ms-2 me-auto">
                                 <a href="/usuario/datosUsuario?nombre=${entry.usuario}" class="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">${entry.usuario}</a>
                             </div>
-                            <span class="badge bg-success text-light rounded-pill">${entry.puntaje_total}</span>
-                        `;
+                            <span class="badge bg-success text-light rounded-pill">${entry.puntaje_total}</span>`;
                         rankingList.appendChild(listItem);
                     });
                 } else {

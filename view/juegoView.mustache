@@ -16,11 +16,11 @@
         </h1>
 
         <div class="mt-5">
-            {{#respuestas}}
-                <form method="post" action="/juego/verificarRespuesta">
+            <form method="post" action="/juego/verificarRespuesta">
+                {{#respuestas}}
                     <button name="esCorrecta" id="esCorrecta" value="{{esCorrecta}}" class="btn shadowE btn-light btn-block btn-lg mb-3 w-100">{{respuesta}}</button>
-                </form>
-            {{/respuestas}}
+                {{/respuestas}}
+            </form>
         </div>
 
         <div class="mt-3 mb-3">

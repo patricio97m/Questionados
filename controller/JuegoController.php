@@ -218,16 +218,16 @@ class JuegoController
             $idAutor = $_SESSION['usuario'][0]['idUsuario'];
 
             $this->model->crearCategoria($nombre, $color, $icono, $idAutor);
-            if(isset($_SESSION['error'])){
+            if(isset($_SESSION['errorCategoria'])){
                 Redirect::to('/juego/nuevaCategoria');
             }
             else{
-                $_SESSION['error'] = "Categoría creada con éxito.";
-                Redirect::to('/');
+                $_SESSION['notificacionCategoria'] = "Categoría creada con éxito.";
+                Redirect::to('/home/verCategorias');
             }
             
         }else{
-            $_SESSION["error"] = "Cargue datos validos.";
+            $_SESSION["errorCategoria"] = "Cargue datos validos.";
             Redirect::to('/juego/nuevaCategoria');
         }
     }
@@ -245,11 +245,12 @@ class JuegoController
         if($_POST){
             $idCategoria = $_POST["idCategoria"];
             $this->model->eliminarCategoria($idCategoria);
+            $_SESSION['notificacionCategoria'] = "Categoría eliminada con éxito.";
             Redirect::to('/home/verCategorias');
         }
         else{
-            $_SESSION["error"] = "Cargue datos validos.";
-            Redirect::to('/home/verCategorias'); 
+            $_SESSION["errorCategoria"] = "Cargue datos validos.";
+            Redirect::to('/juego/nuevaCategoria');
         }
     }
 
@@ -279,12 +280,12 @@ class JuegoController
                 Redirect::to('/home/verCategorias');
             }
             else{
-                $_SESSION['error'] = "Categoría creada con éxito.";
+                $_SESSION['notificacionCategoria'] = "Categoría editada con éxito.";
                 Redirect::to('/home/verCategorias');
             }
             
         }else{
-            $_SESSION["error"] = "Cargue datos validos.";
+            $_SESSION["errorCategoria"] = "Cargue datos validos.";
             Redirect::to('/home/verCategorias');
         }
     }
