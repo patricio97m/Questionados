@@ -56,7 +56,7 @@ class JuegoModel
                 $respuestas = $this->database->query($respuestasQuery);
 
                 // Obtener datos de la categoría
-                $categoriaQuery = "SELECT nombre, color FROM Categoria WHERE idCategoria = " . $pregunta[0]['idCategoria'];
+                $categoriaQuery = "SELECT nombre, color, icono FROM Categoria WHERE idCategoria = " . $pregunta[0]['idCategoria'];
                 $categoria = $this->database->query($categoriaQuery);
 
                 // Combinar la pregunta con sus respuestas y su categoria
@@ -66,6 +66,7 @@ class JuegoModel
                     'dificultad' => $pregunta[0]['dificultad'],
                     'color' => $categoria[0]['color'],
                     'categoria' => $categoria[0]['nombre'],
+                    'iconoCategoria' => $categoria[0]['icono'],
                     'respuestas' => $respuestas
                 ];
             }
@@ -240,9 +241,10 @@ class JuegoModel
     }
 
     public function obtenerPreguntaPorId($idPregunta) {
-        $sql = "SELECT P.idPregunta, P.pregunta, P.categoria, P.dificultad, P.fecha_pregunta, P.idUsuario, P.esVerificada,
+        $sql = "SELECT P.idPregunta, P.pregunta, C.nombre AS categoria, C.icono AS iconoCategoria, C.color, P.dificultad, P.fecha_pregunta, P.idUsuario, P.esVerificada,
             R.idRespuesta, R.respuesta, R.esCorrecta
             FROM Pregunta AS P
+            JOIN Categoria AS C ON P.idCategoria = C.idCategoria
             LEFT JOIN Respuesta AS R ON P.idPregunta = R.idPregunta
             WHERE P.idPregunta = '$idPregunta'";
 
@@ -255,6 +257,8 @@ class JuegoModel
         foreach ($result as $row) {
             if (empty($preguntaYRespuestas['pregunta'])) {
                 $preguntaYRespuestas['pregunta'] = $row['pregunta'];
+                $preguntaYRespuestas['categoria'] = $row['categoria'];
+                $preguntaYRespuestas['dificultad'] = $row['dificultad'];
             }
 
             $preguntaYRespuestas['respuestas'][] = [
@@ -268,7 +272,9 @@ class JuegoModel
     }
 
     public function actualizarPregunta($pregunta, $idPregunta, $respuestaCorrecta, $respuestasIncorrectas, $categoria, $dificultad) {
-        $sqlUpdatePregunta = "UPDATE Pregunta SET pregunta = '$pregunta', categoria = '$categoria', dificultad = '$dificultad' WHERE idPregunta = '$idPregunta'";
+        $idCategoria = $this->buscarIdCategoriaPorNombre($categoria);
+
+        $sqlUpdatePregunta = "UPDATE Pregunta SET pregunta = '$pregunta', idCategoria = '$idCategoria', dificultad = '$dificultad' WHERE idPregunta = '$idPregunta'";
         $this->database->query($sqlUpdatePregunta);
 
         $sqlUpdateRespuestaCorrecta = "UPDATE Respuesta SET respuesta = '$respuestaCorrecta' WHERE idPregunta = '$idPregunta' AND esCorrecta = 1";
@@ -364,5 +370,11 @@ class JuegoModel
                 rename($iconoAnterior, $iconoNuevo);
             }
         }
+    }
+
+    public function buscarIdCategoriaPorNombre($categoria){
+        $sql = "SELECT idCategoria FROM Categoria WHERE nombre = '$categoria'";
+        $categoria = $this->database->query($sql);
+        return $categoria[0][0];
     }
 }

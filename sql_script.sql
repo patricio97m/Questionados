@@ -24,6 +24,7 @@ CREATE TABLE Categoria (
                         idCategoria INT AUTO_INCREMENT PRIMARY KEY,
                         nombre varchar(32) not null,
                         color varchar(16) not null,
+                        icono varchar(60) not null,
                         fecha TIMESTAMP,
                         idAutor INT
 );
@@ -112,13 +113,13 @@ VALUES (12, DATE_SUB(NOW(), INTERVAL 7 DAY), 4), (20, NOW(), 4), (14, DATE_SUB(N
        (8, DATE_SUB(NOW(), INTERVAL 7 DAY), 9), (24, DATE_SUB(NOW(), INTERVAL 30 DAY), 9), (12, DATE_SUB(NOW(), INTERVAL 1 DAY), 9),
        (15, DATE_SUB(NOW(), INTERVAL 7 DAY), 10), (32, DATE_SUB(NOW(), INTERVAL 30 DAY), 10), (13, DATE_SUB(NOW(), INTERVAL 1 DAY), 10);
 
-INSERT INTO Categoria (nombre, color, fecha, idAutor) VALUES 
-                        ('Geografía', '#007BFF', NOW(), 1),
-                        ('Ciencia', '#28A745', NOW(), 1),
-                        ('Historia', '#FFC107', NOW(), 1),
-                        ('Entretenimiento', '#17A2B8', NOW(), 1),
-                        ('Arte', '#DC3545', NOW(), 1),
-                        ('Deporte', '#6C757D', NOW(), 1);
+INSERT INTO Categoria (nombre, color, fecha, idAutor, icono) VALUES 
+                        ('Geografía', '#007BFF', NOW(), 1, '../public/categorias/Geografía') ,
+                        ('Ciencia', '#28A745', NOW(), 1, '../public/categorias/Ciencia'),
+                        ('Historia', '#FFC107', NOW(), 1, '../public/categorias/Historia'),
+                        ('Entretenimiento', '#17A2B8', NOW(), 1, '../public/categorias/Entretenimiento'),
+                        ('Arte', '#DC3545', NOW(), 1, '../public/categorias/Arte'),
+                        ('Deporte', '#6C757D', NOW(), 1, '../public/categorias/Deporte');
 
 INSERT INTO Pregunta (pregunta, idCategoria, dificultad, fecha_pregunta, idUsuario, esVerificada) VALUES
                                                ('¿Cuál es la capital de Francia?', 1 , 'facil', NOW(), 1, true),

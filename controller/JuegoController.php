@@ -158,6 +158,8 @@ class JuegoController
             'usuario' => $_SESSION['usuario'][0],
             'pregunta' => $preguntaYRespuestas['pregunta'],
             'respuestas' => $preguntaYRespuestas['respuestas'],
+            'categoria' => $preguntaYRespuestas['categoria'],
+            'dificultad' => $preguntaYRespuestas['dificultad'],
             'idPregunta' => $idPregunta,
             'redirigirA' => $_SESSION['redirigirA']
         ];
