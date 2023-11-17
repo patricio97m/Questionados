@@ -146,7 +146,7 @@ class UsuarioModel
             $this->mailer->Subject = 'Mail de registro en Questionados';
             $this->mailer->Body    = '<b>¡Debe verificar su cuenta!<b> <br>
                                     Para hacerlo, clickee en el siguiente link: <br> 
-                                    http://localhost/usuario/verificarUsuario/codigoVerificacion=' . $codigoVerificacion;
+                                    http://localhost/usuario/verificarUsuario/codigoVerificacion=' . $codigoVerificacion . "&usuario=" . $usuario;
 
             $this->mailer->send();
         } catch (Exception $e) {

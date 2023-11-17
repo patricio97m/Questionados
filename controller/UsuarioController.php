@@ -50,13 +50,11 @@ class UsuarioController
                 Redirect::to('/usuario/registro');
             }
             else {
-                $_SESSION['alertaVerificacion'] = "Chequea tu bandeja de correo y verificá tu cuenta!";
+                $_SESSION['error'] = "Chequea tu bandeja de correo y verificá tu cuenta!";
                 $_SESSION["modal"] = "$mail";
                 $this->model->crearUsuario($nombre, $apellido, $fecha_nac, $sexo, $pais, $ciudad, $mail, $usuario, $contrasena, $imagen);
                 $this->model->enviarCorreoVerificacion($mail, $nombre, $usuario);
-                $usuarioEncontrado  = $this->model->loguearUsuario($usuario, $contrasena);
-                $_SESSION['usuario'] = $usuarioEncontrado;
-                Redirect::to('/');
+                Redirect::to('/usuario/ingresar');
             }
         }else{
             $_SESSION["error"] ="Cargue datos validos.";
@@ -80,11 +78,15 @@ class UsuarioController
         $usuarioEncontrado  = $this->model->loguearUsuario($usuario, $contrasena);
 
         if ($usuarioEncontrado) {
-            $_SESSION['usuario'] = $usuarioEncontrado;
-            if(!($_SESSION['usuario'][0]['estaVerificado'])){
-                $_SESSION['alertaVerificacion'] = "Chequea tu bandeja de correo y verificá tu cuenta!";
+            if($usuarioEncontrado[0]['estaVerificado']){
+                $_SESSION['usuario'] = $usuarioEncontrado;
+                Redirect::to('/');
             }
-            Redirect::to('/');
+            else{
+                $_SESSION['error'] = "Chequea tu bandeja de correo y verificá tu cuenta!";
+                Redirect::to('/usuario/ingresar');
+            }
+            
         } else {
             $_SESSION["error"] ="Usuario o contraseña incorrectos.";
             Redirect::to('/usuario/ingresar');
@@ -211,11 +213,11 @@ class UsuarioController
     }    
     
     public function verificarUsuario(){
-       if(isset($_SESSION['usuario']) && isset($_GET['codigoVerificacion'])){
-        $username = $_SESSION['usuario'][0]['usuario'];
+       if(isset($_GET['usuario']) && isset($_GET['codigoVerificacion'])){
+        $username = $_GET['usuario'];
         $codigoVerificacion = $_GET['codigoVerificacion'];
         if($this->model->verificarUsuario($username, $codigoVerificacion)){
-            unset($_SESSION['alertaVerificacion']);
+            unset($_SESSION['error']);
         }
        }
        
