@@ -326,8 +326,16 @@ class JuegoModel
     }
 
     public function eliminarCategoria($idCategoria){
-        $sql = "DELETE FROM Categoria WHERE idCategoria = '$idCategoria'";
-        $this->database->query($sql);
+        $sql = "SELECT icono FROM Categoria WHERE idCategoria = '$idCategoria'";
+        $icono = $this->database->query($sql)[0][0];
+        $icono = substr($icono, 3);
+        
+        if(file_exists($icono)) {
+            unlink($icono);
+        }
+
+        $sql2 = "DELETE FROM Categoria WHERE idCategoria = '$idCategoria'";
+        $this->database->query($sql2);  
     }
 
     public function buscarCategoriaPorID($idCategoria){

@@ -225,7 +225,7 @@ class JuegoController
                 Redirect::to('/juego/nuevaCategoria');
             }
             else{
-                $_SESSION['error'] = "Categoría creada con éxito.";
+                $_SESSION['confirmacion'] = "Categoría creada con éxito.";
                 Redirect::to('/home/verCategorias');
             }
             
@@ -252,7 +252,7 @@ class JuegoController
         if($_POST){
             $idCategoria = $_POST["idCategoria"];
             $this->model->eliminarCategoria($idCategoria);
-            $_SESSION['error'] = "Categoría eliminada con éxito.";
+            $_SESSION['confirmacion'] = "Categoría eliminada con éxito.";
             Redirect::to('/home/verCategorias');
         }
         else{
@@ -291,7 +291,7 @@ class JuegoController
                 Redirect::to('/home/verCategorias');
             }
             else{
-                $_SESSION['error'] = "Categoría editada con éxito.";
+                $_SESSION['confirmacion'] = "Categoría editada con éxito.";
                 Redirect::to('/home/verCategorias');
             }
             

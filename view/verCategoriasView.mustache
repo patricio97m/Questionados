@@ -1,10 +1,15 @@
 <main class="footer-final">
     <div class="container mt-3 p-4 border rounded col-md-6 bg-white">
         {{#error}}
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-danger" role="alert">
                 {{error}}
             </div>
         {{/error}}
+        {{#confirmacion}}
+            <div class="alert alert-success" role="alert">
+                {{confirmacion}}
+            </div>
+        {{/confirmacion}}
 
         <h2 class="text-center">{{titulo}}</h2>
 

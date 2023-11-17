@@ -147,6 +147,10 @@ class HomeController
             $datos["error"] = $_SESSION['error'];
             unset($_SESSION['error']);
         }
+        if (!empty($_SESSION['confirmacion'])) {
+            $datos["confirmacion"] = $_SESSION['confirmacion'];
+            unset($_SESSION['confirmacion']);
+        }
 
         $_SESSION['redirigirA'] = "verCategorias";
 
