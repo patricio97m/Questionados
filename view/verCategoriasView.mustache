@@ -1,10 +1,10 @@
 <main class="footer-final">
     <div class="container mt-3 p-4 border rounded col-md-6 bg-white">
-        {{#notificacionCategoria}}
+        {{#error}}
             <div class="alert alert-success" role="alert">
-                {{notificacionCategoria}}
+                {{error}}
             </div>
-        {{/notificacionCategoria}}
+        {{/error}}
 
         <h2 class="text-center">{{titulo}}</h2>
 
@@ -21,7 +21,7 @@
                 <a class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100">
                         <h5 class="my-1 me-2" style="color: {{color}}">{{nombre}}</h5>
-                        <img src="../public/categorias/{{nombre}}.svg" alt="categoria" style="background-color: {{color}}">
+                        <img src="{{icono}}" alt="categoria" style="background-color: {{color}}">
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <small>Autor: {{autor}} | Fecha: {{fecha}}</small>

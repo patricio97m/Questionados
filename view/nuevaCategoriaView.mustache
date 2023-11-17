@@ -2,11 +2,11 @@
     <div class="container mt-3 p-4 border rounded col-md-6 bg-white">
         <h2>Editor de Categoría</h2>
 
-        {{#errorCategoria}}
+        {{#error}}
             <div class="alert alert-danger" role="alert">
-                {{errorCategoria}}
+                {{error}}
             </div>
-        {{/errorCategoria}}
+        {{/error}}
 
         <form method="post" action="/juego/procesarNuevaCategoria" enctype="multipart/form-data">
             <div class="mb-3">

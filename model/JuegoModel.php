@@ -95,7 +95,7 @@ class JuegoModel
             $respuestas = $this->database->query($respuestasQuery);
 
             // Obtener datos de la categoría
-            $categoriaQuery = "SELECT nombre, color FROM Categoria WHERE idCategoria = " . $pregunta[0]['idCategoria'];
+            $categoriaQuery = "SELECT nombre, color, icono FROM Categoria WHERE idCategoria = " . $pregunta[0]['idCategoria'];
             $categoria = $this->database->query($categoriaQuery);
 
             // Combinar la pregunta con sus respuestas
@@ -105,6 +105,7 @@ class JuegoModel
                 'dificultad' => $pregunta[0]['dificultad'],
                 'color' => $categoria[0]['color'],
                 'categoria' => $categoria[0]['nombre'],
+                'iconoCategoria' => $categoria[0]['icono'],
                 'respuestas' => $respuestas
             ];
         }
@@ -305,21 +306,22 @@ class JuegoModel
     }
 
     public function crearCategoria($nombre, $color, $icono, $idAutor){
-        $destino = "public/categorias/";
         $extensionDelArchivo = pathinfo(basename($icono["name"]), PATHINFO_EXTENSION);
-        if($extensionDelArchivo != "svg"){
-            $_SESSION["alertaCategoria"] = "Por favor, ingresa un archivo svg";
-            return false;
-        }
-        $destinoArchivo = $destino . $nombre . "." . $extensionDelArchivo;
+        if($extensionDelArchivo == "svg"){
+            $destino = "public/categorias/";
+            $direccionIcono = $this->guardarFoto($icono, $destino);
 
-        if(move_uploaded_file($icono["tmp_name"], $destinoArchivo)){
-            $query = "INSERT INTO Categoria (nombre, color, fecha, idAutor)
-                      VALUES('$nombre', '$color', NOW(), $idAutor)";
-            $this->database->query($query); 
+            if(isset($direccionIcono)){
+                $query = "INSERT INTO Categoria (nombre, color, fecha, idAutor, icono)
+                        VALUES('$nombre', '$color', NOW(), $idAutor, '$direccionIcono')";
+                $this->database->query($query); 
+            }
+            else{
+                $_SESSION["error"] = "Ha ocurrido un error al cargar el Icono";
+            }
         }
         else{
-            $_SESSION["alertaCategoria"] = "Ha ocurrido un error al cargar el Icono";
+            $_SESSION['error'] = "Elija un icono en formato svg";
         }
     }
 
@@ -336,38 +338,28 @@ class JuegoModel
 
     public function editarCategoria($idCategoria, $nombreNuevo, $color, $icono){
         $nombreViejo = $this->database->query("SELECT nombre FROM Categoria WHERE idCategoria = $idCategoria")[0][0];
-        Logger::info($nombreViejo);
         $sql = "UPDATE Categoria SET nombre= '$nombreNuevo', color= '$color' WHERE idCategoria = $idCategoria";
         $this->database->query($sql);
 
-        $destino = "public/categorias/";
-        $iconoAnterior = $destino . $nombreViejo . ".svg";
-        $iconoNuevo = $destino . $nombreNuevo . ".svg";
-
-        if(isset($icono)){
-            Logger::info("Icono es distintos de null");
-            Logger::info(implode(", ", $icono));
+        if (!empty($icono['name'])){
             $extensionDelArchivo = pathinfo(basename($icono["name"]), PATHINFO_EXTENSION);
-            if($extensionDelArchivo != "svg"){
-                $_SESSION["alertaCategoria"] = "Por favor, ingresa un archivo svg";
-                return false;
-            }
-            
-            if(unlink($iconoAnterior)){
-                Logger::info("se elimino el icon anterior: " . $iconoAnterior);
-                if(!move_uploaded_file($icono["tmp_name"], $iconoNuevo)){
-                    $_SESSION["alertaCategoria"] = "Ha ocurrido un error al cargar el Icono";
+            if($extensionDelArchivo == "svg"){
+                $iconoAnterior = substr($this->buscarCategoriaPorID($idCategoria)["icono"], 3);
+                $destino = "public/categorias/";
+                $iconoNuevo = $this->guardarFoto($icono, $destino);
+
+                if (file_exists($iconoAnterior)) {
+                    unlink($iconoAnterior);
                 }
+
+                $this->database->query("UPDATE categoria
+                SET
+                    icono = '$iconoNuevo'
+                WHERE idCategoria = '$idCategoria';"
+                    );
             }
             else{
-                Logger::info("No se elimino el icon anterior: " . $iconoAnterior);
-                $_SESSION["alertaCategoria"] = "Ha ocurrido un error al eliminar al reemplazar el Icono";
-            }
-        }
-        else{
-            Logger::info("Icono es null");
-            if($nombreViejo != $nombreNuevo){
-                rename($iconoAnterior, $iconoNuevo);
+                $_SESSION['error'] = "Elija un icono en formato svg";
             }
         }
     }
@@ -376,5 +368,23 @@ class JuegoModel
         $sql = "SELECT idCategoria FROM Categoria WHERE nombre = '$categoria'";
         $categoria = $this->database->query($sql);
         return $categoria[0][0];
+    }
+
+    public function guardarFoto($imagen, $destino){
+        $extensionDelArchivo = pathinfo(basename($imagen["name"]), PATHINFO_EXTENSION);
+        $numeroRandom = rand(1,100000);
+        $destinoArchivo = $destino . $numeroRandom . "." . $extensionDelArchivo;
+
+        while(file_exists($destinoArchivo)){
+            $numeroRandom = rand(1,100000);
+            $destinoArchivo = $destino . $numeroRandom . "." . $extensionDelArchivo;
+        }
+        if(move_uploaded_file($imagen["tmp_name"], $destinoArchivo)) {
+            $destinoArchivo = "../" . $destinoArchivo;
+            return $destinoArchivo;
+        }
+        else{
+            $_SESSION["error"] = "Ha ocurrido un error al cargar la Foto";
+        }
     }
 }

@@ -23,6 +23,7 @@ class JuegoController
                 'respuestas' => $preguntaYRespuestas['respuestas'],
                 'categoria' => $preguntaYRespuestas['categoria'],
                 'color' => $preguntaYRespuestas['color'],
+                'iconoCategoria' => $preguntaYRespuestas['iconoCategoria'],
                 'puntaje' => $_SESSION['puntaje'] ?? 0,
                 'horaDeLaPregunta' => $horaDeLaPregunta,
                 'tiempoRestante' => ($horaDeLaPregunta + 15) - time(),
@@ -220,22 +221,26 @@ class JuegoController
             $idAutor = $_SESSION['usuario'][0]['idUsuario'];
 
             $this->model->crearCategoria($nombre, $color, $icono, $idAutor);
-            if(isset($_SESSION['errorCategoria'])){
+            if(isset($_SESSION['error'])){
                 Redirect::to('/juego/nuevaCategoria');
             }
             else{
-                $_SESSION['notificacionCategoria'] = "Categoría creada con éxito.";
+                $_SESSION['error'] = "Categoría creada con éxito.";
                 Redirect::to('/home/verCategorias');
             }
             
         }else{
-            $_SESSION["errorCategoria"] = "Cargue datos validos.";
+            $_SESSION["error"] = "Cargue datos validos.";
             Redirect::to('/juego/nuevaCategoria');
         }
     }
 
     public function nuevaCategoria() {
         $data['usuario'] = $_SESSION['usuario'];
+        if (!empty($_SESSION['error'])) {
+            $data["error"] = $_SESSION['error'];
+            unset($_SESSION['error']);
+        }
         $this->render->printView('nuevaCategoria', $data);
     }
 
@@ -247,12 +252,12 @@ class JuegoController
         if($_POST){
             $idCategoria = $_POST["idCategoria"];
             $this->model->eliminarCategoria($idCategoria);
-            $_SESSION['notificacionCategoria'] = "Categoría eliminada con éxito.";
+            $_SESSION['error'] = "Categoría eliminada con éxito.";
             Redirect::to('/home/verCategorias');
         }
         else{
-            $_SESSION["errorCategoria"] = "Cargue datos validos.";
-            Redirect::to('/juego/nuevaCategoria');
+            $_SESSION["error"] = "Cargue datos validos.";
+            Redirect::to('/home/verCategorias');
         }
     }
 
@@ -263,6 +268,10 @@ class JuegoController
             $data['nombreCategoria'] = $categoria['nombre'];
             $data['colorCategoria'] = $categoria['color'];
             $data['idCategoria'] = $categoria['idCategoria'];
+            if (!empty($_SESSION['error'])) {
+                $data["error"] = $_SESSION['error'];
+                unset($_SESSION['error']);
+            }
             $this->render->printView('editarCategoria', $data);
         }
         
@@ -273,7 +282,7 @@ class JuegoController
             $nombre = $_POST["nombre"];
             $color = $_POST["color"];
             $idCategoria = $_POST["idCategoria"];
-            if($_FILES["icono"]['tmp_name'] != null){
+            if(isset($_FILES['icono'])){
                 $icono = $_FILES["icono"];
             }
             
@@ -282,12 +291,12 @@ class JuegoController
                 Redirect::to('/home/verCategorias');
             }
             else{
-                $_SESSION['notificacionCategoria'] = "Categoría editada con éxito.";
+                $_SESSION['error'] = "Categoría editada con éxito.";
                 Redirect::to('/home/verCategorias');
             }
             
         }else{
-            $_SESSION["errorCategoria"] = "Cargue datos validos.";
+            $_SESSION["error"] = "Cargue datos validos.";
             Redirect::to('/home/verCategorias');
         }
     }

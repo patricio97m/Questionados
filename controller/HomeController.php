@@ -143,9 +143,9 @@ class HomeController
             'rolUsuario' => 'Autor'
         ];
 
-        if (!empty($_SESSION['notificacionCategoria'])) {
-            $datos["notificacionCategoria"] = $_SESSION['notificacionCategoria'];
-            unset($_SESSION['notificacionCategoria']);
+        if (!empty($_SESSION['error'])) {
+            $datos["error"] = $_SESSION['error'];
+            unset($_SESSION['error']);
         }
 
         $_SESSION['redirigirA'] = "verCategorias";

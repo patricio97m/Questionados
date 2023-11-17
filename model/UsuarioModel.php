@@ -61,9 +61,7 @@ class UsuarioModel
 
             if (file_exists($fotoVieja)) {
                 if ($fotoVieja != "public/perfil_placeholder.png") {
-                    if (unlink($fotoVieja)) {
-                        Logger::info("Archivo de Foto de Perfil anterior eliminado correctamente.");
-                    }
+                    unlink($fotoVieja);
                 }
             }
 
@@ -72,7 +70,6 @@ class UsuarioModel
             fotoPerfil = '$fotoNueva'
         WHERE idUsuario = '$idUsuario';"
             );
-            Logger::info("Archivo de Foto de Perfil actualizada correctamente.");
         }
     }
 

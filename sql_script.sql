@@ -114,12 +114,12 @@ VALUES (12, DATE_SUB(NOW(), INTERVAL 7 DAY), 4), (20, NOW(), 4), (14, DATE_SUB(N
        (15, DATE_SUB(NOW(), INTERVAL 7 DAY), 10), (32, DATE_SUB(NOW(), INTERVAL 30 DAY), 10), (13, DATE_SUB(NOW(), INTERVAL 1 DAY), 10);
 
 INSERT INTO Categoria (nombre, color, fecha, idAutor, icono) VALUES 
-                        ('Geografía', '#007BFF', NOW(), 1, '../public/categorias/Geografía') ,
-                        ('Ciencia', '#28A745', NOW(), 1, '../public/categorias/Ciencia'),
-                        ('Historia', '#FFC107', NOW(), 1, '../public/categorias/Historia'),
-                        ('Entretenimiento', '#17A2B8', NOW(), 1, '../public/categorias/Entretenimiento'),
-                        ('Arte', '#DC3545', NOW(), 1, '../public/categorias/Arte'),
-                        ('Deporte', '#6C757D', NOW(), 1, '../public/categorias/Deporte');
+                        ('Geografía', '#007BFF', NOW(), 1, '../public/categorias/Geografía.svg') ,
+                        ('Ciencia', '#28A745', NOW(), 1, '../public/categorias/Ciencia.svg'),
+                        ('Historia', '#FFC107', NOW(), 1, '../public/categorias/Historia.svg'),
+                        ('Entretenimiento', '#17A2B8', NOW(), 1, '../public/categorias/Entretenimiento.svg'),
+                        ('Arte', '#DC3545', NOW(), 1, '../public/categorias/Arte.svg'),
+                        ('Deporte', '#6C757D', NOW(), 1, '../public/categorias/Deporte.svg');
 
 INSERT INTO Pregunta (pregunta, idCategoria, dificultad, fecha_pregunta, idUsuario, esVerificada) VALUES
                                                ('¿Cuál es la capital de Francia?', 1 , 'facil', NOW(), 1, true),
