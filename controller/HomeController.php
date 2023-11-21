@@ -57,6 +57,18 @@ class HomeController
         echo json_encode($ranking);
     }
 
+    public function cantidadJugadoresAjax() {
+        $ranking = array_merge($this->model->obtenerCantidadJugadoresPorFecha('historico'),$this->model->obtenerCantidadJugadoresPorFecha('mes'),$this->model->obtenerCantidadJugadoresPorFecha('semana'),$this->model->obtenerCantidadJugadoresPorFecha('dia'));
+
+        echo json_encode($ranking);
+    }
+
+    public function cantidadPartidasAjax() {
+        $ranking = array_merge($this->model->obtenerCantidadPartidasPorFecha('historico'),$this->model->obtenerCantidadPartidasPorFecha('mes'),$this->model->obtenerCantidadPartidasPorFecha('semana'),$this->model->obtenerCantidadPartidasPorFecha('dia'));
+
+        echo json_encode($ranking);
+    }
+
     public function moderarPreguntas() {
         $preguntasConRespuestas = $this->model->obtenerPreguntasAModerar();
 
@@ -155,5 +167,15 @@ class HomeController
         } else {
             Redirect::to('/usuario/ingresar');
         }
+    }
+
+    public function estadisticas() {
+
+        $datos = [
+            'usuario' => $_SESSION['usuario'][0],
+        ];
+
+        if ($datos['usuario']){$this->render->printView('estadisticas', $datos);}
+        else Redirect::to('/usuario/ingresar');
     }
 }

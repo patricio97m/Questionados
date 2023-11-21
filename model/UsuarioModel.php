@@ -20,9 +20,9 @@ class UsuarioModel
         }
 
         $sql = "INSERT INTO `usuario` (
-        `nombre`, `apellido`, `fecha_nac`, `sexo`, `pais`, `ciudad`, `mail`, `usuario`, `contrasena`, `estaVerificado`, `fotoPerfil`) 
+        `nombre`, `apellido`, `fecha_nac`, `sexo`, `pais`, `ciudad`, `mail`, `usuario`, `contrasena`, `estaVerificado`, `fotoPerfil`, `fecha_alta`) 
     VALUES 
-        ('$nombre', '$apellido', '$fecha_nac', '$sexo', '$pais', '$ciudad', '$mail', '$usuario', '$contrasena', false, '$direccionImagen');";
+        ('$nombre', '$apellido', '$fecha_nac', '$sexo', '$pais', '$ciudad', '$mail', '$usuario', '$contrasena', false, '$direccionImagen', NOW());";
 
         Logger::info('UsuarioAlta: ' . $sql);
         $this->database->query($sql);

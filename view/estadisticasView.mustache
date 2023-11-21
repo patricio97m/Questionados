@@ -1,0 +1,26 @@
+<main class="pt-3 container mt-2 p-4 border rounded col-md-6 footer-final bg-white">
+    {{#usuario}}
+        <h1 class="text-center mb-3 p-3">Estadisticas</h1>
+    {{/usuario}}
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="text-uppercase d-inline p-1 text-light" >
+                <span class="badge rounded-pill text-bg-dark" id="ranking-title">Grafico {{periodo}}</span>
+            </h3>
+            <div>
+                <select name="periodo" class="form-select" id="periodo-select">
+                    <option selected value="">Filtrar</option>
+                    <option value="cantidad_jugadores">Cantidad Jugadores</option>
+                    <option value="cantidad_partidas">Cantidad Partidas</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+</main>
+<script src="../public/js/estadisticas.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+</script>

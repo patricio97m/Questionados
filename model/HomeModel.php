@@ -54,6 +54,51 @@ class HomeModel
         return $this->database->query($query);
     }
 
+    public function obtenerCantidadJugadoresPorFecha($periodo) {
+        $orderByClause = 'DESC';
+
+        if ($periodo === 'mes') {
+            $periodoClausula = 'WHERE DATE(fecha_alta) >= DATE_SUB(NOW(), INTERVAL 1 MONTH)';
+        } elseif ($periodo === 'semana') {
+            $periodoClausula = 'WHERE DATE(fecha_alta) >= DATE_SUB(NOW(), INTERVAL 1 WEEK)';
+        } elseif ($periodo === 'dia') {
+            $periodoClausula = 'WHERE DATE(fecha_alta) >= CURDATE()';
+        }
+        elseif ($periodo === 'historico') {
+            $periodoClausula = '';
+        }else $periodoClausula = 'WHERE DATE(fecha_alta) >= DATE_SUB(NOW(), INTERVAL 1 MONTH)';
+
+        $query = "select count(cantidad_jugadores) as cantidad_jugadores,'$periodo' as periodo from ( SELECT count(fecha_alta) AS cantidad_jugadores 
+                FROM Usuario $periodoClausula GROUP BY usuario ) as a";
+
+        return $this->database->query($query);
+    }
+
+    public function obtenerCantidadPartidasPorFecha($periodo) {
+
+        if ($periodo === 'mes') {
+            $periodoClausula = 'WHERE DATE(fecha_partida) >= DATE_SUB(NOW(), INTERVAL 1 MONTH)';
+        } elseif ($periodo === 'semana') {
+            $periodoClausula = 'WHERE DATE(fecha_partida) >= DATE_SUB(NOW(), INTERVAL 1 WEEK)';
+        } elseif ($periodo === 'dia') {
+            $periodoClausula = 'WHERE DATE(fecha_partida) >= CURDATE()';
+        }
+        elseif ($periodo === 'historico') {
+            $periodoClausula = '';
+        }else $periodoClausula = 'WHERE DATE(fecha_partida) >= DATE_SUB(NOW(), INTERVAL 1 MONTH)';
+
+        $query = "select 
+                    count(cantidad_partidas) as cantidad_partidas ,'$periodo' as periodo
+                    from 
+                    ( 
+                        SELECT count(id) AS cantidad_partidas 
+                        FROM partida 
+                        $periodoClausula
+                        GROUP BY id ) as a";
+
+        return $this->database->query($query);
+    }
+
     public function obtenerPreguntasAModerar() {
         $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, C.nombre as categoria
         FROM Pregunta AS P
