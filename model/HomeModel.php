@@ -99,6 +99,29 @@ class HomeModel
         return $this->database->query($query);
     }
 
+    public function obtenerCantidadPreguntasPorFecha($periodo) {
+        $periodoClausula = '';
+
+        if ($periodo === 'mes') {
+            $periodoClausula = 'WHERE DATE(fecha_pregunta) >= DATE_SUB(NOW(), INTERVAL 1 MONTH)';
+        } elseif ($periodo === 'semana') {
+            $periodoClausula = 'WHERE DATE(fecha_pregunta) >= DATE_SUB(NOW(), INTERVAL 1 WEEK)';
+        } elseif ($periodo === 'dia') {
+            $periodoClausula = 'WHERE DATE(fecha_pregunta) >= CURDATE()';
+        }
+        elseif ($periodo === 'historico') {
+            $periodoClausula = '';
+        }else $periodoClausula = 'WHERE DATE(fecha_pregunta) >= DATE_SUB(NOW(), INTERVAL 1 MONTH)';
+
+        $query = "SELECT 
+                COUNT(idPregunta) AS cantidad_preguntas,
+                '$periodo' AS periodo
+              FROM Pregunta 
+              $periodoClausula";
+
+        return $this->database->query($query);
+    }
+
     public function obtenerPreguntasAModerar() {
         $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, C.nombre as categoria
         FROM Pregunta AS P

@@ -61,6 +61,38 @@ periodoSelect.addEventListener("change", function () {
                 console.error("Error al cargar el ranking:", error);
             });
     }
+    else if (selectedPeriodo === "cantidad_preguntas"){
+        fetch(`/home/cantidadPreguntasAjax`)
+            .then(response => response.json())
+            .then(data => {
+                const title = document.getElementById("ranking-title");
+                title.textContent = `Grafico cantidad Preguntas`;
+                var datosGrafico = [["Element", "Preguntas", { role: "style" } ]];
+
+                if (data.length > 0) {
+                    data.forEach(entry => {
+                        datosGrafico.push([entry.periodo.toUpperCase(),entry.cantidad_preguntas*1, "#"+Math.floor(Math.random()*16777215).toString(16)])
+                    });
+                } else {
+                    const noDataItem = document.createElement("p");
+                    noDataItem.textContent = "No hay datos por este período de tiempo.";
+                    rankingList.appendChild(noDataItem);
+                }
+                var data = google.visualization.arrayToDataTable(datosGrafico);
+                var options = {
+                    title: 'Cantidad Preguntas',
+                    width: 600,
+                    height: 400,
+                    bar: {groupWidth: "95%"},
+                    legend: { position: "none" },
+                };
+                drawChartBar(data, options);
+                console.log(datosGrafico);
+            })
+            .catch(error => {
+                console.error("Error al cargar el ranking:", error);
+            });
+    }
 });
 function drawChart(inData, inOption) {
 

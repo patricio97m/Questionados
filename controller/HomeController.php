@@ -69,6 +69,12 @@ class HomeController
         echo json_encode($ranking);
     }
 
+    public function cantidadPreguntasAjax() {
+        $ranking = array_merge($this->model->obtenerCantidadPreguntasPorFecha('historico'),$this->model->obtenerCantidadPreguntasPorFecha('mes'),$this->model->obtenerCantidadPreguntasPorFecha('semana'),$this->model->obtenerCantidadPreguntasPorFecha('dia'));
+
+        echo json_encode($ranking);
+    }
+
     public function moderarPreguntas() {
         $preguntasConRespuestas = $this->model->obtenerPreguntasAModerar();
 
