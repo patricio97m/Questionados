@@ -1,25 +1,33 @@
-<main class="pt-3 container mt-2 p-4 border rounded col-md-6 footer-final bg-white">
+<main class="pt-3 container mt-2 p-4 border rounded col-md-10 footer-final bg-white">
     {{#usuario}}
-        <h1 class="text-center mb-3 p-3">Estadisticas</h1>
+        <h1 class="text-center mb-3 p-3">Estadísticas</h1>
     {{/usuario}}
 
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="text-uppercase d-inline p-1 text-light" >
-                <span class="badge rounded-pill text-bg-dark" id="ranking-title">Grafico {{periodo}}</span>
+            <h3 class="text-uppercase d-inline p-1 text-light" id="titulo-grafico">
+                <span class="badge rounded-pill text-bg-dark" id="ranking-title">Seleccione un gráfico</span>
             </h3>
             <div>
                 <select name="periodo" class="form-select" id="periodo-select">
                     <option selected value="">Filtrar</option>
-                    <option value="cantidad_jugadores">Cantidad Jugadores</option>
-                    <option value="cantidad_partidas">Cantidad Partidas</option>
-                    <option value="cantidad_preguntas">Cantidad Preguntas</option>
+                    <option value="cantidad_jugadores">Cantidad jugadores</option>
+                    <option value="cantidad_partidas">Cantidad partidas</option>
+                    <option value="cantidad_preguntas">Cantidad preguntas totales</option>
+                    <option value="usuarios_por_sexo">Cantidad usuarios por sexo</option>
+                    <option value="porcentaje_preguntas_usuarios">Usuarios por % de resp. correctas</option>
+                    <option value="usuarios_por_edad">Cantidad de usuarios por grupo de edad</option>
+                    <option value="usuarios_por_pais">Cantidad usuarios por país</option>
                 </select>
             </div>
         </div>
     </div>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
+    <div id="lista-usuarios" style="height: 30em"></div>
+    <div class="d-flex justify-content-end">
+        <button id="export-button" class="btn btn-success" hidden>Exportar a PDF</button>
+    </div>
 </main>
+<script src="../public/js/html2pdf.bundle.js"></script>
 <script src="../public/js/estadisticas.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">

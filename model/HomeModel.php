@@ -122,6 +122,39 @@ class HomeModel
         return $this->database->query($query);
     }
 
+    public function obtenerUsuariosPorSexo(){
+        $query = "SELECT sexo, COUNT(*) as cantidad_usuarios FROM Usuario GROUP BY sexo";
+        return $this->database->query($query);
+    }
+    public function obtenerUsuariosPorEdad() {
+        $query = "SELECT
+                SUM(CASE WHEN DATEDIFF(CURDATE(), fecha_nac) < 18 * 365 THEN 1 ELSE 0 END) AS Menores,
+                SUM(CASE WHEN DATEDIFF(CURDATE(), fecha_nac) >= 18 * 365 AND DATEDIFF(CURDATE(), fecha_nac) < 60 * 365 THEN 1 ELSE 0 END) AS Medios,
+                SUM(CASE WHEN DATEDIFF(CURDATE(), fecha_nac) >= 60 * 365 THEN 1 ELSE 0 END) AS Jubilados
+              FROM Usuario";
+
+        return $this->database->query($query);
+    }
+    public function obtenerUsuariosPorPorcentajeDePreguntas() {
+        $query = "
+        SELECT
+    u.idUsuario,
+    u.usuario, COUNT(ru.idRespuestaUsuario) AS total_respuestas, SUM(ru.esCorrecta) AS respuestas_correctas, IFNULL(SUM(ru.esCorrecta) / COUNT(ru.idRespuestaUsuario) * 100, 0) AS porcentaje_correctas
+    FROM Usuario u
+    LEFT JOIN RespuestasUsuario ru ON u.idUsuario = ru.idUsuario
+    WHERE ru.idRespuestaUsuario IS NOT NULL
+    GROUP BY u.idUsuario, u.usuario
+    ORDER BY porcentaje_correctas DESC;
+    ";
+
+        return $this->database->query($query);
+    }
+
+    public function obtenerUsuariosPorPais() {
+        $query = "SELECT pais, COUNT(idUsuario) as cantidad_usuarios FROM Usuario GROUP BY pais ORDER BY cantidad_usuarios DESC";
+        return $this->database->query($query);
+    }
+
     public function obtenerPreguntasAModerar() {
         $query = "SELECT P.*, R.idRespuesta, R.respuesta, R.esCorrecta, U.usuario, C.nombre as categoria
         FROM Pregunta AS P
@@ -156,9 +189,7 @@ class HomeModel
                 'esCorrecta' => $row['esCorrecta'],
             ];
         }
-
         return array_values($preguntas);
-
     }
 
     public function obtenerReportes() {

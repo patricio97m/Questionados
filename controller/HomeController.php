@@ -58,21 +58,34 @@ class HomeController
     }
 
     public function cantidadJugadoresAjax() {
-        $ranking = array_merge($this->model->obtenerCantidadJugadoresPorFecha('historico'),$this->model->obtenerCantidadJugadoresPorFecha('mes'),$this->model->obtenerCantidadJugadoresPorFecha('semana'),$this->model->obtenerCantidadJugadoresPorFecha('dia'));
-
-        echo json_encode($ranking);
+        $usuarios = array_merge($this->model->obtenerCantidadJugadoresPorFecha('historico'),$this->model->obtenerCantidadJugadoresPorFecha('mes'),$this->model->obtenerCantidadJugadoresPorFecha('semana'),$this->model->obtenerCantidadJugadoresPorFecha('dia'));
+        echo json_encode($usuarios);
     }
 
     public function cantidadPartidasAjax() {
-        $ranking = array_merge($this->model->obtenerCantidadPartidasPorFecha('historico'),$this->model->obtenerCantidadPartidasPorFecha('mes'),$this->model->obtenerCantidadPartidasPorFecha('semana'),$this->model->obtenerCantidadPartidasPorFecha('dia'));
-
-        echo json_encode($ranking);
+        $partidas = array_merge($this->model->obtenerCantidadPartidasPorFecha('historico'),$this->model->obtenerCantidadPartidasPorFecha('mes'),$this->model->obtenerCantidadPartidasPorFecha('semana'),$this->model->obtenerCantidadPartidasPorFecha('dia'));
+        echo json_encode($partidas);
     }
 
     public function cantidadPreguntasAjax() {
-        $ranking = array_merge($this->model->obtenerCantidadPreguntasPorFecha('historico'),$this->model->obtenerCantidadPreguntasPorFecha('mes'),$this->model->obtenerCantidadPreguntasPorFecha('semana'),$this->model->obtenerCantidadPreguntasPorFecha('dia'));
-
-        echo json_encode($ranking);
+        $preguntas = array_merge($this->model->obtenerCantidadPreguntasPorFecha('historico'),$this->model->obtenerCantidadPreguntasPorFecha('mes'),$this->model->obtenerCantidadPreguntasPorFecha('semana'),$this->model->obtenerCantidadPreguntasPorFecha('dia'));
+        echo json_encode($preguntas);
+    }
+    public function usuariosPorSexo() {
+        $usuarios = array_merge($this->model->obtenerUsuariosPorSexo());
+        echo json_encode($usuarios);
+    }
+    public function usuariosPorEdad() {
+        $usuarios = array_merge($this->model->obtenerUsuariosPorEdad());
+        echo json_encode($usuarios);
+    }
+    public function usuariosPorPais() {
+        $usuarios = array_merge($this->model->obtenerUsuariosPorPais());
+        echo json_encode($usuarios);
+    }
+    public function usuariosPorPorcentajeDePreguntas() {
+        $usuarios = array_merge($this->model->obtenerUsuariosPorPorcentajeDePreguntas());
+        echo json_encode($usuarios);
     }
 
     public function moderarPreguntas() {
