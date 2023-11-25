@@ -1,4 +1,4 @@
-<main class="pt-3 container mt-2 p-4 border rounded col-md-10 footer-final bg-white">
+<main class="pt-3 container mt-2 p-4 border rounded col-md-10 footer-final bg-white" id="contenedor-principal">
     {{#usuario}}
         <h1 class="text-center mb-3 p-3">Estadísticas</h1>
     {{/usuario}}
@@ -18,16 +18,25 @@
                     <option value="porcentaje_preguntas_usuarios">Usuarios por % de resp. correctas</option>
                     <option value="usuarios_por_edad">Cantidad de usuarios por grupo de edad</option>
                     <option value="usuarios_por_pais">Cantidad usuarios por país</option>
+                    <option value="ver_graficos">Ver todos los gráficos</option>
                 </select>
             </div>
         </div>
     </div>
-    <div id="lista-usuarios" style="height: 30em"></div>
+    <div id="graficos-container">
+        <div id="cant-jugadores-div" style="height: 30em; display : none"></div>
+        <div id="cant-partidas-div" style="height: 30em; display : none"></div>
+        <div id="cant-preguntas-div" style="height: 30em; display : none"></div>
+        <div id="usuarios-por-sexo-div" style="height: 30em; display : none"></div>
+        <div id="usuarios-por-edad-div" style="height: 30em; display : none"></div>
+        <div id="usuarios-por-pais-div" style="height: 30em; display : none"></div>
+        <div id="porcentaje-preg-usuarios-div" style="height: 30em; display : none"></div>
+    </div>
     <div class="d-flex justify-content-end">
         <button id="export-button" class="btn btn-success" hidden>Exportar a PDF</button>
     </div>
 </main>
-<script src="../public/js/html2pdf.bundle.js"></script>
+<script src="../public/js/html2pdf.bundle.min.js"></script>
 <script src="../public/js/estadisticas.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">

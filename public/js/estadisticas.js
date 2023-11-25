@@ -1,45 +1,77 @@
 const periodoSelect = document.getElementById("periodo-select");
 const rankingList = document.querySelector(".list-group");
-const listaUsuariosContainer = document.getElementById("lista-usuarios");
+const graficosContainer = document.getElementById("graficos-container");
 const exportButton = document.getElementById("export-button");
 const title = document.getElementById("ranking-title");
+const cantJugadoresDiv = document.getElementById("cant-jugadores-div");
+const cantPartidasDiv = document.getElementById("cant-partidas-div");
+const cantPreguntasDiv = document.getElementById("cant-preguntas-div");
+const usuariosPorSexoDiv = document.getElementById("usuarios-por-sexo-div");
+const usuariosPorEdadDiv = document.getElementById("usuarios-por-edad-div");
+const usuariosPorPaisDiv = document.getElementById("usuarios-por-pais-div");
+const porcentajePregUsuariosDiv = document.getElementById("porcentaje-preg-usuarios-div");
+const graficosDivs = ["cant-jugadores-div", "cant-partidas-div", "cant-preguntas-div", "usuarios-por-sexo-div", "usuarios-por-edad-div", "usuarios-por-pais-div", "porcentaje-preg-usuarios-div"];
 
 exportButton.addEventListener("click", exportarPDF);
 periodoSelect.addEventListener("change", function () {
     const selectedPeriodo = periodoSelect.value;
 
-    while (listaUsuariosContainer.firstChild) {
-        listaUsuariosContainer.removeChild(listaUsuariosContainer.firstChild);
-    }
+    // Oculta todos los divs de gráficos
+    graficosDivs.forEach(divId => {
+        const div = document.getElementById(divId);
+        div.style.display = "none";
+    });
 
     if (selectedPeriodo === "cantidad_jugadores") {
         cantidadJugadores();
         exportButton.hidden = false;
+        cantJugadoresDiv.style.display = "block";
     } else if (selectedPeriodo === "cantidad_partidas"){
         cantidadPartidas();
         exportButton.hidden = false;
+        cantPartidasDiv.style.display = "block";
     }
     else if (selectedPeriodo === "cantidad_preguntas"){
         cantidadPreguntas();
         exportButton.hidden = false;
+        cantPreguntasDiv.style.display = "block";
     }
     else if (selectedPeriodo === "usuarios_por_sexo") {
         usuariosPorSexo();
         exportButton.hidden = false;
+        usuariosPorSexoDiv.style.display = "block";
     } else if (selectedPeriodo === "usuarios_por_edad") {
         usuariosPorEdad();
         exportButton.hidden = false;
+        usuariosPorEdadDiv.style.display = "block";
     }else if (selectedPeriodo === "usuarios_por_pais") {
         usuariosPorPais();
         exportButton.hidden = false;
+        usuariosPorPaisDiv.style.display = "block";
     }
     else if (selectedPeriodo === "porcentaje_preguntas_usuarios") {
         porcentajePreguntasUsuarios();
         exportButton.hidden = false;
+        porcentajePregUsuariosDiv.style.display = "block";
     }
     else if (selectedPeriodo === ""){
         exportButton.hidden = true;
         title.textContent = "SELECCIONE UN GRÁFICO";
+    }
+    else if (selectedPeriodo === "ver_graficos") {
+        cantidadJugadores();
+        cantidadPartidas();
+        cantidadPreguntas();
+        usuariosPorSexo();
+        usuariosPorEdad();
+        usuariosPorPais();
+        porcentajePreguntasUsuarios();
+        exportButton.hidden = false;
+        graficosDivs.forEach(divId => {
+            const div = document.getElementById(divId);
+            div.style.display = "block";
+        });
+        title.textContent = "Ver todos los gráficos";
     }
 });
 
@@ -63,7 +95,7 @@ function cantidadJugadores() {
             var options = {
                 title: 'Cantidad Jugadores'
             };
-            drawChart(data, options);
+            drawChart(data, options, cantJugadoresDiv);
         })
         .catch(error => {
             console.error("Error al cargar el ranking:", error);
@@ -93,7 +125,7 @@ function cantidadPartidas(){
                 bar: {groupWidth: "95%"},
                 legend: { position: "none" },
             };
-            drawChartBar(data, options);
+            drawChartBar(data, options, cantPartidasDiv);
         })
         .catch(error => {
             console.error("Error al cargar el ranking:", error);
@@ -123,7 +155,7 @@ function cantidadPreguntas() {
                 bar: {groupWidth: "95%"},
                 legend: { position: "none" },
             };
-            drawChartBar(data, options);
+            drawChartBar(data, options, cantPreguntasDiv);
         })
         .catch(error => {
             console.error("Error al cargar el ranking:", error);
@@ -135,7 +167,7 @@ function usuariosPorSexo() {
         .then(data => {
             title.textContent = "Usuarios por sexo";
 
-            if (data.length > 0 && listaUsuariosContainer) {
+            if (data.length > 0 && graficosContainer) {
                 const datosGrafico = [['Sexo', 'Cantidad de Usuarios']];
 
                 data.forEach(entry => {
@@ -152,14 +184,14 @@ function usuariosPorSexo() {
                     bars: 'horizontal',
                 };
 
-                const chart = new google.visualization.BarChart(listaUsuariosContainer);
-                chart.draw(chartData, chartOptions);
+                const chart = new google.visualization.BarChart(usuariosPorSexoDiv);
+                chart.draw(chartData, chartOptions, usuariosPorSexoDiv);
             } else {
                 const noDataItem = document.createElement("p");
                 noDataItem.textContent = "No hay datos por este período de tiempo.";
-                if (listaUsuariosContainer) {
-                    listaUsuariosContainer.innerHTML = '';
-                    listaUsuariosContainer.appendChild(noDataItem);
+                if (usuariosPorSexoDiv) {
+                    usuariosPorSexoDiv.innerHTML = '';
+                    usuariosPorSexoDiv.appendChild(noDataItem);
                 }
             }
         });
@@ -170,7 +202,7 @@ function usuariosPorEdad() {
         .then(data => {
             title.textContent = "Usuarios por grupo de edad";
 
-            if (data.length > 0 && listaUsuariosContainer) {
+            if (data.length > 0 && graficosContainer) {
                 const datosGrafico = [['Edad', 'Cantidad de Usuarios']];
 
                 data.forEach(entry => {
@@ -189,14 +221,14 @@ function usuariosPorEdad() {
                     bars: 'horizontal',
                 };
 
-                const chart = new google.visualization.BarChart(listaUsuariosContainer);
-                chart.draw(chartData, chartOptions);
+                const chart = new google.visualization.BarChart(usuariosPorEdadDiv);
+                chart.draw(chartData, chartOptions, usuariosPorEdadDiv);
             } else {
                 const noDataItem = document.createElement("p");
                 noDataItem.textContent = "No hay datos por este período de tiempo.";
-                if (listaUsuariosContainer) {
-                    listaUsuariosContainer.innerHTML = '';
-                    listaUsuariosContainer.appendChild(noDataItem);
+                if (usuariosPorEdadDiv) {
+                    usuariosPorEdadDiv.innerHTML = '';
+                    usuariosPorEdadDiv.appendChild(noDataItem);
                 }
             }
         });
@@ -207,7 +239,7 @@ function usuariosPorPais(){
         .then(data => {
             title.textContent = "Usuarios por país";
 
-            if (data.length > 0 && listaUsuariosContainer) {
+            if (data.length > 0 && graficosContainer) {
                 const datosGrafico = [['País', 'Cantidad de Usuarios']];
 
                 // Agregar datos al array para el gráfico
@@ -225,14 +257,14 @@ function usuariosPorPais(){
                     bars: 'horizontal',
                 };
 
-                const chart = new google.visualization.ColumnChart(listaUsuariosContainer);
-                chart.draw(chartData, chartOptions);
+                const chart = new google.visualization.ColumnChart(usuariosPorPaisDiv);
+                chart.draw(chartData, chartOptions, usuariosPorPaisDiv);
             } else {
                 const noDataItem = document.createElement("p");
                 noDataItem.textContent = "No hay datos por este período de tiempo.";
-                if (listaUsuariosContainer) {
-                    listaUsuariosContainer.innerHTML = '';
-                    listaUsuariosContainer.appendChild(noDataItem);
+                if (usuariosPorPaisDiv) {
+                    usuariosPorPaisDiv.innerHTML = '';
+                    usuariosPorPaisDiv.appendChild(noDataItem);
                 }
             }
         });
@@ -243,7 +275,7 @@ function porcentajePreguntasUsuarios() {
         .then(data => {
             title.textContent = "Usuarios por % de resp. correctas";
 
-            if (data.length > 0 && listaUsuariosContainer) {
+            if (data.length > 0 && graficosContainer) {
                 const datosGrafico = [['Usuario', 'Porcentaje Correctas']];
 
                 data.forEach(entry => {
@@ -260,14 +292,14 @@ function porcentajePreguntasUsuarios() {
                     bars: 'horizontal',
                 };
 
-                const chart = new google.visualization.BarChart(listaUsuariosContainer);
-                chart.draw(chartData, chartOptions);
+                const chart = new google.visualization.BarChart(porcentajePregUsuariosDiv);
+                chart.draw(chartData, chartOptions, porcentajePregUsuariosDiv);
             } else {
                 const noDataItem = document.createElement("p");
                 noDataItem.textContent = "No hay datos por este período de tiempo.";
-                if (listaUsuariosContainer) {
-                    listaUsuariosContainer.innerHTML = '';
-                    listaUsuariosContainer.appendChild(noDataItem);
+                if (porcentajePregUsuariosDiv) {
+                    porcentajePregUsuariosDiv.innerHTML = '';
+                    porcentajePregUsuariosDiv.appendChild(noDataItem);
                 }
             }
         })
@@ -275,11 +307,11 @@ function porcentajePreguntasUsuarios() {
             console.error("Error al cargar el ranking:", error);
         });
 }
-function drawChart(inData, inOption) {
-    var chart = new google.visualization.PieChart(document.getElementById('lista-usuarios'));
+function drawChart(inData, inOption, contenedor) {
+    var chart = new google.visualization.PieChart(contenedor);
     chart.draw(inData, inOption);
 }
-function drawChartBar(inData, inOption) {
+function drawChartBar(inData, inOption, contenedor) {
     var view = new google.visualization.DataView(inData);
     view.setColumns([0, 1,
         { calc: "stringify",
@@ -287,17 +319,18 @@ function drawChartBar(inData, inOption) {
             type: "string",
             role: "annotation" },
         2]);
-    var chart = new google.visualization.ColumnChart(document.getElementById("lista-usuarios"));
+    var chart = new google.visualization.ColumnChart(contenedor);
     chart.draw(view, inOption);
 }
 function exportarPDF() {
     var opt = {
-        margin:       1,
+        margin:       0,
         filename:     'Estadistica.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+        image:        { type: 'jpeg', quality: 0.98},
         html2canvas:  { scale: 2 },
         jsPDF:        { unit: 'in', format: 'legal', orientation: 'landscape' }
     };
 
-    html2pdf().set(opt).from(listaUsuariosContainer).save();
+    html2pdf().set(opt).from(graficosContainer).save();
 }
