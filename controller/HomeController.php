@@ -75,12 +75,25 @@ class HomeController
         $usuarios = array_merge($this->model->obtenerUsuariosPorSexo());
         echo json_encode($usuarios);
     }
+    public function usuariosPorSexoDetalle() {
+        $usuarios = array_merge($this->model->obtenerUsuariosPorSexoDetalle());
+        echo json_encode($usuarios);
+    }
+    public function usuariosPorEdadDetalle() {
+        $usuarios = array_merge($this->model->obtenerUsuariosPorEdadDetalle());
+        echo json_encode($usuarios);
+    }
     public function usuariosPorEdad() {
         $usuarios = array_merge($this->model->obtenerUsuariosPorEdad());
         echo json_encode($usuarios);
     }
     public function usuariosPorPais() {
         $usuarios = array_merge($this->model->obtenerUsuariosPorPais());
+        echo json_encode($usuarios);
+    }
+
+    public function usuariosPorPaisDetalle() {
+        $usuarios = array_merge($this->model->obtenerUsuariosPorPaisDetalle());
         echo json_encode($usuarios);
     }
     public function usuariosPorPorcentajeDePreguntas() {

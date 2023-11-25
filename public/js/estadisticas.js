@@ -1,6 +1,8 @@
 const periodoSelect = document.getElementById("periodo-select");
 const rankingList = document.querySelector(".list-group");
 const listaUsuariosContainer = document.getElementById("lista-usuarios");
+const pdf = document.getElementById("pdf");
+const tabla_pdf = document.getElementById("tabla_pdf");
 const exportButton = document.getElementById("export-button");
 const title = document.getElementById("ranking-title");
 
@@ -10,6 +12,9 @@ periodoSelect.addEventListener("change", function () {
 
     while (listaUsuariosContainer.firstChild) {
         listaUsuariosContainer.removeChild(listaUsuariosContainer.firstChild);
+    }
+    while (tabla_pdf.firstChild) {
+        tabla_pdf.removeChild(tabla_pdf.firstChild);
     }
 
     if (selectedPeriodo === "cantidad_jugadores") {
@@ -54,7 +59,18 @@ function cantidadJugadores() {
             if (data.length > 0) {
                 data.forEach(entry => {
                     datosGrafico.push([entry.periodo.toUpperCase(),entry.cantidad_jugadores*1])
+                    const listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                            <th>
+                            ${entry.periodo}
+                            </th>
+                            <td>
+                            ${entry.cantidad_jugadores*1}
+                            </td>
+                            `;
+                    tabla_pdf.appendChild(listItem);
                 });
+                //cantidadJugadoresPdf();
             } else {
                 const noDataItem = document.createElement("p");
                 noDataItem.textContent = "No hay datos por este período de tiempo.";
@@ -79,6 +95,16 @@ function cantidadPartidas(){
             if (data.length > 0) {
                 data.forEach(entry => {
                     datosGrafico.push([entry.periodo.toUpperCase(),entry.cantidad_partidas*1, "#"+Math.floor(Math.random()*16777215).toString(16)])
+                    const listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                            <th>
+                            ${entry.periodo}
+                            </th>
+                            <td>
+                            ${entry.cantidad_partidas*1}
+                            </td>
+                            `;
+                    tabla_pdf.appendChild(listItem);
                 });
             } else {
                 const noDataItem = document.createElement("p");
@@ -109,6 +135,16 @@ function cantidadPreguntas() {
             if (data.length > 0) {
                 data.forEach(entry => {
                     datosGrafico.push([entry.periodo.toUpperCase(),entry.cantidad_preguntas*1, "#"+Math.floor(Math.random()*16777215).toString(16)])
+                    const listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                            <th>
+                            ${entry.periodo}
+                            </th>
+                            <td>
+                            ${entry.cantidad_preguntas*1}
+                            </td>
+                            `;
+                    tabla_pdf.appendChild(listItem);
                 });
             } else {
                 const noDataItem = document.createElement("p");
@@ -141,6 +177,7 @@ function usuariosPorSexo() {
                 data.forEach(entry => {
                     datosGrafico.push([entry.sexo, parseInt(entry.cantidad_usuarios)]);
                 });
+                usuariosPorSexoDetalle()
 
                 // Crear el gráfico
                 const chartData = google.visualization.arrayToDataTable(datosGrafico);
@@ -164,6 +201,54 @@ function usuariosPorSexo() {
             }
         });
 }
+function usuariosPorSexoDetalle() {
+    fetch(`/home/usuariosPorSexoDetalle`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const listItem = document.createElement("tr");
+                listItem.innerHTML = `
+                            <th>
+                            Nombre
+                            </th>
+                            <th>
+                            Apellido
+                            </th>
+                            <th>
+                            Usuario
+                            </th>
+                            <th>
+                            Sexo
+                            </th>
+                            `;
+                tabla_pdf.appendChild(listItem);
+                data.forEach(entry => {
+                    const listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                            <td>
+                            ${entry.nombre}
+                            </td>
+                            <td>
+                            ${entry.apellido}
+                            </td>
+                            <td>
+                            ${entry.usuario}
+                            </td>
+                            <td>
+                            ${entry.sexo}
+                            </td>
+                            `;
+                    tabla_pdf.appendChild(listItem);
+                });
+            } else {
+                const noDataItem = document.createElement("p");
+                noDataItem.textContent = "No hay datos por este período de tiempo.";
+            }
+        })
+        .catch(error => {
+            console.error("Error al cargar el ranking:", error);
+        });
+}
 function usuariosPorEdad() {
     fetch(`/home/usuariosPorEdad`)
         .then(response => response.json())
@@ -178,6 +263,7 @@ function usuariosPorEdad() {
                     datosGrafico.push(['Medios', parseInt(entry.Medios)]);
                     datosGrafico.push(['Jubilados', parseInt(entry.Jubilados)]);
                 });
+                usuariosPorEdadDetalle();
 
                 // Crear el gráfico
                 const chartData = google.visualization.arrayToDataTable(datosGrafico);
@@ -201,6 +287,61 @@ function usuariosPorEdad() {
             }
         });
 }
+
+function usuariosPorEdadDetalle() {
+    fetch(`/home/usuariosPorEdadDetalle`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const listItem = document.createElement("tr");
+                listItem.innerHTML = `
+                            <th>
+                            Nombre
+                            </th>
+                            <th>
+                            Apellido
+                            </th>
+                            <th>
+                            Usuario
+                            </th>
+                            <th>
+                            Edad
+                            </th>
+                            <th>
+                            Grupo Edad
+                            </th>
+                            `;
+                tabla_pdf.appendChild(listItem);
+                data.forEach(entry => {
+                    const listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                            <td>
+                            ${entry.nombre}
+                            </td>
+                            <td>
+                            ${entry.apellido}
+                            </td>
+                            <td>
+                            ${entry.usuario}
+                            </td>
+                            <td>
+                            ${entry.edad}
+                            </td>
+                            <td>
+                            ${entry.grupo_edad}
+                            </td>
+                            `;
+                    tabla_pdf.appendChild(listItem);
+                });
+            } else {
+                const noDataItem = document.createElement("p");
+                noDataItem.textContent = "No hay datos por este período de tiempo.";
+            }
+        })
+        .catch(error => {
+            console.error("Error al cargar el ranking:", error);
+        });
+}
 function usuariosPorPais(){
     fetch(`/home/usuariosPorPais`)
         .then(response => response.json())
@@ -214,6 +355,7 @@ function usuariosPorPais(){
                 data.forEach(entry => {
                     datosGrafico.push([entry.pais, parseInt(entry.cantidad_usuarios)]);
                 });
+                usuariosPorPaisDetalle();
 
                 // Crear el gráfico
                 const chartData = google.visualization.arrayToDataTable(datosGrafico);
@@ -237,6 +379,55 @@ function usuariosPorPais(){
             }
         });
 }
+
+function usuariosPorPaisDetalle() {
+    fetch(`/home/usuariosPorPaisDetalle`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const listItem = document.createElement("tr");
+                listItem.innerHTML = `
+                            <th>
+                            Nombre
+                            </th>
+                            <th>
+                            Apellido
+                            </th>
+                            <th>
+                            Usuario
+                            </th>
+                            <th>
+                            Pais
+                            </th>
+                            `;
+                tabla_pdf.appendChild(listItem);
+                data.forEach(entry => {
+                    const listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                            <td>
+                            ${entry.nombre}
+                            </td>
+                            <td>
+                            ${entry.apellido}
+                            </td>
+                            <td>
+                            ${entry.usuario}
+                            </td>
+                            <td>
+                            ${entry.pais}
+                            </td>
+                            `;
+                    tabla_pdf.appendChild(listItem);
+                });
+            } else {
+                const noDataItem = document.createElement("p");
+                noDataItem.textContent = "No hay datos por este período de tiempo.";
+            }
+        })
+        .catch(error => {
+            console.error("Error al cargar el ranking:", error);
+        });
+}
 function porcentajePreguntasUsuarios() {
     fetch(`/home/usuariosPorPorcentajeDePreguntas`)
         .then(response => response.json())
@@ -245,9 +436,53 @@ function porcentajePreguntasUsuarios() {
 
             if (data.length > 0 && listaUsuariosContainer) {
                 const datosGrafico = [['Usuario', 'Porcentaje Correctas']];
+                const listItem = document.createElement("tr");
+                listItem.innerHTML = `
+                            <th>
+                            Nombre
+                            </th>
+                            <th>
+                            Apellido
+                            </th>
+                            <th>
+                            Usuario
+                            </th>
+                            <th>
+                            Total Respuestas
+                            </th>
+                            <th>
+                            Respuestas Correctas
+                            </th>
+                            <th>
+                            Porcentaje Correctas
+                            </th>
+                            `;
+                tabla_pdf.appendChild(listItem);
 
                 data.forEach(entry => {
                     datosGrafico.push([entry.usuario, parseFloat(entry.porcentaje_correctas)]);
+                    const listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                            <td>
+                            ${entry.nombre}
+                            </td>
+                            <td>
+                            ${entry.apellido}
+                            </td>
+                            <td>
+                            ${entry.usuario}
+                            </td>
+                            <td>
+                            ${entry.total_respuestas}
+                            </td>
+                            <td>
+                            ${entry.respuestas_correctas}
+                            </td>
+                            <td>
+                            ${entry.porcentaje_correctas*1} %
+                            </td>
+                            `;
+                    tabla_pdf.appendChild(listItem);
                 });
 
                 // Crear el gráfico
@@ -294,10 +529,10 @@ function exportarPDF() {
     var opt = {
         margin:       1,
         filename:     'Estadistica.pdf',
+        pagebreak: {mode: ['avoid-all','css','legacy']},
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
         jsPDF:        { unit: 'in', format: 'legal', orientation: 'landscape' }
     };
-
-    html2pdf().set(opt).from(listaUsuariosContainer).save();
+    html2pdf().set(opt).from(pdf).save();
 }
