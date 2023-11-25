@@ -126,6 +126,11 @@ class HomeModel
         $query = "SELECT sexo, COUNT(*) as cantidad_usuarios FROM Usuario GROUP BY sexo";
         return $this->database->query($query);
     }
+
+    public function obtenerUsuariosPorSexoDetalle(){
+        $query = "SELECT sexo, nombre, apellido, usuario FROM Usuario order by  sexo";
+        return $this->database->query($query);
+    }
     public function obtenerUsuariosPorEdad() {
         $query = "SELECT
                 SUM(CASE WHEN DATEDIFF(CURDATE(), fecha_nac) < 18 * 365 THEN 1 ELSE 0 END) AS Menores,
@@ -135,10 +140,24 @@ class HomeModel
 
         return $this->database->query($query);
     }
+
+    public function obtenerUsuariosPorEdadDetalle() {
+        $query = "SELECT
+                CASE 
+                WHEN DATEDIFF(CURDATE(), fecha_nac) < 18 * 365 THEN 'Menores'
+                WHEN DATEDIFF(CURDATE(), fecha_nac) >= 18 * 365 AND DATEDIFF(CURDATE(), fecha_nac) < 60 * 365 THEN 'Medios'
+                WHEN DATEDIFF(CURDATE(), fecha_nac) >= 60 * 365 THEN 'Jubilados' else 'NA' end as grupo_edad
+                ,nombre, apellido, usuario,TIMESTAMPDIFF (YEAR, fecha_nac, CURDATE()) as edad
+              FROM Usuario";
+
+        return $this->database->query($query);
+    }
     public function obtenerUsuariosPorPorcentajeDePreguntas() {
         $query = "
         SELECT
     u.idUsuario,
+    u.nombre,
+    u.apellido,
     u.usuario, COUNT(ru.idRespuestaUsuario) AS total_respuestas, SUM(ru.esCorrecta) AS respuestas_correctas, IFNULL(SUM(ru.esCorrecta) / COUNT(ru.idRespuestaUsuario) * 100, 0) AS porcentaje_correctas
     FROM Usuario u
     LEFT JOIN RespuestasUsuario ru ON u.idUsuario = ru.idUsuario
@@ -152,6 +171,11 @@ class HomeModel
 
     public function obtenerUsuariosPorPais() {
         $query = "SELECT pais, COUNT(idUsuario) as cantidad_usuarios FROM Usuario GROUP BY pais ORDER BY cantidad_usuarios DESC";
+        return $this->database->query($query);
+    }
+
+    public function obtenerUsuariosPorPaisDetalle() {
+        $query = "SELECT pais,nombre, apellido, usuario FROM Usuario ORDER BY pais asc";
         return $this->database->query($query);
     }
 
